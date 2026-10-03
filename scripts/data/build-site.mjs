@@ -134,8 +134,10 @@ for (const key of new Set([...Object.keys(ah), ...binsBy.keys(), ...salesBy.keys
 const byName = new Map();
 for (const [i, f] of report.files.entries()) {
   const src = files[i], c = coverage(src.file);
-  const e = byName.get(f.name) ?? { name: f.name, files: 0, hours: 0, polls: 0, last: 0 };
-  e.files++; e.hours += c.hours * (f.hours ? f.picked / f.hours : 0); e.polls += f.polls; e.last = Math.max(e.last, src.file.to);
+  // real polling and Internet Archive copies (single snapshots of past days) are counted apart
+  const e = byName.get(f.name) ?? { name: f.name, files: 0, hours: 0, polls: 0, last: 0, archiveFiles: 0, archiveSnapshots: 0 };
+  if (src.file.collector.source === "wayback") { e.archiveFiles++; e.archiveSnapshots += f.polls; }
+  else { e.files++; e.hours += c.hours * (f.hours ? f.picked / f.hours : 0); e.polls += f.polls; e.last = Math.max(e.last, src.file.to); }
   byName.set(f.name, e);
 }
 const daily = (await q(`SELECT floor(extract(epoch from ts) / 86400) AS d, count(*)::int AS polls FROM bazaar_snapshots WHERE origin = 2 GROUP BY 1 ORDER BY 1`))

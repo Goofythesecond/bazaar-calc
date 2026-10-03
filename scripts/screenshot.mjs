@@ -36,11 +36,16 @@ for (const p of paths) {
   await send("Page.navigate", { url: base + p });
   await sleep(7000);
   const info = (await send("Runtime.evaluate", { returnByValue: true, expression:
-    `({ root: document.getElementById('root')?.innerText.length ?? 0, overflow: document.documentElement.scrollWidth - innerWidth, nan: /\\bNaN\\b|undefined|\\[object Object\\]|Infinity/.test(document.body.innerText) ? (document.body.innerText.match(/.{0,40}(\\bNaN\\b|undefined|\\[object Object\\]|Infinity).{0,40}/)||[''])[0] : '' })` })).result.result.value;
+    `({ root: document.getElementById('root')?.innerText.length ?? 0, // a phone's layout viewport grows to fit content that is too wide: compare with the real screen width
+       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+       clipped: (() => { const scrolls = el => { for (let a = el.parentElement; a; a = a.parentElement) { const o = getComputedStyle(a).overflowX; if (o === 'auto' || o === 'scroll') return true; } return false; };
+         const bad = [...document.querySelectorAll('#root *')].filter(el => { const r = el.getBoundingClientRect(); return r.width > 0 && r.right > document.documentElement.clientWidth + 2 && !scrolls(el) && getComputedStyle(el).position !== 'fixed'; });
+         return bad.length ? bad.length + ' elements past the right edge, e.g. ' + (bad.at(-1).innerText || bad.at(-1).tagName).slice(0, 60).replace(/\\s+/g, ' ') : ''; })(),
+       nan: /\\bNaN\\b|undefined|\\[object Object\\]|Infinity/.test(document.body.innerText) ? (document.body.innerText.match(/.{0,40}(\\bNaN\\b|undefined|\\[object Object\\]|Infinity).{0,40}/)||[''])[0] : '' })` })).result.result.value;
   const shot = await send("Page.captureScreenshot", { format: "png", captureBeyondViewport: false });
   const file = join(outDir, `${p.replace(/[^a-z0-9]+/gi, "_") || "home"}_${width}.png`);
   writeFileSync(file, Buffer.from(shot.result.data, "base64"));
-  const problems = [...errors, ...(info.root < 50 ? ["page is empty"] : []), ...(info.overflow > 2 ? [`page scrolls sideways by ${info.overflow}px`] : []), ...(info.nan ? [`shows "${info.nan.trim()}"`] : [])];
+  const problems = [...errors, ...(info.root < 50 ? ["page is empty"] : []), ...(info.overflow > 2 ? [`page scrolls sideways by ${info.overflow}px`] : []), ...(info.clipped ? [`cut off: ${info.clipped}`] : []), ...(info.nan ? [`shows "${info.nan.trim()}"`] : [])];
   if (problems.length) bad++;
   console.log(`${problems.length ? "PROBLEM" : "ok     "} ${p} -> ${file}${problems.length ? "\n    " + problems.join("\n    ") : ""}`);
 }

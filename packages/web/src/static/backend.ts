@@ -20,7 +20,7 @@ interface ItemRow { id: string; name: string; category: string | null; tier: str
 interface AhLatest { ts: number; lowestBin: number | null; secondBin: number | null; bins: number; auctions: number; sales24h: number; medianSale24h: number | null }
 export interface Manifest {
   format: string; builtAt: number; asOf: number; recipesVersion: string | null;
-  contributors: { name: string; files: number; hours: number; polls: number; last: number }[];
+  contributors: { name: string; files: number; hours: number; polls: number; last: number; archiveFiles?: number; archiveSnapshots?: number }[];
   files: { label: string; name: string; kind: string; source: string; from: number; to: number; hours: number; picked: number; polls: number; warnings: string[] }[];
   rejected: { label: string; error: string }[]; daily: { day: string; polls: number }[];
   counts: Record<string, number>;

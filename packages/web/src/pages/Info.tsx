@@ -34,18 +34,18 @@ export function Timing() {
             <li><b>Relisting counts again.</b> The calculators include this.</li>
             <li>One action counts at most {num(BAZAAR.dailyLimitPerActionCap)} coins.</li>
           </ul>
-          <p className="small muted" style={{ margin: 0 }}>{BAZAAR_SOURCES.dailyLimit}</p>
+          <p className="small muted" style={{ margin: 0, overflowWrap: "anywhere" }}>{BAZAAR_SOURCES.dailyLimit}</p>
         </section>
         <section className="card pad stack">
           <h2 style={{ margin: 0 }}>Bazaar rules</h2>
-          <table className="small"><tbody>
+          <div style={{ overflowX: "auto" }}><table className="small"><tbody>
             <tr><td className="l">Orders at once</td><td className="n">{[0, 1, 2].map(orderSlots).join(" / ")}</td><td className="l muted">Bazaar Flipper 0 / 1 / 2</td></tr>
             <tr><td className="l">Tax on sales</td><td className="n">{[0, 1, 2].map(l => `${(taxRate(l) * 100).toFixed(3).replace(/0+$/, "")}%`).join(" / ")}</td><td className="l muted">Bazaar Flipper 0 / 1 / 2</td></tr>
             <tr><td className="l">Units per order</td><td className="n">{num(BAZAAR.maxUnitsPerOrder)}</td><td className="l muted">{BAZAAR.maxUnitsPerOrderUnstackable} for unstackable items</td></tr>
             <tr><td className="l">On sell offer at once</td><td className="n">{coins(BAZAAR.maxSellOfferValue)}</td><td className="l muted">coins of items</td></tr>
             <tr><td className="l">Orders expire after</td><td className="n">{BAZAAR.orderExpiryDays} days</td><td className="l muted"></td></tr>
-          </tbody></table>
-          <p className="small muted" style={{ margin: 0 }}>{BAZAAR_SOURCES.rules}</p>
+          </tbody></table></div>
+          <p className="small muted" style={{ margin: 0, overflowWrap: "anywhere" }}>{BAZAAR_SOURCES.rules}</p>
         </section>
       </div>
     </>

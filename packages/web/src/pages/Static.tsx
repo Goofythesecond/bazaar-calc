@@ -102,9 +102,11 @@ export function ContributeStatic() {
       </div>
       <h2>Contributors</h2>
       {!m ? <div className="card empty">Loading…</div> : m.contributors.length === 0 ? <div className="card empty">No data yet.</div> :
-        <div className="tablewrap"><table><thead><tr><th className="l">GitHub</th><th>Files</th><th>Hours used</th><th>Polls</th><th>Latest data</th></tr></thead><tbody>
-          {m.contributors.map(c => <tr key={c.name}><td className="l"><b>{c.name}</b></td><td className="n">{num(c.files)}</td><td className="n">{num(c.hours, 1)}</td><td className="n">{num(c.polls)}</td><td className="n">{utc(c.last)}</td></tr>)}
-        </tbody></table></div>}
+        <><div className="tablewrap"><table><thead><tr><th className="l">GitHub</th><th>Hours polled</th><th>Polls</th><th>Files</th><th>Archive snapshots</th><th>Latest data</th></tr></thead><tbody>
+          {m.contributors.map(c => <tr key={c.name}><td className="l"><b>{c.name}</b></td><td className="n">{num(c.hours, 1)}</td><td className="n">{num(c.polls)}</td><td className="n">{num(c.files)}</td>
+            <td className="n">{c.archiveSnapshots ? `${num(c.archiveSnapshots)} (${num(c.archiveFiles ?? 0)} files)` : "–"}</td><td className="n">{c.last ? utc(c.last) : "–"}</td></tr>)}
+        </tbody></table></div>
+        <p className="small muted">Hours polled: time covered by polls at most 150 s apart (what fill times are measured from). Archive snapshots: single copies of Hypixel's bazaar from past days, saved by the Internet Archive; they add price history, not fill times. Latest data moves forward only when new files are merged.</p></>}
     </>
   );
 }
