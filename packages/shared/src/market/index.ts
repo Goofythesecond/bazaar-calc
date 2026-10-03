@@ -7,3 +7,4 @@ export * from "./names.js";
 export * from "./book.js";
 export * from "./assemble.js";
 export * from "./event-impact.js";
+export * from "./dips.js";

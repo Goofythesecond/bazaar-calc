@@ -20,12 +20,14 @@ export interface Profile {
   reputation: Record<string, number>;    // "Barbarian" -> reputation
   xpLevels: number;
   coleMoltenForge: boolean;              // auto-set from the current mayor when known
+  quadTaxes: boolean;                    // Derpy's QUAD TAXES!!! (bazaar tax x4): auto-set from the current mayor
+  npcShoppingSpree: boolean;             // Diaz's Shopping Spree (NPC buy limits x10): auto-set from the current mayor
   ignoreRequirements: boolean;           // show everything regardless of unlocks
 }
 
 export const DEFAULT_PROFILE: Profile = {
   hotmTier: 0, quickForgeLevel: 0, enchantingLevel: 0, collections: {}, slayers: {}, reputation: {},
-  xpLevels: 0, coleMoltenForge: false, ignoreRequirements: true,
+  xpLevels: 0, coleMoltenForge: false, quadTaxes: false, npcShoppingSpree: false, ignoreRequirements: true,
 };
 
 const ROMAN: Record<string, number> = { I: 1, V: 5, X: 10, L: 50, C: 100 };

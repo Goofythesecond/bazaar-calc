@@ -2,14 +2,14 @@
 import { useQuery } from "@tanstack/react-query";
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import type { Plan } from "@bc/shared";
+import type { RankedOpportunity, Plan } from "@bc/shared";
 import { Icon } from "../components/Icon";
-import { Detail, Flags, Flow, Requirements } from "../components/RouteView";
+import { ConfidencePill, Detail, Flags, Flow, Requirements } from "../components/RouteView";
 import { KIND_LABEL, api, coins, dataAge, historyAge, num, pct } from "../lib";
 import { useApp } from "../state";
 
-const KINDS = ["bazaar", "craft", "book", "forge"] as const;
-const KIND_ICON = { bazaar: "swap", craft: "craft", book: "book", forge: "flame" } as const;
+const KINDS = ["bazaar", "craft", "book", "forge", "npc"] as const;
+const KIND_ICON = { bazaar: "swap", craft: "craft", book: "book", forge: "flame", npc: "sell" } as const;
 
 function Meter({ label, used, total, fmt }: { label: string; used: number; total: number; fmt: (v: number) => string }) {
   const share = total > 0 ? Math.min(1, used / total) : 0;
@@ -30,7 +30,7 @@ export function Planner() {
   const q = useQuery({
     queryKey: ["plan", s, profile, kinds, requireMet],
     queryFn: () => api<Plan & { marketAt: number; dataAt?: number; statsAt?: number; statsUsed?: boolean }>("/api/v1/calc/plan", { settings: s, profile, options: { kinds, requireMet } }),
-    refetchInterval: 60_000, placeholderData: prev => prev,
+    placeholderData: prev => prev, // refreshed on every new snapshot (live.ts)
   });
   const t = q.data?.totals;
   const toggle = (k: string) => setKinds(kinds.includes(k) ? kinds.filter(x => x !== k) : [...kinds, k]);
@@ -92,6 +92,7 @@ export function Planner() {
                 <span className="pill kind"><Icon name={KIND_ICON[o.kind]} size={12} />{KIND_LABEL[o.kind]}</span>
                 <Link className="title" to={`/item/${o.outputId}`}>{o.title}</Link>
                 <Requirements o={o} compact /><Flags flags={o.flags} max={2} />
+                {(o as RankedOpportunity).confidence && <ConfidencePill c={(o as RankedOpportunity).confidence} />}
               </div>
               <Flow o={o} />
               {open === o.key && <Detail o={o} />}

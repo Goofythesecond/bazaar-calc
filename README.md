@@ -1,15 +1,29 @@
 # Bazaar Calc
 
-A free, open-source Hypixel SkyBlock market calculator. It finds and ranks four kinds of flips, and plans the best
+A free, open-source Hypixel SkyBlock market calculator. It finds and ranks five kinds of flips, and plans the best
 combination of them for your coins, slots, unlocks and playing time:
 
 - **Bazaar flips**: buy order, then relist as a sell offer.
 - **Craft flips**: buy ingredients, craft (including intermediate crafts), sell.
 - **Book flips**: combine low-level enchanted books up to the highest level that can be combined, then sell.
 - **Forge flips**: buy or craft the inputs, forge them, sell the output.
+- **NPC flips**: buy on the bazaar and sell to an NPC merchant (no tax, 500M coins a day), or buy from a merchant and
+  sell on the bazaar (640 of an item a day, 6,400 in a Shopping Spree).
 
-Every route is listed with the full working, order sizes for the daily bazaar limit, measured fill times and market
-warnings (spoofed walls, mass delists, pumped prices).
+Every route is listed with the full working, order sizes for the daily bazaar limit, measured fill times, market
+warnings (spoofed walls, mass delists, pumped prices) and a confidence level saying how far its numbers can be trusted.
+
+Tools for trading with it:
+- **Live prices:** the site recalculates on every new Hypixel snapshot (every 20 s) while it is open.
+- **My orders:** type in the orders you placed in game. Each new snapshot shows whether they are on top, how many units
+  are ahead of you, how much has filled and the price to relist at.
+- **Alerts:** new flips that meet your rules, and order events, as a toast, a sound, a browser notification or a
+  Discord message (a self-hosted server can send them around the clock).
+- **Track record:** paper trading runs the calculator's own picks as virtual orders on the real market and compares
+  real with predicted profit. Routes you track go into a journal with what was predicted.
+- **Dips:** items whose cheapest offer is far below their typical price, marked new or already low an hour ago.
+- **Mayor perks:** Derpy's QUAD TAXES!!!, Diaz's Shopping Spree and Cole's Molten Forge are applied automatically
+  while active.
 
 > Not affiliated with or endorsed by Hypixel. NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.
 
@@ -162,10 +176,13 @@ Every result on the site has a **Details** view that lists each step with real n
 - **Prices:**
   - Buy orders go 0.1 above the best buy order, and sell offers 0.1 below the best sell offer.
   - Instant trades use the best price.
-  - Tax depends on your Bazaar Flipper level.
+  - Tax depends on your Bazaar Flipper level (1.25% / 1.125% / 1%), and is 4 times that while Derpy's QUAD TAXES!!!
+    perk is active.
+  - NPC sales are priced at the item's NPC sell price from Hypixel's items resource (`npc_sell_price`), with no tax.
+    Merchant prices for buying from NPCs come from NotEnoughUpdates-REPO shop recipes (coins only).
 - **Fill speed (measured):**
   - Every poll, each item's best buy order and best sell offer is followed from the moment a new best price appears until it is beaten or gone ("episodes", last 24 h). That gives how long a fresh top order really stays on top and how many units trade against it.
-  - Flow per hour is the item's measured trade rate (min of Hypixel's 7-day figure ÷ 168 and what we saw leave the book); the episodes give its shape over time.
+  - Flow per hour is the item's measured trade rate: real instant trades counted from the rise of Hypixel's 7-day counters between polls once an item has at least 1 hour of them, otherwise the min of Hypixel's 7-day figure ÷ 168 and what we saw leave the book. The episodes give its shape over time.
   - With fewer than 8 episodes on a side, a standard model (Poisson undercut rate) fills in and the route says "estimated".
 - **Batches and order sizes:** a route runs in batches of B: one buy order per ingredient for B × the recipe amount and one sell offer for B, so you only ever sell what you bought. B is the smallest batch that gets the best rate within your coins (orders + stock), daily limit and clicking time. Bigger orders do not fill faster; they only tie up more coins and count more toward the daily limit on every relist. Open a route and press **Order sizes & daily limit** for the batch table.
 - **Planner:** coins are handed out in 5% steps, each to the route (new or already picked) that earns the most extra per step, within order slots, forge slots, the daily limit and clicking time. Coins are "tied up at once" (money in orders + unsold stock), so they are reused as items sell; profit made during the day is not reinvested in the estimate.
@@ -181,3 +198,5 @@ Every result on the site has a **Details** view that lists each step with real n
 - **Per item:** the item page shows time on top (survival curve), outbid vs filled, the order-size table and a quota calculator ("how long to buy 10,000?": p10 / p50 / p90 from 2,000 runs over real episodes). API: `GET /api/v1/bazaar/{id}/fill?check=5&qty=10000`.
 - **Requirements:** come from NEU's craft text (collections, HotM, slayer, reputation), the Forge (HotM 2), and XP costs for combining books.
 - Two planner picks never order the same item (they would compete with each other).
+- **Confidence:** each route's score multiplies factors for what its numbers rest on: estimated fill times (0.6), the sale price's history (7-day median only 0.85, none 0.6; auction reference prices 0.85 or 0.6), fewer than 12 hours of watched trading (0.7 to 1), market warnings (manipulated 0.3, other serious warnings 0.6, little history 0.85) and, on the website, old published history (over 24 h 0.8, over 72 h 0.6). High is 0.75 or more, medium 0.5 or more. The "× confidence" column (coins per hour times the score) ranks routes by what they are likely to earn.
+- **Dips:** the cheapest sell offer is compared with the lower of the 24 h and 7-day medians, so a price falling back to normal after a spike is not called a bargain.

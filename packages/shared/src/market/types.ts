@@ -22,20 +22,26 @@ export interface ItemMarket {
   liveHours: number;           // hours of polls behind the undercut / measured-flow estimates
   /** units removed from the top buy-order / sell-offer levels per hour, measured from our order books (fills + cancels) */
   observedBuyFlowH?: number | null;
+  /** "trades": observed flows are real instant trades (Hypixel's counters); "book": units that left the book (older data) */
+  flowBasis?: "trades" | "book" | null;
   observedSellFlowH?: number | null;
   ref?: {
     askMed: number | null; bidMed: number | null; spreadMed: number | null; days: number;
     /** medians of hourly closes over the last 24 h / 7 days, and how many hourly closes back them */
     ask24?: number | null; bid24?: number | null; n24?: number; ask7?: number | null; bid7?: number | null; n7?: number;
     askVol24?: number | null; bidVol24?: number | null;
+    /** top prices about an hour earlier (latest quote 1-3 h back); null when unknown */
+    hourAgo?: { ask: number | null; bid: number | null } | null;
     /** last 24 h: units that left each side of the book vs real instant trades (from Hypixel's 7-day counters) */
-    delists?: { hours: number; bidRemoved: number; bidTrades: number; askRemoved: number; askTrades: number } | null;
+    delists?: { hours: number; bidRemoved: number; bidTrades: number; askRemoved: number; askTrades: number; exact?: boolean } | null;
   } | null;
   topBid?: BookLevel[];
   topAsk?: BookLevel[];
   /** measured time-on-top episodes for the buy-order side (bid) and sell-offer side (ask), last 24 h */
   holdBid?: HoldStats | null;
   holdAsk?: HoldStats | null;
+  /** coins an NPC shop pays for one (Hypixel's items resource); null if NPCs do not buy it */
+  npcSellPrice?: number | null;
   ahLowestBin?: number | null;
   ahMedianSale24h?: number | null;
   ahSales24h?: number;

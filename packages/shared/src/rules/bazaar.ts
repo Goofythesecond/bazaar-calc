@@ -18,9 +18,16 @@ export const BAZAAR = {
   dailyLimitDefault: 15_000_000_000,
   dailyLimitPerActionCap: 2_147_483_647,
   dailyLimitResetUtcHour: 0,
-  // NPC shops (not the bazaar): most sell at most 640 of an item per player per day, reset 00:00 UTC
-  // (6,400 with Diaz's Shopping Spree perk). Source: hypixelskyblock.minecraft.wiki/w/Shops
+  // NPC shops (not the bazaar): most sell at most 640 of an item per profile per day per merchant, reset 00:00 UTC;
+  // 6,400 while Diaz's "Shopping Spree" perk is active. Source: hypixelskyblock.minecraft.wiki/w/Shop (checked 2026-10-03)
   npcDailyBuyLimit: 640,
+  npcDailyBuyLimitShoppingSpree: 6_400,
+  // selling TO NPC shops pays no bazaar tax but earns at most 500,000,000 coins per profile per day (00:00 UTC), since
+  // 2025-10-15 (200M before). Source: hypixelskyblock.minecraft.wiki/w/Shop (checked 2026-10-03)
+  npcDailySellCoins: 500_000_000,
+  // Derpy's "QUAD TAXES!!!": "Pay 4x the normal amount of taxes!", bazaar tax included since 2024-07-02.
+  // Source: hypixelskyblock.minecraft.wiki/w/Derpy (checked 2026-10-03); Bazaar Utils applies the same x4.
+  quadTaxesMultiplier: 4,
 } as const;
 
 export const BAZAAR_SOURCES = {
@@ -34,9 +41,15 @@ export function orderSlots(flipperLevel: number): number {
   return BAZAAR.baseOrderSlots + lvl * BAZAAR.slotsPerFlipperLevel;
 }
 
-export function taxRate(flipperLevel: number): number {
+/** Tax on bazaar sales: 1.25% minus 0.125% per Bazaar Flipper level, times 4 while Derpy's QUAD TAXES!!! is active. */
+export function taxRate(flipperLevel: number, quadTaxes = false): number {
   const lvl = Math.max(0, Math.min(BAZAAR.maxFlipperLevel, Math.floor(flipperLevel)));
-  return BAZAAR.baseTax - lvl * BAZAAR.taxReductionPerFlipperLevel;
+  return (BAZAAR.baseTax - lvl * BAZAAR.taxReductionPerFlipperLevel) * (quadTaxes ? BAZAAR.quadTaxesMultiplier : 1);
+}
+
+/** Units of one item an NPC merchant sells you per day (Diaz's Shopping Spree: x10). */
+export function npcBuyLimit(shoppingSpree = false): number {
+  return shoppingSpree ? BAZAAR.npcDailyBuyLimitShoppingSpree : BAZAAR.npcDailyBuyLimit;
 }
 
 /** Coins one action adds to the daily limit (each action is capped at the 32-bit integer limit). */

@@ -4,3 +4,5 @@
 export * from "./engine.js";
 export * from "./routes.js";
 export * from "./planner.js";
+export * from "./npc-flips.js";
+export * from "./confidence.js";

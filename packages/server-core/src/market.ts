@@ -1,6 +1,6 @@
 // Build the calculator's Market (shared types) from the database.
 import zlib from "node:zlib";
-import { type GameEvent, type ItemMarket, type ItemStats, type MayorTerm, type Recipe, assembleMarket, calendarEvents, mayorEvents, realtimeEvents, unpackLevels } from "@bc/shared";
+import { type GameEvent, type PerkEffects, currentTerm, perkEffects, type ItemMarket, type ItemStats, type MayorTerm, type Recipe, assembleMarket, calendarEvents, mayorEvents, realtimeEvents, unpackLevels } from "@bc/shared";
 import type { Db } from "./db.js";
 import { loadHoldStats } from "./hold.js";
 
@@ -15,7 +15,7 @@ export async function loadMarket(db: Db): Promise<Map<string, ItemMarket>> {
     db.query("SELECT item_id, data FROM item_stats"),
     // the active-auction scan runs every 30 min; a key nobody lists any more keeps its old row, so ignore stale ones
     db.query("SELECT item_key, lowest_bin, sales_24h, median_sale_24h FROM ah_latest WHERE ts > now() - interval '2 hours'"),
-    db.query("SELECT id, name FROM items"),
+    db.query("SELECT id, name, npc_sell_price FROM items"),
     loadHoldStats(db),
   ]);
   return assembleMarket({
@@ -27,6 +27,7 @@ export async function loadMarket(db: Db): Promise<Map<string, ItemMarket>> {
     ah: new Map(ah.rows.map(r => [r.item_key as string, { lowestBin: r.lowest_bin != null ? r.lowest_bin / 100 : null, sales24h: r.sales_24h ?? 0,
       medianSale24h: r.median_sale_24h != null ? r.median_sale_24h / 100 : null }])),
     names: new Map(items.rows.map(r => [r.id as string, r.name as string | null])),
+    npcSell: new Map(items.rows.filter(r => r.npc_sell_price != null).map(r => [r.id as string, Number(r.npc_sell_price)])),
   });
 }
 
@@ -54,8 +55,7 @@ export async function loadEvents(db: Db, from: number, to: number): Promise<Game
     .filter(e => e.end > from && e.start < to).sort((a, b) => a.start - b.start);
 }
 
-/** Is Cole's Molten Forge active right now (mayor or minister)? */
-export async function moltenForgeActive(db: Db, now = Date.now()): Promise<boolean> {
-  const t = (await loadMayors(db, now, now)).find(m => m.start <= now && m.end > now);
-  return !!t && (t.perks.some(p => p.toLowerCase() === "molten forge") || (t.minister?.perk ?? "").toLowerCase() === "molten forge");
+/** Perks of the current mayor and minister that change the calculator's rules (tax, forge times, NPC limits). */
+export async function currentPerks(db: Db, now = Date.now()): Promise<PerkEffects> {
+  return perkEffects(currentTerm(await loadMayors(db, now, now), now));
 }

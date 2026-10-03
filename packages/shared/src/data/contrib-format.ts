@@ -40,6 +40,8 @@ export interface DataFile {
   flow: {
     hour: number[]; item: number[];                               // hour = ms / 3,600,000 (UTC hour number)
     intervals: number[]; seconds: number[]; bidOutbid: number[]; askUndercut: number[]; bidRemoved: number[]; askRemoved: number[];
+    // real trades from Hypixel's 7-day counters (counterTrades in hypixel.ts); absent in files made before 2026-10-03
+    tradeIntervals?: number[]; tradeSeconds?: number[]; bidTrades?: number[]; askTrades?: number[];
   };
   episodes: {
     item: number[]; side: number[];                               // side 0 = best buy order, 1 = best sell offer
@@ -59,7 +61,7 @@ export interface DataFile {
 export const emptyDataFile = (name: string, kind: CollectorKind, version: string, source: DataSource = "poll"): DataFile => ({
   format: DATA_FORMAT, name, collector: { kind, version, source }, from: 0, to: 0, polls: [], items: [],
   closes: { poll: [], item: [], ask: [], bid: [], askVol: [], bidVol: [], askOrders: [], bidOrders: [], buyWeek: [], sellWeek: [] },
-  flow: { hour: [], item: [], intervals: [], seconds: [], bidOutbid: [], askUndercut: [], bidRemoved: [], askRemoved: [] },
+  flow: { hour: [], item: [], intervals: [], seconds: [], bidOutbid: [], askUndercut: [], bidRemoved: [], askRemoved: [], tradeIntervals: [], tradeSeconds: [], bidTrades: [], askTrades: [] },
   episodes: { item: [], side: [], start: [], dur: [], polls: [], flow: [], end: [] },
   ah: { keys: [], bins: { ts: [], key: [], lowest: [], second: [], bins: [], total: [] }, sales: { ts: [], key: [], price: [], bin: [] } },
   election: [],
@@ -164,6 +166,13 @@ export function structureErrors(f: DataFile): string[] {
   const cents = (x: unknown) => x === null || (isInt(x) && (x as number) > 0);
   cols("closes", f.closes as never, { poll: idx(P), item: idx(I), ask: cents, bid: cents, askVol: nn, bidVol: nn, askOrders: nn, bidOrders: nn, buyWeek: nn, sellWeek: nn });
   cols("flow", f.flow as never, { hour: isInt, item: idx(I), intervals: nn, seconds: nn, bidOutbid: nn, askUndercut: nn, bidRemoved: nn, askRemoved: nn });
+  const tradeCols = ["tradeIntervals", "tradeSeconds", "bidTrades", "askTrades"] as const;
+  const present = tradeCols.filter(k => (f.flow as Record<string, unknown>)?.[k] !== undefined);
+  if (present.length && present.length < tradeCols.length) e.push("flow: trade columns must come together");
+  else if (present.length) {
+    if (f.flow.tradeIntervals!.length !== f.flow.item.length) e.push("flow: trade columns have a different length");
+    else cols("flow", f.flow as never, { tradeIntervals: nn, tradeSeconds: nn, bidTrades: nn, askTrades: nn });
+  }
   cols("episodes", f.episodes as never, { item: idx(I), side: (x: unknown) => x === 0 || x === 1, start: isInt, dur: nn, polls: (x: unknown) => isInt(x) && (x as number) >= 1, flow: nn, end: (x: unknown) => x === 0 || x === 1 || x === 2 });
   if (!Array.isArray(f.ah?.keys) || f.ah.keys.some(x => typeof x !== "string" || x.length > 120)) e.push("ah.keys");
   cols("ah.bins", f.ah?.bins as never, { ts: isInt, key: idx(K), lowest: cents, second: cents, bins: nn, total: nn });
@@ -222,6 +231,7 @@ export function sanityCheck(f: DataFile, now = Date.now()): { errors: string[]; 
     if (fh.has(k)) { errors.push("two flow rows for one item and hour"); break; }
     fh.add(k);
     if (f.flow.seconds[i]! > 3600 * 1.01) { errors.push(`flow row with ${f.flow.seconds[i]} s in one hour`); break; }
+    if (f.flow.tradeSeconds && f.flow.tradeSeconds[i]! > f.flow.seconds[i]! + 0.1) { errors.push("flow row with more trade seconds than seconds"); break; }
     const h = f.flow.hour[i]! * 3.6e6;
     if (h < f.from - 3.6e6 || h > f.to) { errors.push("flow row outside the file's time span"); break; }
   }

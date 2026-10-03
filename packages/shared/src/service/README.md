@@ -5,7 +5,7 @@ calc.
 
 | File | What it holds |
 |---|---|
-| `endpoints.ts` | Input schemas (settings, profile, filters; clamped), `applyFilters`, `calcResponse`, `planResponse`, `fillReport`, `outlookResponse`, `requirementsCatalog` |
+| `endpoints.ts` | Input schemas (settings, profile, filters; clamped), `applyFilters`, `calcResponse`, `planResponse`, `fillReport`, `outlookResponse`, `requirementsCatalog`, `dipsResponse`, `booksResponse` (order books for the order tracker), `paperCandidates` (the picks paper trading follows) |
 
 **Used by:**
 - the API server (`packages/api/src/routes`)

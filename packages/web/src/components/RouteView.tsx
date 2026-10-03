@@ -1,7 +1,9 @@
 // One route in detail: the buy / process / sell flow, unlock requirements, market warnings and the full working.
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
-import { FLAG_TEXT, type Opportunity } from "@bc/shared";
+import { FLAG_TEXT, type Opportunity, type RankedOpportunity } from "@bc/shared";
+import { favourites, toggleFavourite } from "../prefs";
+import { trackRoute } from "../track";
 import { coins, num, pct } from "../lib";
 import { useApp } from "../state";
 import { Icon } from "./Icon";
@@ -38,7 +40,7 @@ export function Flow({ o }: { o: Opportunity }) {
         <div key="sell" className="node sell">
           <span className="ic"><Icon name="sell" /></span>
           <span>
-            <span className="v">{o.sell.mode === "offer" ? "Sell offer" : o.sell.mode === "instant" ? "Instant sell" : "Auction (reference)"}</span>{" "}
+            <span className="v">{o.sell.mode === "offer" ? "Sell offer" : o.sell.mode === "instant" ? "Instant sell" : o.sell.mode === "npc" ? "Sell to NPC" : "Auction (reference)"}</span>{" "}
             <b>{l ? `${num(l.qty)}×` : `${num(day(o.unitsH))}/day`}</b> <Link className="itemname" to={`/item/${o.sell.item}`}>{o.sell.name}</Link> <span className="v">@</span> <span className="num">{coins(o.sell.grossPrice)}</span>
             <span className="sub">{l ? <>per offer · ~{num(l.ordersH, 1)} offers/h · {num(day(l.unitsH))}/day</> : <>{num(day(o.unitsH))} over your {settings.hoursPerDay} h</>}
               {o.sell.currentPrice != null && <> · <span className="down">now {coins(o.sell.currentPrice)}, priced at its typical level</span></>}</span>
@@ -64,6 +66,24 @@ export function Requirements({ o, compact = false }: { o: Opportunity; compact?:
   );
 }
 
+/** Confidence of a route's numbers and the reasons it is not higher (calc/confidence.ts). */
+export function ConfidenceNote({ c }: { c: RankedOpportunity["confidence"] }) {
+  return (
+    <div className="small" style={{ paddingTop: 8 }}>
+      <ConfidencePill c={c} /> {c.reasons.length ? <span className="muted">{c.reasons.join(" · ")}</span> : <span className="muted">measured fill times, enough history, no warnings</span>}
+    </div>
+  );
+}
+export const ConfidencePill = ({ c }: { c: RankedOpportunity["confidence"] }) => (
+  <span className={`pill ${c.level === "high" ? "good" : c.level === "low" ? "warn" : ""}`} title={c.reasons.join("\n") || "complete evidence"}>{c.level} confidence</span>
+);
+
+/** Star to keep an item in your favourites (filters and alerts can use them). */
+export function FavouriteStar({ id }: { id: string }) {
+  const fav = favourites.use().includes(id);
+  return <button className="ghost" aria-pressed={fav} onClick={e => { e.stopPropagation(); toggleFavourite(id); }} title={fav ? "Remove from favourites" : "Add to favourites"}>{fav ? "★" : "☆"}</button>;
+}
+
 export function Flags({ flags, max = 3 }: { flags: string[]; max?: number }) {
   if (!flags.length) return null;
   const ordered = [...flags].sort((a, b) => Number(b.endsWith("likely_manipulated")) - Number(a.endsWith("likely_manipulated")));
@@ -76,14 +96,23 @@ export function Flags({ flags, max = 3 }: { flags: string[]; max?: number }) {
   );
 }
 
-export function Detail({ o }: { o: Opportunity }) {
+export function Detail({ o }: { o: Opportunity & Partial<Pick<RankedOpportunity, "confidence">> }) {
   const [sizes, setSizes] = useState(false);
+  const [tracked, setTracked] = useState<string | null>(null);
+  const track = async () => {
+    try { const r = await trackRoute(o); setTracked(r.orders ? `Saved to Track record; ${r.orders} buy order${r.orders > 1 ? "s" : ""} added to My orders.` : "Saved to Track record (this route has no orders to follow)."); }
+    catch (e) { setTracked(`Could not track: ${(e as Error).message}`); }
+  };
   return (
     <>
     <div className="row" style={{ paddingTop: 12, gap: 8 }}>
       <button className={sizes ? "" : "ghost"} aria-expanded={sizes} onClick={() => setSizes(!sizes)}><Icon name="order" size={14} />{sizes ? "Hide order sizes" : "Order sizes & daily limit"}</button>
-      <span className="small muted">how much to put in each order, how often you relist, and how much of your daily bazaar limit it uses</span>
+      <button className="ghost" onClick={() => void track()}><Icon name="check" size={14} />Track this route</button>
+      <FavouriteStar id={o.outputId} />
+      <span className="small muted">order sizes and daily limit · tracking saves the prediction and follows your orders</span>
     </div>
+    {tracked && <div className="note"><Icon name="info" />{tracked} <Link to="/orders">My orders</Link> · <Link to="/record">Track record</Link></div>}
+    {o.confidence && <ConfidenceNote c={o.confidence} />}
     {sizes && <div style={{ paddingTop: 10 }}><OrderPlan o={o} /></div>}
     <div className="detail-grid">
       <div>

@@ -3,7 +3,7 @@
 // Platform independent: the Node collector and the website's browser collector both feed it.
 import type { BookLevel } from "../market/index.js";
 import { TopTracker } from "../fill/index.js";
-import { type BazaarResponse, type ElectionResponse, bookFlow, degradedBazaar, toLevels, validateBazaar } from "./hypixel.js";
+import { type BazaarResponse, type ElectionResponse, bookFlow, counterTrades, degradedBazaar, toLevels, validateBazaar } from "./hypixel.js";
 import type { BinAgg } from "./nbt.js";
 import { type CollectorKind, type DataFile, emptyDataFile } from "./contrib-format.js";
 
@@ -11,7 +11,7 @@ const END = { outbid: 0, gone: 1, cut: 2 } as const;
 const MAX_GAP_MS = 150_000;
 
 interface Close { poll: number; ask: number | null; bid: number | null; askVol: number; bidVol: number; askOrders: number; bidOrders: number; buyWeek: number; sellWeek: number }
-interface Flow { intervals: number; seconds: number; bidOutbid: number; askUndercut: number; bidRemoved: number; askRemoved: number }
+interface Flow { intervals: number; seconds: number; bidOutbid: number; askUndercut: number; bidRemoved: number; askRemoved: number; tradeIntervals: number; tradeSeconds: number; bidTrades: number; askTrades: number }
 
 const cents = (v: number | undefined | null) => (v == null ? null : Math.round(v * 100));
 
@@ -21,7 +21,7 @@ export class DataCollector {
   private keyIdx = new Map<string, number>();
   private closes = new Map<string, Close>();           // `${item}|${hour}` -> last poll of that hour
   private flows = new Map<string, Flow>();             // `${item}|${hour}`
-  private prev = new Map<string, { ts: number; bids: BookLevel[]; asks: BookLevel[] }>();
+  private prev = new Map<string, { ts: number; bids: BookLevel[]; asks: BookLevel[]; buyWeek: number; sellWeek: number }>();
   private tracker = new TopTracker(MAX_GAP_MS);
   private lastPoll = 0;
   private lastProducts = 0;
@@ -72,12 +72,14 @@ export class DataCollector {
       if (pr && ts > pr.ts && ts - pr.ts <= MAX_GAP_MS) {
         const fl = bookFlow(pr.bids, pr.asks, bidsRaw, asksRaw);
         const k = `${i}|${hour}`;
-        const r = this.flows.get(k) ?? { intervals: 0, seconds: 0, bidOutbid: 0, askUndercut: 0, bidRemoved: 0, askRemoved: 0 };
+        const r = this.flows.get(k) ?? { intervals: 0, seconds: 0, bidOutbid: 0, askUndercut: 0, bidRemoved: 0, askRemoved: 0, tradeIntervals: 0, tradeSeconds: 0, bidTrades: 0, askTrades: 0 };
         r.intervals++; r.seconds += (ts - pr.ts) / 1000; r.bidOutbid += fl.outbid ? 1 : 0; r.askUndercut += fl.undercut ? 1 : 0;
         r.bidRemoved += Math.round(fl.bidRemoved); r.askRemoved += Math.round(fl.askRemoved);
+        const t = counterTrades(pr, { buyWeek: q.buyMovingWeek ?? 0, sellWeek: q.sellMovingWeek ?? 0 });
+        if (t) { r.tradeIntervals++; r.tradeSeconds += (ts - pr.ts) / 1000; r.bidTrades += t.bid; r.askTrades += t.ask; }
         this.flows.set(k, r);
       }
-      this.prev.set(id, { ts, bids, asks });
+      this.prev.set(id, { ts, bids, asks, buyWeek: q.buyMovingWeek ?? 0, sellWeek: q.sellMovingWeek ?? 0 });
     }
     return "accepted";
   }
@@ -144,6 +146,7 @@ export class DataCollector {
     for (const r of frows) {
       fl.hour.push(r.hour); fl.item.push(r.item); fl.intervals.push(r.intervals); fl.seconds.push(Math.round(r.seconds * 10) / 10);
       fl.bidOutbid.push(r.bidOutbid); fl.askUndercut.push(r.askUndercut); fl.bidRemoved.push(r.bidRemoved); fl.askRemoved.push(r.askRemoved);
+      fl.tradeIntervals!.push(r.tradeIntervals); fl.tradeSeconds!.push(Math.round(r.tradeSeconds * 10) / 10); fl.bidTrades!.push(r.bidTrades); fl.askTrades!.push(r.askTrades);
     }
     sortColumns(f.episodes as unknown as Record<string, number[]>, (e, i) => [e.item![i]!, e.side![i]!, e.start![i]!]);
     sortColumns(f.ah.bins as unknown as Record<string, number[]>, (e, i) => [e.ts![i]!, e.key![i]!]);

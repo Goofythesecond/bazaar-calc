@@ -9,6 +9,7 @@ Market data and what can be read from one item's data. **May use:** rules.
 | `names.ts` | Display names (Hypixel names, readable fallbacks for books and tags) |
 | `book.ts` | Packing order books into bytes (`sbbook-v1`) for storage |
 | `assemble.ts` | `assembleMarket`: builds the calculator's market from live quotes + statistics, the same way on the server and in the browser |
+| `dips.ts` | `findDips`: items whose cheapest sell offer is well below the lower of the 24 h and 7-day medians, with profit after tax and whether the dip is new (normal an hour ago) or lasting |
 | `event-impact.ts` | How prices moved during past runs of each event, and the outlook for upcoming ones |
 
 **Change here when** you add a flag or change how flow or a typical price is derived. Explain each flag in

@@ -10,6 +10,10 @@ import { Flips } from "./pages/Flips";
 import { About, ApiDocs, Contribute, Status, Timing } from "./pages/Info";
 import { Events, Item, Items, Outlook } from "./pages/Market";
 import { Planner } from "./pages/Planner";
+import { Alerts } from "./pages/Alerts";
+import { Dips } from "./pages/Dips";
+import { Orders } from "./pages/Orders";
+import { Record } from "./pages/Record";
 import { ApiDocsStatic, ContributeStatic, StatusStatic } from "./pages/Static";
 import { STATIC } from "./lib";
 import { AppState } from "./state";
@@ -26,6 +30,10 @@ createRoot(document.getElementById("root")!).render(
               <Route index element={<Planner />} />
               <Route path="flips/:kind" element={<Flips />} />
               <Route path="outlook" element={<Outlook />} />
+              <Route path="dips" element={<Dips />} />
+              <Route path="orders" element={<Orders />} />
+              <Route path="alerts" element={<Alerts />} />
+              <Route path="record" element={<Record />} />
               <Route path="items" element={<Items />} />
               <Route path="item/:id" element={<Item />} />
               <Route path="events" element={<Events />} />

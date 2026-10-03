@@ -1,11 +1,11 @@
 // What the API endpoints compute, independent of where the data comes from: the server answers HTTP requests with it,
 // the static website runs it in the visitor's browser. Inputs are validated and clamped the same way in both.
 import { z } from "zod";
-import { BAZAAR, limitContribution, DEFAULT_PROFILE, type Profile, type GameEvent, SB_YEAR, mayorEvents, termStart } from "../rules/index.js";
-import { type Ctx, bazaarFlips, bookFlips, craftFlips, forgeFlips, DEFAULT_SETTINGS, type Opportunity, type Settings, plan } from "../calc/index.js";
+import { BAZAAR, limitContribution, type PerkEffects, DEFAULT_PROFILE, type Profile, type GameEvent, SB_YEAR, mayorEvents, termStart } from "../rules/index.js";
+import { type Ctx, type RankedOpportunity, bazaarFlips, bookFlips, craftFlips, forgeFlips, npcFlips, routeConfidence, DEFAULT_SETTINGS, type Opportunity, type Settings, plan } from "../calc/index.js";
 import type { Recipe } from "../recipes/index.js";
-import { curve, fillModel, sizeFor, type TopEpisode, quotaTime, survival } from "../fill/index.js";
-import { type HoldStats, type ItemMarket, buyFlowH, sellFlowH, type EventImpact, outlook, prettyName } from "../market/index.js";
+import { type BookSnapshot, type PaperCandidate, curve, fillModel, sizeFor, type TopEpisode, quotaTime, survival } from "../fill/index.js";
+import { type HoldStats, type ItemMarket, buyFlowH, sellFlowH, type EventImpact, findDips, outlook, prettyName } from "../market/index.js";
 
 /** Drop keys whose value is undefined, so they fall back to the defaults instead of overwriting them. */
 const defined = <T extends object>(v: T): Partial<T> => Object.fromEntries(Object.entries(v).filter(([, x]) => x !== undefined)) as Partial<T>;
@@ -24,7 +24,7 @@ export const SettingsSchema = z.object({
 export const ProfileSchema = z.object({
   hotmTier: num(0, 10), quickForgeLevel: num(0, 20), enchantingLevel: num(0, 60), xpLevels: num(0, 10000),
   collections: z.record(z.string(), num(0, 100)), slayers: z.record(z.string(), num(0, 10)), reputation: z.record(z.string(), num(0, 1e6)),
-  coleMoltenForge: z.coerce.boolean(), ignoreRequirements: z.coerce.boolean(),
+  coleMoltenForge: z.coerce.boolean(), quadTaxes: z.coerce.boolean(), npcShoppingSpree: z.coerce.boolean(), ignoreRequirements: z.coerce.boolean(),
 }).partial().transform(v => ({ ...DEFAULT_PROFILE, ...defined(v) }) as Profile);
 
 export const FilterSchema = z.object({
@@ -37,24 +37,26 @@ export const FilterSchema = z.object({
   requirementsMet: z.coerce.boolean().optional(),
   noFlags: z.coerce.boolean().optional(),
   buyModes: z.array(z.enum(["instant", "order"])).optional(),
-  sellModes: z.array(z.enum(["instant", "offer", "ah_reference"])).optional(),
-  sort: z.enum(["coinsH", "profitPerUnit", "marginPct", "unitsH", "capitalUsed"]).default("coinsH"),
+  sellModes: z.array(z.enum(["instant", "offer", "ah_reference", "npc"])).optional(),
+  sort: z.enum(["coinsH", "scoreH", "profitPerUnit", "marginPct", "unitsH", "capitalUsed"]).default("coinsH"),
   limit: num(1, 500).default(100),
   offset: num(0, 1e6).default(0),
   includeAhForge: z.coerce.boolean().optional(),
   profitableOnly: z.coerce.boolean().optional(),
+  /** only routes whose output is one of these items (your favourites) */
+  items: z.array(z.string().max(80)).max(500).optional(),
 }).partial();
 export type Filters = z.infer<typeof FilterSchema>;
 
 export const CalcBody = z.object({ settings: SettingsSchema.optional(), profile: ProfileSchema.optional(), filters: FilterSchema.optional() });
-export const PlanBody = CalcBody.extend({ options: z.object({ kinds: z.array(z.enum(["bazaar", "craft", "book", "forge"])).optional(), requireMet: z.boolean().optional(), maxPicks: z.number().int().min(1).max(50).optional() }).optional() });
-export const CALC_KINDS = ["bazaar", "craft", "book", "forge", "all"] as const;
+export const PlanBody = CalcBody.extend({ options: z.object({ kinds: z.array(z.enum(["bazaar", "craft", "book", "forge", "npc"])).optional(), requireMet: z.boolean().optional(), maxPicks: z.number().int().min(1).max(50).optional() }).optional() });
+export const CALC_KINDS = ["bazaar", "craft", "book", "forge", "npc", "all"] as const;
 export type CalcKind = (typeof CALC_KINDS)[number];
 
 const warned = (o: Opportunity) => o.flags.some(x => !x.endsWith("low_history"));
 
 /** Filters, then sorts; routes with market warnings (often manipulated prices) come after clean ones. */
-export function applyFilters(list: Opportunity[], f: Filters): Opportunity[] {
+export function applyFilters<T extends RankedOpportunity>(list: T[], f: Filters): T[] {
   const q = f.q?.toLowerCase();
   return list.filter(o =>
     (!q || o.title.toLowerCase().includes(q) || o.outputId.toLowerCase().includes(q)) &&
@@ -67,7 +69,8 @@ export function applyFilters(list: Opportunity[], f: Filters): Opportunity[] {
     (!f.noFlags || !warned(o)) &&
     (!f.buyModes || o.buys.every(b => b.mode === "npc" || f.buyModes!.includes(b.mode))) &&
     (!f.sellModes || f.sellModes.includes(o.sell.mode)) &&
-    (!f.profitableOnly || o.coinsH > 0),
+    (!f.profitableOnly || o.coinsH > 0) &&
+    (!f.items || f.items.includes(o.outputId)),
   ).sort((a, b) => Number(warned(a)) - Number(warned(b)) || (b[f.sort ?? "coinsH"] as number) - (a[f.sort ?? "coinsH"] as number));
 }
 
@@ -78,23 +81,30 @@ export function compact(o: Opportunity) {
   return { ...o, sell, buys: o.buys.map(({ fill: _f, ...b }) => b), orderPlan: o.orderPlan.map(({ options: _o, ...l }) => l) };
 }
 
-export interface MarketSource { market: Map<string, ItemMarket>; recipes: Map<string, Recipe[]>; molten: boolean }
+/** `perks`: mayor / minister perks active now (they change tax, forge times and NPC limits; see rules/mayor-perks.ts). */
+export interface MarketSource { market: Map<string, ItemMarket>; recipes: Map<string, Recipe[]>; perks: PerkEffects;
+  /** age of the history behind the statistics (static site; 0 on a server that scans itself) */
+  statsAgeH?: number }
 
 /** Every route of a kind (`listAll`: incl. losing ones and flagged markets, for the flip tables; off for the planner). */
 export function buildOpportunities(src: MarketSource, kind: CalcKind, settings: Settings, profile: Profile, includeAhForge = false, listAll = false) {
-  const c: Ctx = { market: src.market, recipes: src.recipes, settings, profile: { ...profile, coleMoltenForge: profile.coleMoltenForge || src.molten }, listAll, skipped: [] };
+  const c: Ctx = { market: src.market, recipes: src.recipes, settings, listAll, skipped: [], profile: { ...profile,
+    coleMoltenForge: profile.coleMoltenForge || src.perks.coleMoltenForge, quadTaxes: profile.quadTaxes || src.perks.quadTaxes,
+    npcShoppingSpree: profile.npcShoppingSpree || src.perks.shoppingSpree } };
   const out: Opportunity[] = [];
   if (kind === "all" || kind === "bazaar") out.push(...bazaarFlips(c));
   if (kind === "all" || kind === "craft") out.push(...craftFlips(c, { includeAhOutputs: includeAhForge }));
   if (kind === "all" || kind === "book") out.push(...bookFlips(c));
   if (kind === "all" || kind === "forge") out.push(...forgeFlips(c, { includeAhOutputs: includeAhForge }));
-  return { list: out, skipped: c.skipped! };
+  if (kind === "all" || kind === "npc") out.push(...npcFlips(c));
+  const ranked: RankedOpportunity[] = out.map(o => { const confidence = routeConfidence(o, src.market, src.statsAgeH ?? 0); return { ...o, confidence, scoreH: o.coinsH * confidence.score }; });
+  return { list: ranked, skipped: c.skipped! };
 }
 
 type Build = (kind: CalcKind, settings: Settings, profile: Profile, includeAhForge: boolean, listAll: boolean) => ReturnType<typeof buildOpportunities>;
 
 /** POST /api/v1/calc/{kind}. `build` may cache buildOpportunities. */
-export function calcResponse(build: Build, kind: CalcKind, input: unknown, meta: { marketAt: number; dataAt: number }) {
+export function calcResponse(build: Build, kind: CalcKind, input: unknown, meta: Record<string, unknown> & { marketAt: number; dataAt: number }) {
   const b = CalcBody.parse(input ?? {});
   const settings = SettingsSchema.parse(b.settings ?? {}), profile = ProfileSchema.parse(b.profile ?? {}), f = FilterSchema.parse(b.filters ?? {});
   const { list, skipped } = build(kind, settings, profile, f.includeAhForge ?? false, true);
@@ -106,12 +116,15 @@ export function calcResponse(build: Build, kind: CalcKind, input: unknown, meta:
 }
 
 /** POST /api/v1/calc/plan */
-export function planResponse(build: Build, input: unknown, meta: { marketAt: number; dataAt: number }) {
+export function planResponse(build: Build, input: unknown, meta: Record<string, unknown> & { marketAt: number; dataAt: number }) {
   const b = PlanBody.parse(input ?? {});
   const settings = SettingsSchema.parse(b.settings ?? {}), profile = ProfileSchema.parse(b.profile ?? {});
   const candidates = applyFilters(build("all", settings, profile, b.filters?.includeAhForge ?? false, false).list, FilterSchema.parse({ ...(b.filters ?? {}), limit: 500 }));
   const p = plan(candidates, settings, profile, b.options ?? {});
-  return { ...p, picks: p.picks.map(compact), ...meta };
+  // a pick is its candidate re-sized to the coins it got: same evidence, so the same confidence
+  const conf = new Map(candidates.map(c => [c.key, c.confidence]));
+  const picks = p.picks.map(o => { const confidence = conf.get(o.key)!; return { ...compact(o), confidence, scoreH: o.coinsH * confidence.score }; });
+  return { ...p, picks, ...meta };
 }
 
 export const FILL_METHOD = [
@@ -200,4 +213,31 @@ export function requirementsCatalog(recipes: Iterable<Recipe>): { type: string; 
   }
   return [...g.values()].map(e => ({ type: e.type, name: e.name, max: e.max, recipes: e.outputs.size }))
     .sort((a, b) => a.type.localeCompare(b.type) || b.recipes - a.recipes);
+}
+
+/** GET /api/v1/dips: items whose cheapest sell offer is far below its typical price (market/dips.ts). */
+export function dipsResponse(market: Map<string, ItemMarket>, query: Record<string, unknown>, perks: PerkEffects) {
+  const minDrop = Math.min(0.9, Math.max(0.02, toNum(query.minDrop, 0.1)));
+  const level = Math.min(2, Math.max(0, Math.round(toNum(query.flipperLevel, 0))));
+  const rows = findDips(market, { minDrop, flipperLevel: level, quadTaxes: perks.quadTaxes });
+  return { minDrop, total: rows.length, rows: rows.slice(0, Math.min(500, Math.max(1, toNum(query.limit, 100)))) };
+}
+
+/** GET /api/v1/books?ids=A,B: current order books and Hypixel's 7-day counters (the order tracker follows your orders with them). */
+export function booksResponse(market: Map<string, ItemMarket>, ids: string[]) {
+  const items: Record<string, BookSnapshot & { name: string }> = {};
+  for (const id of ids.slice(0, 50)) {
+    const m = market.get(id);
+    if (m && (m.topBid || m.topAsk)) items[id] = { name: m.name, ts: m.ts, bids: m.topBid ?? [], asks: m.topAsk ?? [], buyWeek: m.ibuyWeek, sellWeek: m.isellWeek };
+  }
+  return { items };
+}
+
+/** The routes paper trading may open, best first: profitable bazaar flips with order legs and no serious warnings, ranked
+ *  by coins/h x confidence; the size is the route's buy order. Shared by the browser and the server. */
+export function paperCandidates(list: RankedOpportunity[]): PaperCandidate[] {
+  return list
+    .filter(o => o.kind === "bazaar" && o.coinsH > 0 && !o.key.endsWith(":instant") && o.flags.every(f => f === "low_history" || f === "mass_delists"))
+    .sort((a, b) => b.scoreH - a.scoreH)
+    .map(o => ({ key: o.key, title: o.title, item: o.outputId, qty: o.orderPlan.find(l => l.side === "buy")?.qty ?? o.batch, profitPerUnit: o.profitPerUnit, unitsH: o.unitsH, kind: o.kind }));
 }

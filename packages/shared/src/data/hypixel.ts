@@ -66,5 +66,15 @@ export function bookFlow(prevBids: BookLevel[], prevAsks: BookLevel[], bids: Hyp
   };
 }
 
+/**
+ * Real instant trades between two polls from Hypixel's 7-day counters: the rise of sellMovingWeek is units instant-sold
+ * (they filled buy orders), the rise of buyMovingWeek units instant-bought (they filled sell offers). The counters also
+ * fall in bulk when week-old trades expire (about every 30 min); in such a pair the trades are unknown, so null.
+ */
+export function counterTrades(prev: { buyWeek: number; sellWeek: number }, now: { buyWeek: number; sellWeek: number }): { bid: number; ask: number } | null {
+  const bid = now.sellWeek - prev.sellWeek, ask = now.buyWeek - prev.buyWeek;
+  return bid < 0 || ask < 0 ? null : { bid, ask };
+}
+
 /** Book levels as stored (prices rounded to centicoins, exactly as the database packs them). */
 export const toLevels = (o: HypixelOrder[]): BookLevel[] => o.map(x => ({ price: Math.round(x.pricePerUnit * 100) / 100, amount: x.amount, orders: x.orders }));

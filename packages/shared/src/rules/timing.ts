@@ -39,6 +39,11 @@ export const ACTIONS: Record<string, ActionDef> = {
     steps: ["click", "click"],
     menus: ["NPC shop menu", "click the item (one stack)"],
   },
+  npc_sell: {
+    label: "Sell one stack to an NPC shop",
+    steps: ["click", "click"],
+    menus: ["NPC shop menu", "click the stack in your inventory"],
+  },
   instant_sell: {
     label: "Instant sell",
     steps: ["command", "click", "click"],

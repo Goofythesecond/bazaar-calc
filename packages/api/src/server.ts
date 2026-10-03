@@ -17,12 +17,14 @@ import { registerContribute } from "./routes/contribute.js";
 import { registerFill } from "./routes/fill.js";
 import { registerPublic } from "./routes/public.js";
 import { State } from "./state.js";
+import { startServerJobs } from "./jobs.js";
 
 /** Start the API (and the built website) on `db`. Returns a function that closes the server. */
 export async function startApi(db: Db, opts: { port?: number; host?: string } = {}): Promise<() => Promise<void>> {
 await migrate(db);
 const state = new State(db);
 await state.start();
+const jobs = await startServerJobs(state, db);
 
 const app = Fastify({ logger: { level: process.env.LOG_LEVEL ?? "info" }, trustProxy: ENV.trustProxy });
 await app.register(cookie, { secret: ENV.sessionSecret });
@@ -57,6 +59,7 @@ app.setErrorHandler((err: FastifyError, _req, reply) => {
 app.get("/api/openapi.json", async () => OPENAPI);
 registerAuth(app, db);
 registerPublic(app, db, state);
+app.get("/api/v1/paper", async () => jobs.paper());
 registerFill(app, db, state);
 registerCalc(app, state);
 registerContribute(app, db);
@@ -82,5 +85,5 @@ if (existsSync(webDist)) {
 }
 
 await app.listen({ port: opts.port ?? ENV.port, host: opts.host ?? process.env.API_HOST ?? "0.0.0.0" });
-return async () => { state.stop(); await app.close(); };
+return async () => { jobs.stop(); state.stop(); await app.close(); };
 }

@@ -99,6 +99,8 @@ export function perkEvents(perk: string, termStart: number, termEnd: number): Ga
   else if (p === "mythological ritual") out.push({ kind: "mayor_event", name: "Mythological Ritual", start: termStart, end: termEnd, confidence: "schedule_rule" });
   else if (p === "chivalrous carnival") out.push({ kind: "mayor_event", name: "Carnival", start: termStart, end: termEnd, confidence: "schedule_rule" });
   else if (p === "molten forge") out.push({ kind: "mayor_event", name: "Molten Forge (-25% forge time)", start: termStart, end: termEnd, confidence: "schedule_rule" });
+  else if (p === "quad taxes!!!") out.push({ kind: "mayor_event", name: "QUAD TAXES (bazaar tax x4)", start: termStart, end: termEnd, confidence: "schedule_rule" });
+  else if (p === "shopping spree") out.push({ kind: "mayor_event", name: "Shopping Spree (NPC buy limits x10)", start: termStart, end: termEnd, confidence: "schedule_rule" });
   else if (p.startsWith("extra event")) {
     const s = sbTime(y0, 6, 22);
     if (inTerm(s)) out.push({ kind: "mayor_event", name: `Foxy ${perk}`, start: s, end: s + 3 * SB_DAY, confidence: "approximate",

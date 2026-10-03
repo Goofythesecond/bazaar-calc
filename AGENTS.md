@@ -6,7 +6,7 @@ this repository. Humans: see [README.md](README.md), [CONTRIBUTING.md](CONTRIBUT
 
 ## What this project is
 
-A Hypixel SkyBlock market calculator that lists bazaar, craft, book and forge flips and plans the best mix of them. It
+A Hypixel SkyBlock market calculator that lists bazaar, craft, book, forge and NPC flips and plans the best mix of them. It
 runs two ways:
 - **Website (GitHub Pages, no server):** the calculator runs in the visitor's browser on live Hypixel prices. History
   comes from community data in `data/contrib/`.
@@ -96,7 +96,7 @@ pnpm install                         # pnpm 12 (see packageManager); Node 24 in 
 pnpm check                           # architecture rules, build every package, run every test
 node scripts/checks/architecture.mjs # just the structure rules (no install needed)
 pnpm -r build                        # type checks every package and builds them
-pnpm -r test                         # 34 calculator / rule tests + 4 ingestion tests (PGlite)
+pnpm -r test                         # 45 calculator / rule tests + 4 ingestion tests (PGlite)
 ```
 
 After changing `package.json`, run `pnpm install` and commit `pnpm-lock.yaml`. CI installs with

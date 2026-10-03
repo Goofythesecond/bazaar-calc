@@ -1,5 +1,5 @@
 // API client, formatting and persisted settings.
-import { DEFAULT_PROFILE, DEFAULT_SETTINGS, type Opportunity, type Profile, type Settings } from "@bc/shared";
+import { DEFAULT_PROFILE, DEFAULT_SETTINGS, type Opportunity, type Profile, type RankedOpportunity, type Settings } from "@bc/shared";
 
 /** Built as the static website (GitHub Pages): no server, the calculator runs in the browser (src/static). */
 export const STATIC = import.meta.env.VITE_STATIC === "1";
@@ -51,7 +51,7 @@ export function loadSaved(): Saved {
 export function save(v: Saved) { try { localStorage.setItem(KEY, JSON.stringify({ ...v, v: 2 })); } catch { /* private mode */ } }
 
 export interface CalcResponse {
-  total: number; profitable: number; offset: number; rows: Opportunity[]; marketAt: number; dataAt?: number; statsAt?: number; statsUsed?: boolean;
+  total: number; profitable: number; offset: number; rows: RankedOpportunity[]; marketAt: number; dataAt?: number; statsAt?: number; statsUsed?: boolean; perks?: string[];
   skipped: { kind: Opportunity["kind"]; key: string; title: string; reason: string }[];
 }
 
@@ -62,7 +62,7 @@ export function dataAge(dataAt: number | undefined, fallback: number): { label: 
     stale: min > 5 ? `These prices are ${min < 120 ? `${Math.round(min)} min` : `${(min / 60).toFixed(1)} h`} old: the scanner has not delivered new data, so the numbers may be out of date.` : null };
 }
 
-export const KIND_LABEL: Record<Opportunity["kind"], string> = { bazaar: "Bazaar flip", craft: "Craft flip", book: "Book flip", forge: "Forge" };
+export const KIND_LABEL: Record<Opportunity["kind"], string> = { bazaar: "Bazaar flip", craft: "Craft flip", book: "Book flip", forge: "Forge", npc: "NPC flip" };
 
 /** Static website: how old the published history (competition, fill times, typical prices) is, when that matters. */
 export function historyAge(statsAt: number | undefined, used: boolean | undefined): string | null {

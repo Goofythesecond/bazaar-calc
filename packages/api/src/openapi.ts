@@ -56,12 +56,15 @@ export const OPENAPI = {
     "/api/v1/mayors": { get: { summary: "Mayor terms and the current election", responses: ok("mayors") } },
     "/api/v1/events": { get: { summary: "Calendar, mayor and real-time events", parameters: [{ name: "from", in: "query" }, { name: "to", in: "query" }], responses: ok("events") } },
     "/api/v1/outlook": { get: { summary: "Expected price moves during upcoming events, from measured history", parameters: [{ name: "days", in: "query" }, { name: "minChange", in: "query" }], responses: ok("outlook") } },
-    "/api/v1/rules/bazaar": { get: { summary: "Bazaar rules (slots, tax, limits) with sources", responses: ok("rules") } },
+    "/api/v1/dips": { get: { summary: "Items whose cheapest sell offer is well below the lower of the 24 h and 7-day medians, with profit after tax and whether the dip is new", parameters: [{ name: "minDrop", in: "query" }, { name: "flipperLevel", in: "query" }, { name: "limit", in: "query" }], responses: ok("dips") } },
+    "/api/v1/books": { get: { summary: "Current order books and Hypixel's 7-day counters for up to 50 items (?ids=A,B); the order tracker follows your orders with them", parameters: [{ name: "ids", in: "query" }], responses: ok("books") } },
+    "/api/v1/paper": { get: { summary: "The server's paper-trading record: virtual orders on the calculator's top bazaar picks, filled from real trades", responses: ok("paper") } },
+    "/api/v1/rules/bazaar": { get: { summary: "Bazaar rules (slots, tax with the active mayor perks, limits) with sources", responses: ok("rules") } },
     "/api/v1/rules/forge": { get: { summary: "Forge rules with sources", responses: ok("rules") } },
     "/api/v1/rules/requirements": { get: { summary: "Every collection / HotM / slayer / reputation requirement used by recipes, with the highest tier needed", responses: ok("requirements") } },
     "/api/v1/rules/enchants": { get: { summary: "Enchanted book combining rules with sources", responses: ok("rules") } },
     "/api/v1/rules/timing": { get: { summary: "Action timing model for your ping, plus contributor-measured timings", parameters: [{ name: "ping", in: "query" }, { name: "click", in: "query" }, { name: "typing", in: "query" }], responses: ok("timing") } },
-    ...Object.fromEntries(["bazaar", "craft", "book", "forge", "all"].map(k => [`/api/v1/calc/${k}`, {
+    ...Object.fromEntries(["bazaar", "craft", "book", "forge", "npc", "all"].map(k => [`/api/v1/calc/${k}`, {
       post: { summary: `${k} flips for your settings (every route, losing ones too; each row has orderPlan: per order leg the size per order, orders/h, limit coins/h and the measured basis)`, requestBody: { content: { "application/json": { schema: calcBody } } }, responses: ok("opportunities") },
       get: { summary: `${k} flips with default settings`, responses: ok("opportunities") },
     }])),

@@ -1,7 +1,7 @@
 // One evaluation engine for every flip type. A Route is: buy legs -> processing steps -> sell leg, all per ONE
 // sold output unit. evaluate() turns a route into an Opportunity with coins/hour, what limits it, capital, daily
 // bazaar-limit use, time spent clicking, requirements and a step-by-step explanation.
-import { BAZAAR, limitContribution, orderSlots, taxRate, FORGE, forgeSlots, type Profile, type Requirement, dedupeRequirements, unmet, actionSeconds, type TimingSettings } from "../rules/index.js";
+import { BAZAAR, limitContribution, npcBuyLimit, orderSlots, taxRate, FORGE, forgeSlots, type Profile, type Requirement, dedupeRequirements, unmet, actionSeconds, type TimingSettings } from "../rules/index.js";
 import { type FillModel, at, curve } from "../fill/index.js";
 
 export interface Settings extends TimingSettings {
@@ -52,7 +52,7 @@ export interface ProcessStep {
 export interface SellLeg {
   item: string;
   name: string;
-  mode: SellMode | "ah_reference";
+  mode: SellMode | "ah_reference" | "npc"; // npc: sold to an NPC shop at its fixed price (no bazaar tax, 500M coins/day cap)
   grossPrice: number;      // per unit before tax
   netPrice: number;        // after tax
   currentPrice?: number;   // the price right now, when it is above the typical price used instead
@@ -65,7 +65,7 @@ export interface SellLeg {
 }
 
 export interface Route {
-  kind: "bazaar" | "craft" | "book" | "forge";
+  kind: "bazaar" | "craft" | "book" | "forge" | "npc";
   key: string;
   title: string;
   outputId: string;
@@ -124,6 +124,7 @@ export interface Opportunity extends Route {
   oneAtATime: boolean;
   batchOptions: { batch: number; unitsH: number; coinsH: number; limitCoinsH: number; capital: number; clickMinH: number; limitedBy: string; oneAtATime: boolean }[];
   instantLimitCoinsH: number; // daily-limit coins per hour from instant buys / sells
+  npcSellCoinsH: number;      // coins/h earned selling to NPC shops (they pay at most 500M coins per profile per day)
   unmet: Requirement[];
   explain: string[];
 }
@@ -143,15 +144,16 @@ const fmt = (v: number, d = 1) => { let f = fmts.get(d); if (!f) fmts.set(d, (f 
 
 /** `capital`: coins this route may use. A single route on its own gets all your coins; the planner passes what is left. */
 export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coins,
-  limits?: { activeSecondsH?: number; limitCoinsDay?: number; forgeSlots?: number }): Opportunity {
+  limits?: { activeSecondsH?: number; limitCoinsDay?: number; forgeSlots?: number; npcSellCoinsDay?: number }): Opportunity {
   const explain: string[] = [];
-  const tax = taxRate(s.bazaarFlipperLevel);
+  const tax = taxRate(s.bazaarFlipperLevel, p.quadTaxes);
   const costPerUnit = route.buys.reduce((a, b) => a + b.qty * b.price, 0);
   const profitPerUnit = route.sell.netPrice - costPerUnit;
   for (const b of route.buys)
     explain.push(`Per ${route.sell.name} sold: ${b.mode === "order" ? "buy order" : b.mode === "npc" ? `NPC shop (${b.source ?? "NPC"})` : "instant buy"} ${fmt(b.qty, 3)}x ${b.name} at ${fmt(b.price)} = ${fmt(b.qty * b.price)}`);
   for (const st of route.steps) explain.push(`${st.label}: ${fmt(st.opsPerUnit, 3)} operation(s) per unit`);
-  explain.push(`${route.sell.mode === "offer" ? "Sell offer" : route.sell.mode === "instant" ? "Instant sell" : "AH reference price"} ${route.sell.name} at ${fmt(route.sell.grossPrice)} - ${(tax * 100).toFixed(3)}% tax = ${fmt(route.sell.netPrice)}`);
+  if (route.sell.mode === "npc") explain.push(`Sell ${route.sell.name} to an NPC shop at ${fmt(route.sell.grossPrice)} (no bazaar tax)`);
+  else explain.push(`${route.sell.mode === "offer" ? "Sell offer" : route.sell.mode === "instant" ? "Instant sell" : "AH reference price"} ${route.sell.name} at ${fmt(route.sell.grossPrice)} - ${(tax * 100).toFixed(3)}% tax = ${fmt(route.sell.netPrice)}`);
   if (route.sell.currentPrice != null)
     explain.push(`Sale priced at the ${route.sell.priceBasis}: right now it is listed at ${fmt(route.sell.currentPrice)} (${((route.sell.currentPrice / route.sell.grossPrice - 1) * 100).toFixed(0)}% higher), which buyers are unlikely to pay by the time you sell`);
   explain.push(`Profit per unit = ${fmt(route.sell.netPrice)} - ${fmt(costPerUnit)} = ${fmt(profitPerUnit)}`);
@@ -160,9 +162,16 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   for (const b of route.buys)
     caps.push({ name: `${b.name} supply`, unitsH: b.flowH / b.qty,
       why: b.mode === "order" ? `your buy orders fill ~${fmt(b.flowH)}/h (${b.share == null ? "competition unknown" : `on top ${(b.share * 100).toFixed(0)}%`})`
-        : b.mode === "npc" ? `NPC shops sell at most ${BAZAAR.npcDailyBuyLimit}/day per item = ${fmt(b.flowH)}/h over your ${s.hoursPerDay} h` : `sellers list ~${fmt(b.flowH)}/h` });
+        : b.mode === "npc" ? `NPC shops sell at most ${npcBuyLimit(p.npcShoppingSpree)}/day per item = ${fmt(b.flowH)}/h over your ${s.hoursPerDay} h` : `sellers list ~${fmt(b.flowH)}/h` });
   caps.push({ name: `${route.sell.name} demand`, unitsH: route.sell.flowH,
     why: route.sell.mode === "offer" ? `your sell offers fill ~${fmt(route.sell.flowH)}/h (${route.sell.share == null ? "competition unknown" : `on top ${(route.sell.share * 100).toFixed(0)}%`})` : `buyers take ~${fmt(route.sell.flowH)}/h` });
+
+  // NPC shops pay out at most 500M coins per profile per day (whatever the planner's other NPC picks leave)
+  if (route.sell.mode === "npc") {
+    const day = limits?.npcSellCoinsDay ?? BAZAAR.npcDailySellCoins;
+    caps.push({ name: "NPC sell cap", unitsH: Math.max(0, day) / Math.max(1e-9, route.sell.grossPrice) / Math.max(0.1, s.hoursPerDay),
+      why: `NPC shops pay out at most ${fmt(BAZAAR.npcDailySellCoins / 1e6, 0)}M coins a day${day < BAZAAR.npcDailySellCoins ? ` (${fmt(Math.max(0, day) / 1e6, 0)}M left after your other NPC sales)` : ""}, spread over your ${s.hoursPerDay} h` });
+  }
 
   // crafting speed
   const craftOps = route.steps.filter(x => x.type === "craft").reduce((a, x) => a + x.opsPerUnit, 0);
@@ -255,6 +264,7 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
         clickS += ((U * b.qty) / BAZAAR.maxInstantBuyUnits) * actionSeconds("instant_buy", s);
       }
     }
+    if (route.sell.mode === "npc") clickS += (U / 64) * actionSeconds("npc_sell", s); // NPC sales do not count toward the bazaar limit
     if (route.sell.mode === "instant") {
       instantLimitH += U * route.sell.grossPrice; // pre-tax value counts
       clickS += (U / BAZAAR.maxInstantBuyUnits) * actionSeconds("instant_sell", s);
@@ -359,6 +369,6 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
       return (unitsH * hoursPlayed * x.opsPerUnit) / runsPerSlot(dH);
     })) - 1e-9)) : 0,
     limitCoinsH, limitHoursLeft: limitCoinsH > 0 ? s.dailyLimit / limitCoinsH : Infinity,
-    activeSecondsH: use.clickS, orderPlan: use.legs, instantLimitCoinsH: use.instantLimitH, batch: chosen.B, batchOptions, unmet: unmet(reqs, p), explain,
+    activeSecondsH: use.clickS, orderPlan: use.legs, instantLimitCoinsH: use.instantLimitH, npcSellCoinsH: route.sell.mode === "npc" ? unitsH * route.sell.grossPrice : 0, batch: chosen.B, batchOptions, unmet: unmet(reqs, p), explain,
   };
 }

@@ -15,7 +15,9 @@ export interface ItemStats {
   spark: (number | null)[]; chg24: number | null; chg7: number | null; chg14: number | null; volDaily: number | null;
   ask24?: number | null; bid24?: number | null; n24?: number; ask7?: number | null; bid7?: number | null; n7?: number;
   askVol24?: number | null; bidVol24?: number | null;
-  delists?: { hours: number; bidRemoved: number; bidTrades: number; askRemoved: number; askTrades: number } | null;
+  delists?: { hours: number; bidRemoved: number; bidTrades: number; askRemoved: number; askTrades: number; exact?: boolean } | null;
+  /** what the observed flow is: real trades from Hypixel's counters, or units that left the book (older data) */
+  flowBasis?: "trades" | "book" | null;
   eventImpact?: EventImpact[];
 }
 
@@ -36,6 +38,8 @@ export interface MarketInputs {
   /** only auction rows recent enough to trade on */
   ah: Map<string, AhRef>;
   names: Map<string, string | null>;
+  /** what NPC shops pay per item (Hypixel's items resource, npc_sell_price) */
+  npcSell?: Map<string, number | null>;
   /** wall-clock time for auction-only rows */
   now?: number;
 }
@@ -49,12 +53,14 @@ export function assembleMarket(inp: MarketInputs): Map<string, ItemMarket> {
       id: r.id, name: prettyName(r.id, inp.names.get(r.id)), ts: r.ts, ask: r.ask, bid: r.bid,
       askVolume: r.askVolume, bidVolume: r.bidVolume, askOrders: r.askOrders, bidOrders: r.bidOrders, ibuyWeek: r.ibuyWeek, isellWeek: r.isellWeek,
       undercutBuyH: s?.undercutBuyH ?? null, undercutSellH: s?.undercutSellH ?? null, liveHours: s?.liveHours ?? 0,
-      observedBuyFlowH: s?.observedBuyFlowH ?? null, observedSellFlowH: s?.observedSellFlowH ?? null,
+      observedBuyFlowH: s?.observedBuyFlowH ?? null, observedSellFlowH: s?.observedSellFlowH ?? null, flowBasis: s?.flowBasis ?? null,
       ref: s ? { askMed: s.askMed, bidMed: s.bidMed, spreadMed: s.spreadMed, days: s.days, ask24: s.ask24 ?? null, bid24: s.bid24 ?? null, n24: s.n24 ?? 0,
-        ask7: s.ask7 ?? null, bid7: s.bid7 ?? null, n7: s.n7 ?? 0, askVol24: s.askVol24 ?? null, bidVol24: s.bidVol24 ?? null, delists: s.delists ?? null } : null,
+        ask7: s.ask7 ?? null, bid7: s.bid7 ?? null, n7: s.n7 ?? 0, askVol24: s.askVol24 ?? null, bidVol24: s.bidVol24 ?? null, delists: s.delists ?? null,
+        hourAgo: s.hourAgo ?? null } : null,
       topBid: r.bids, topAsk: r.asks,
       holdBid: inp.hold.get(r.id)?.bid ?? null, holdAsk: inp.hold.get(r.id)?.ask ?? null,
       ahLowestBin: a?.lowestBin ?? null, ahSales24h: a?.sales24h ?? 0, ahMedianSale24h: a?.medianSale24h ?? null,
+      npcSellPrice: inp.npcSell?.get(r.id) ?? null,
       flags: [], flagWhy: {},
     };
     computeFlags(m, s?.hourAgo ?? undefined);

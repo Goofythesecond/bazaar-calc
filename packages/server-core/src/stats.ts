@@ -8,17 +8,35 @@ import { loadEvents, type ItemStats } from "./market.js";
 /** Undercuts per hour with a Poisson correction: polls only show WHETHER the top changed in an interval, so with a share p
  *  of intervals showing a change the true rate is -ln(1 - p) per interval. Measured flows are units removed from the top
  *  levels per hour (an upper bound on fills, since cancels look the same). */
-export function competition(c: { n: unknown; secs: unknown; ob: unknown; uc: unknown; br: unknown; ar: unknown } | undefined) {
+export function competition(c: FlowSums | undefined) {
   const n = Number(c?.n ?? 0), secs = Number(c?.secs ?? 0);
-  if (!c || n < 15 || secs <= 0) return { undercutBuyH: null, undercutSellH: null, observedBuyFlowH: null, observedSellFlowH: null };
+  if (!c || n < 15 || secs <= 0) return { undercutBuyH: null, undercutSellH: null, observedBuyFlowH: null, observedSellFlowH: null, liveHours: 0, flowBasis: null };
   const per = secs / n, rate = (k: number) => (k <= 0 ? 0 : -Math.log(1 - Math.min(0.99, k / n)) * (3600 / per));
-  return { undercutBuyH: rate(Number(c.ob)), undercutSellH: rate(Number(c.uc)), observedBuyFlowH: Number(c.br) / (secs / 3600), observedSellFlowH: Number(c.ar) / (secs / 3600) };
+  // Observed trades per hour: real instant trades from Hypixel's counters once at least an hour of them is measured
+  // (exact: fills only), else units that left the top of the book (fills AND cancels, and replenished levels hide fills:
+  // on 2026-10-03 removals were 23%+ below real trades for a quarter of item sides and 50%+ above for 12%).
+  // liveHours is the time behind whichever is used.
+  const tradeSecs = Number(c.tsecs ?? 0);
+  const trades = tradeSecs >= 3600;
+  const h = (trades ? tradeSecs : secs) / 3600;
+  return { undercutBuyH: rate(Number(c.ob)), undercutSellH: rate(Number(c.uc)),
+    observedBuyFlowH: Number(trades ? c.bt : c.br) / h, observedSellFlowH: Number(trades ? c.at : c.ar) / h, liveHours: h,
+    flowBasis: trades ? "trades" as const : "book" as const };
 }
 
+/** Sums of bazaar_flow_hourly over a window (stats query). */
+export interface FlowSums { n: unknown; secs: unknown; ob: unknown; uc: unknown; br: unknown; ar: unknown; tsecs?: unknown; bt?: unknown; at?: unknown }
+
 /** Units that left each side of the book vs real instant trades over the same watched hours (null when too little data). */
-export function delists(c: { secs: unknown; br: unknown; ar: unknown } | undefined, k: { span: unknown; b1: unknown; b2: unknown; s1: unknown; s2: unknown } | undefined) {
-  const span = Number(k?.span ?? 0), watched = Number(c?.secs ?? 0) / 3600;
-  if (!c || !k || span < 3 || watched < 3) return null;
+export function delists(c: FlowSums | undefined, k: { span: unknown; b1: unknown; b2: unknown; s1: unknown; s2: unknown } | undefined) {
+  const watched = Number(c?.secs ?? 0) / 3600, tradeH = Number(c?.tsecs ?? 0) / 3600;
+  if (!c || watched < 3) return null;
+  // exact: the trades measured in the same polls, scaled from the hours they cover to the hours the removals cover
+  if (tradeH >= 3) return { hours: watched, exact: true,
+    bidRemoved: Number(c.br), bidTrades: Number(c.bt) * (watched / tradeH),
+    askRemoved: Number(c.ar), askTrades: Number(c.at) * (watched / tradeH) };
+  const span = Number(k?.span ?? 0);
+  if (!k || span < 3) return null;
   // The counter's drop-off (trades from exactly a week earlier) is unknown and swings with last week's activity; to never
   // call real trading a "delist", trades are taken as at least the item's average weekly rate over the same hours.
   const trades = (w1: number, w2: number) => Math.max((w2 - w1 + (w1 / 168) * span) * (watched / span), (Math.max(w1, w2) / 168) * watched);
@@ -37,7 +55,8 @@ export async function computeStats(db: Db, windowDays = 14, now = Date.now()): P
       ORDER BY item_id, b, ts DESC`, [windowDays, at]);
   // competition + measured flow from consecutive order books (bazaar_flow_hourly), last 24 hours
   const comp = await db.query(
-    `SELECT item_id, sum(intervals) AS n, sum(seconds) AS secs, sum(bid_outbid) AS ob, sum(ask_undercut) AS uc, sum(bid_removed) AS br, sum(ask_removed) AS ar
+    `SELECT item_id, sum(intervals) AS n, sum(seconds) AS secs, sum(bid_outbid) AS ob, sum(ask_undercut) AS uc, sum(bid_removed) AS br, sum(ask_removed) AS ar,
+            sum(trade_seconds) AS tsecs, sum(bid_trades) AS bt, sum(ask_trades) AS at
        FROM bazaar_flow_hourly WHERE hour >= date_trunc('hour', $1::timestamptz - interval '24 hours') AND hour <= $1::timestamptz GROUP BY item_id`, [at]);
   // real instant trades in the same 24 h: rise of Hypixel's 7-day counters (first -> last quote) plus what dropped off
   // from a week earlier (estimated at the average weekly rate). Compared with units that left the book, this separates
@@ -79,7 +98,7 @@ export async function computeStats(db: Db, windowDays = 14, now = Date.now()): P
     const w24 = win(24), w7 = win(24 * 7);
     const data: ItemStats & { eventImpact?: EventImpact[] } = {
       askMed: med(pts.map(p => p.ask)), bidMed: med(pts.map(p => p.bid)), spreadMed: med(pts.map(p => (p.ask - p.bid) / p.bid)), days: windowDays,
-      ...competition(c), liveHours: c ? Number(c.secs) / 3600 : 0,
+      ...competition(c),
       delists: delists(c, counters.get(id)),
       hourAgo: ago ? { ask: ago.ask_top / 100, bid: ago.bid_top / 100 } : null,
       spark, chg24: ref(at(now - 86400_000)), chg7: ref(at(now - 7 * 86400_000)), chg14: ref(mids[0]!.t < start + 12 * 3600_000 ? mids[0]!.v : null),

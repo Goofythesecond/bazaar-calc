@@ -7,3 +7,4 @@ export * from "./enchants.js";
 export * from "./calendar.js";
 export * from "./timing.js";
 export * from "./requirements.js";
+export * from "./mayor-perks.js";

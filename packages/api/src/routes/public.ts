@@ -4,7 +4,7 @@ import type { FastifyInstance } from "fastify";
 import { type Db, loadMayors } from "@bc/server-core";
 import {
   BAZAAR, BAZAAR_SOURCES, ENCHANT_SOURCE, type ItemMarket, FORGE, FORGE_SOURCES, NOTICE, type EventImpact, enchantRules, forgeSlots, orderSlots,
-  outlookResponse, parseBookId, prettyName, quickForgeReduction, requirementsCatalog, taxRate, timingTable, unpackLevels,
+  booksResponse, describePerks, dipsResponse, outlookResponse, parseBookId, prettyName, quickForgeReduction, requirementsCatalog, taxRate, timingTable, unpackLevels,
 } from "@bc/shared";
 import type { State } from "../state.js";
 
@@ -12,7 +12,7 @@ const unpack = (b: Buffer | null) => (b ? unpackLevels(new Uint8Array(zlib.zstdD
 const toNum = (v: unknown, d: number) => (v == null || v === "" || Number.isNaN(Number(v)) ? d : Number(v));
 
 export function registerPublic(app: FastifyInstance, db: Db, state: State) {
-  app.get("/api/v1/health", async () => ({ ok: true, marketItems: state.market.size, loadedAt: state.loadedAt }));
+  app.get("/api/v1/health", async () => ({ ok: true, marketItems: state.market.size, loadedAt: state.loadedAt, dataAt: state.dataAt }));
 
   app.get("/api/v1/status", async () => {
     const [snap, contrib, ah, rec] = await Promise.all([
@@ -57,7 +57,8 @@ export function registerPublic(app: FastifyInstance, db: Db, state: State) {
   // the exact market the calculators are using right now (refreshed every 30 s): lets anyone check a route's prices
   app.get<{ Querystring: { ids?: string } }>("/api/v1/market", async req => {
     const ids = (req.query.ids ?? "").split(",").filter(Boolean).slice(0, 5000);
-    const pick = (m: ItemMarket) => ({ ts: m.ts, bid: m.bid, ask: m.ask, ibuyWeek: m.ibuyWeek, isellWeek: m.isellWeek, flags: m.flags, flagWhy: m.flagWhy, ref: m.ref ?? null });
+    const pick = (m: ItemMarket) => ({ ts: m.ts, bid: m.bid, ask: m.ask, ibuyWeek: m.ibuyWeek, isellWeek: m.isellWeek, observedBuyFlowH: m.observedBuyFlowH ?? null,
+      observedSellFlowH: m.observedSellFlowH ?? null, liveHours: m.liveHours, flowBasis: m.flowBasis ?? null, npcSellPrice: m.npcSellPrice ?? null, flags: m.flags, flagWhy: m.flagWhy, ref: m.ref ?? null });
     const items = ids.length ? Object.fromEntries(ids.map(id => [id, state.market.get(id)]).filter(([, m]) => m).map(([id, m]) => [id, pick(m as ItemMarket)]))
       : Object.fromEntries([...state.market].map(([id, m]) => [id, pick(m)]));
     return { marketAt: state.loadedAt, dataAt: state.dataAt, items };
@@ -125,8 +126,12 @@ export function registerPublic(app: FastifyInstance, db: Db, state: State) {
     return outlookResponse(state.events, el, impacts, state.market, req.query);
   });
 
+  app.get<{ Querystring: { minDrop?: string; flipperLevel?: string; limit?: string } }>("/api/v1/dips", async req => dipsResponse(state.market, req.query, state.perks));
+  app.get<{ Querystring: { ids?: string } }>("/api/v1/books", async req => booksResponse(state.market, (req.query.ids ?? "").split(",").filter(Boolean)));
+
   app.get("/api/v1/rules/bazaar", async () => ({
-    ...BAZAAR, orderSlotsByFlipperLevel: [0, 1, 2].map(orderSlots), taxByFlipperLevel: [0, 1, 2].map(taxRate), sources: BAZAAR_SOURCES,
+    ...BAZAAR, orderSlotsByFlipperLevel: [0, 1, 2].map(orderSlots), taxByFlipperLevel: [0, 1, 2].map(l => taxRate(l, state.perks.quadTaxes)),
+    activePerks: describePerks(state.perks), sources: BAZAAR_SOURCES,
   }));
   app.get("/api/v1/rules/forge", async () => ({
     ...FORGE, slotsByHotm: Array.from({ length: 11 }, (_, i) => forgeSlots(i)), quickForgeByLevel: Array.from({ length: 21 }, (_, i) => quickForgeReduction(i)), sources: FORGE_SOURCES,

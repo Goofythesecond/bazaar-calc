@@ -1,12 +1,13 @@
 // In-memory caches of the market, recipes and events, refreshed from Postgres.
-import { type Db, loadEvents, loadMarket, loadRecipes, moltenForgeActive } from "@bc/server-core";
-import { type Ctx, type GameEvent, type ItemMarket, type Opportunity, type Profile, type Recipe, type Settings, buildOpportunities } from "@bc/shared";
+import { type Db, currentPerks, loadEvents, loadMarket, loadRecipes } from "@bc/server-core";
+import { type Ctx, type GameEvent, type ItemMarket, NO_PERKS, type Opportunity, type RankedOpportunity, type PerkEffects, type Profile, type Recipe, type Settings, buildOpportunities } from "@bc/shared";
 
 export class State {
   market = new Map<string, ItemMarket>();
   recipes = new Map<string, Recipe[]>();
   events: GameEvent[] = [];
-  molten = false;
+  /** mayor / minister perks active now (tax, forge times, NPC limits) */
+  perks: PerkEffects = NO_PERKS;
   loadedAt = 0;
   /** when Hypixel published the newest prices in the market (not when we re-read the database) */
   dataAt = 0;
@@ -20,7 +21,7 @@ export class State {
     const v = String((await this.db.query("SELECT max(source_version) AS v, count(*) AS n FROM recipes")).rows.map(r => `${r.v}|${r.n}`)[0] ?? "");
     if (v !== this.recipeVersion) { this.recipeVersion = v; this.recipes = await loadRecipes(this.db); }
     this.market = await loadMarket(this.db);
-    this.molten = await moltenForgeActive(this.db);
+    this.perks = await currentPerks(this.db);
     this.loadedAt = Date.now();
     this.dataAt = Math.max(0, ...[...this.market.values()].filter(m => m.ask != null || m.bid != null).map(m => m.ts));
   }
@@ -36,11 +37,12 @@ export class State {
   stop() { this.timers.forEach(clearInterval); }
 
   ctx(settings: Settings, profile: Profile): Ctx {
-    return { market: this.market, recipes: this.recipes, settings, profile: { ...profile, coleMoltenForge: profile.coleMoltenForge || this.molten } };
+    return { market: this.market, recipes: this.recipes, settings, profile: { ...profile, coleMoltenForge: profile.coleMoltenForge || this.perks.coleMoltenForge,
+      quadTaxes: profile.quadTaxes || this.perks.quadTaxes, npcShoppingSpree: profile.npcShoppingSpree || this.perks.shoppingSpree } };
   }
 
   /** `listAll`: every route incl. losing ones and flagged markets (flip tables); off for the planner. */
-  opportunities(kind: Opportunity["kind"] | "all", settings: Settings, profile: Profile, includeAhForge = false, listAll = false): { list: Opportunity[]; skipped: NonNullable<Ctx["skipped"]> } {
+  opportunities(kind: Opportunity["kind"] | "all", settings: Settings, profile: Profile, includeAhForge = false, listAll = false): { list: RankedOpportunity[]; skipped: NonNullable<Ctx["skipped"]> } {
     const key = JSON.stringify([kind, settings, profile, includeAhForge, listAll, this.loadedAt]);
     const hit = this.cache.get(key);
     if (hit) return hit;
@@ -49,10 +51,10 @@ export class State {
     if (this.cache.size > 40) this.cache.delete(this.cache.keys().next().value!);
     return res;
   }
-  private cache = new Map<string, { list: Opportunity[]; skipped: NonNullable<Ctx["skipped"]> }>();
+  private cache = new Map<string, { list: RankedOpportunity[]; skipped: NonNullable<Ctx["skipped"]> }>();
 
   private build(kind: Opportunity["kind"] | "all", settings: Settings, profile: Profile, includeAhForge: boolean, listAll: boolean) {
-    return buildOpportunities({ market: this.market, recipes: this.recipes, molten: this.molten }, kind, settings, profile, includeAhForge, listAll);
+    return buildOpportunities({ market: this.market, recipes: this.recipes, perks: this.perks }, kind, settings, profile, includeAhForge, listAll);
   }
 }
 

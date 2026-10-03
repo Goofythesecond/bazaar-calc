@@ -1,7 +1,7 @@
 // Store one Hypixel bazaar response. Change-only rows + an hourly keyframe; bazaar_latest always holds "now".
 import { createHash } from "node:crypto";
 import zlib from "node:zlib";
-import { type BazaarResponse, type BookLevel, type HypixelOrder, type TopEpisode, type TopTracker, bookFlow, degradedBazaar, packLevels, unpackLevels, validateBazaar } from "@bc/shared";
+import { type BazaarResponse, type BookLevel, type HypixelOrder, type TopEpisode, type TopTracker, bookFlow, counterTrades, degradedBazaar, packLevels, unpackLevels, validateBazaar } from "@bc/shared";
 import { type Db, ensurePartition, insertMany } from "../db.js";
 import { storeEpisodes } from "../hold.js";
 
@@ -9,6 +9,10 @@ export const ORIGIN = { POLL: 1, CONTRIBUTOR: 2, WAYBACK: 6 } as const;
 const cents = (v: number | null | undefined) => (v == null ? null : Math.round(v * 100));
 const pack = (orders: HypixelOrder[]) =>
   zlib.zstdCompressSync(Buffer.from(packLevels(orders.map(o => ({ price: o.pricePerUnit, amount: o.amount, orders: o.orders })))));
+
+/** bazaar_flow_hourly columns (db/migrations/003_flow.sql, 007_trades.sql); rows of one item and hour add up. */
+export const FLOW_COLUMNS = ["item_id", "hour", "intervals", "seconds", "bid_outbid", "ask_undercut", "bid_removed", "ask_removed", "trade_intervals", "trade_seconds", "bid_trades", "ask_trades"];
+export const FLOW_UPSERT = `ON CONFLICT (item_id, hour) DO UPDATE SET ${FLOW_COLUMNS.slice(2).map(c => `${c} = bazaar_flow_hourly.${c} + excluded.${c}`).join(", ")}`;
 
 export interface IngestResult { status: "accepted" | "duplicate" | "rejected"; reason?: string; changes?: number; ts?: number }
 
@@ -23,9 +27,9 @@ export async function ingestBazaar(db: Db, data: BazaarResponse, origin: number,
   const degraded = degradedBazaar(data, prevCount);
   if (degraded) return { status: "rejected", reason: degraded, ts };
 
-  const latest = new Map<string, { ts: number; key: string; bids: Buffer | null; asks: Buffer | null }>();
+  const latest = new Map<string, { ts: number; key: string; bids: Buffer | null; asks: Buffer | null; buyWeek: number; sellWeek: number }>();
   for (const r of (await db.query("SELECT item_id, extract(epoch from ts) * 1000 AS ts, ask_top, bid_top, ask_wavg, bid_wavg, ask_volume, bid_volume, ask_orders, bid_orders, ibuy_week, isell_week, bids, asks, md5(coalesce(bids, ''::bytea) || coalesce(asks, ''::bytea)) AS book FROM bazaar_latest")).rows)
-    latest.set(r.item_id, { ts: Number(r.ts), bids: r.bids, asks: r.asks, key: [r.ask_top, r.bid_top, r.ask_wavg, r.bid_wavg, r.ask_volume, r.bid_volume, r.ask_orders, r.bid_orders, r.ibuy_week, r.isell_week, r.book].join("|") });
+    latest.set(r.item_id, { ts: Number(r.ts), bids: r.bids, asks: r.asks, buyWeek: Number(r.ibuy_week ?? 0), sellWeek: Number(r.isell_week ?? 0), key: [r.ask_top, r.bid_top, r.ask_wavg, r.bid_wavg, r.ask_volume, r.bid_volume, r.ask_orders, r.bid_orders, r.ibuy_week, r.isell_week, r.book].join("|") });
   const lastKey = await db.query("SELECT extract(epoch from max(ts)) * 1000 AS t FROM bazaar_snapshots WHERE keyframe");
   const keyframe = !lastKey.rows[0]?.t || ts - Number(lastKey.rows[0].t) >= 3600_000;
   const newest = Math.max(0, ...[...latest.values()].map(v => v.ts));
@@ -52,7 +56,9 @@ export async function ingestBazaar(db: Db, data: BazaarResponse, origin: number,
     const prev = latest.get(id);
     if (prev && ts > prev.ts && ts - prev.ts <= 150_000) {
       const f = bookFlow(unbook(prev.bids), unbook(prev.asks), bids, asks);
-      flowRows.push([id, hourIso, 1, (ts - prev.ts) / 1000, f.outbid ? 1 : 0, f.undercut ? 1 : 0, Math.round(f.bidRemoved), Math.round(f.askRemoved)]);
+      const t = counterTrades(prev, { buyWeek: q.buyMovingWeek ?? 0, sellWeek: q.sellMovingWeek ?? 0 });
+      flowRows.push([id, hourIso, 1, (ts - prev.ts) / 1000, f.outbid ? 1 : 0, f.undercut ? 1 : 0, Math.round(f.bidRemoved), Math.round(f.askRemoved),
+        t ? 1 : 0, t ? (ts - prev.ts) / 1000 : 0, t?.bid ?? 0, t?.ask ?? 0]);
     }
   }
 
@@ -67,8 +73,7 @@ export async function ingestBazaar(db: Db, data: BazaarResponse, origin: number,
       await insertMany(client, "bazaar_latest", ["item_id", "ts", "ask_top", "bid_top", "ask_wavg", "bid_wavg", "ask_volume", "bid_volume", "ask_orders", "bid_orders", "ibuy_week", "isell_week", "bids", "asks"], latestRows,
         "ON CONFLICT (item_id) DO UPDATE SET ts = excluded.ts, ask_top = excluded.ask_top, bid_top = excluded.bid_top, ask_wavg = excluded.ask_wavg, bid_wavg = excluded.bid_wavg, ask_volume = excluded.ask_volume, bid_volume = excluded.bid_volume, ask_orders = excluded.ask_orders, bid_orders = excluded.bid_orders, ibuy_week = excluded.ibuy_week, isell_week = excluded.isell_week, bids = excluded.bids, asks = excluded.asks WHERE bazaar_latest.ts <= excluded.ts");
     if (flowRows.length)
-      await insertMany(client, "bazaar_flow_hourly", ["item_id", "hour", "intervals", "seconds", "bid_outbid", "ask_undercut", "bid_removed", "ask_removed"], flowRows,
-        "ON CONFLICT (item_id, hour) DO UPDATE SET intervals = bazaar_flow_hourly.intervals + excluded.intervals, seconds = bazaar_flow_hourly.seconds + excluded.seconds, bid_outbid = bazaar_flow_hourly.bid_outbid + excluded.bid_outbid, ask_undercut = bazaar_flow_hourly.ask_undercut + excluded.ask_undercut, bid_removed = bazaar_flow_hourly.bid_removed + excluded.bid_removed, ask_removed = bazaar_flow_hourly.ask_removed + excluded.ask_removed");
+      await insertMany(client, "bazaar_flow_hourly", FLOW_COLUMNS, flowRows, FLOW_UPSERT);
     await storeEpisodes(client, episodes);
     await client.query("INSERT INTO bazaar_snapshots (ts, origin, contributor_id, n_products, n_changes, keyframe) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING",
       [tsIso, origin, contributorId, Object.keys(data.products).length, quoteRows.length, keyframe]);

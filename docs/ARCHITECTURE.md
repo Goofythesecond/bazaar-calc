@@ -50,11 +50,11 @@ rules  ←  market, recipes  ←  fill  ←  calc, data  ←  service
 
 | Module | Holds | May use |
 |---|---|---|
-| `rules` | game rules: bazaar, Forge, enchants, calendar, timing, requirements | – |
-| `market` | market types, signals and flags, names, book packing, `assembleMarket`, event impact | rules |
+| `rules` | game rules: bazaar, Forge, enchants, calendar, timing, requirements, mayor perks | – |
+| `market` | market types, signals and flags, names, book packing, `assembleMarket`, event impact, dips | rules |
 | `recipes` | `Recipe`, NotEnoughUpdates-REPO parser | rules |
-| `fill` | time-on-top episodes, fill / order-size model | rules, market |
-| `calc` | route engine, route builders, planner | rules, market, recipes, fill |
+| `fill` | time-on-top episodes, fill / order-size model, order tracker, paper trading | rules, market |
+| `calc` | route engine, route builders (bazaar, craft, book, forge, NPC), confidence, planner | rules, market, recipes, fill |
 | `data` | Hypixel shapes and checks, NBT reader, contribution file format, collector core | rules, market, fill |
 | `service` | endpoint logic shared by the API and the static site | rules, market, recipes, fill, calc |
 
@@ -84,6 +84,20 @@ without the calculators, and the import graph has no cycles.
 
 Details: [docs/WORKFLOWS.md](WORKFLOWS.md).
 
+**Live updates and trading tools:**
+- Static website: the backend worker fetches Hypixel's bazaar about 1.5 s after each 20-second snapshot while a tab is
+  visible (once a minute in the background when alerts or tracked orders need it, otherwise paused) and checks for
+  newly published history every 10 minutes. `web/src/live.ts` tells pages to recalculate.
+- Self-hosted: the website checks `/api/v1/health` every 10 s and recalculates when the scanner has new data.
+- On every snapshot `web/src/runners.ts` checks your tracked orders (`fill/order-tracker.ts`) and flip alerts.
+  Paper trading (`fill/paper.ts`) runs in the static worker, or on the server in `api/src/jobs.ts`.
+- What a visitor sets up (favourites, orders, alerts, journal, paper record) stays in their browser (`web/src/prefs.ts`).
+
+**Real trades vs book changes:** Hypixel's 7-day counters (`sellMovingWeek`, `buyMovingWeek`) rise by exactly the
+units traded instantly between two polls (`counterTrades` in the `data` module); they drop about every 30 minutes when a
+batch expires, and those intervals are left unmeasured. Statistics use these trades once an item has at least 1 hour of
+them (`flowBasis: "trades"`), and units that left the book otherwise (`"book"`, older data).
+
 **Units and time:**
 - Prices are coins in memory and centicoins (integers) in the database and in data files.
 - Every time is UTC: database sessions, partitions, hourly buckets, file names.
@@ -97,6 +111,9 @@ Details: [docs/WORKFLOWS.md](WORKFLOWS.md).
 | Change flip maths or order sizing | `packages/shared/src/calc/` (engine, routes, planner) or `packages/shared/src/fill/` (fill model) | tests, audit, `scripts/checks/backtest.mjs` for the fill model |
 | Add a flip type | builder in `packages/shared/src/calc/routes.ts` → `buildOpportunities` and `CALC_KINDS` in `packages/shared/src/service/endpoints.ts` → page and nav in `packages/web` | screenshots of the new page |
 | Add an API endpoint | logic in `packages/shared/src/service/` → route in `packages/api/src/routes/` and `openapi.ts` → the same path in `packages/web/src/static/backend.ts` | both sites answer it |
+| Add or change a mayor perk | `packages/shared/src/rules/mayor-perks.ts` (with its source) → `Profile` in `requirements.ts` if it changes a calculation | tests; the "Mayor perks" note on the flip pages |
+| Change how much a route is trusted | `routeConfidence` in `packages/shared/src/calc/confidence.ts` | tests; the confidence column on the flip pages |
+| Change the order tracker or paper trading | `packages/shared/src/fill/order-tracker.ts`, `packages/shared/src/fill/paper.ts` | tests; My orders and Track record pages |
 | Add a per-item statistic | `packages/server-core/src/stats.ts` (keep the `now` parameter) → `ItemStats` in `packages/shared/src/market/assemble.ts` | the published `market.json` carries it automatically |
 | Add a field to contribution files | `packages/shared/src/data/contrib-format.ts` (new `DATA_FORMAT` version if old files can't be read), `packages/shared/src/data/contrib-collector.ts`, `packages/server-core/src/contrib.ts` import / export | a collector next to a server must still match it exactly (docs/WORKFLOWS.md) |
 | Add a website page | `packages/web/src/pages/` → route in `packages/web/src/main.tsx` → nav in `packages/web/src/components/Layout.tsx` → fixed page list in `scripts/site/build-pages.mjs` | `scripts/checks/screenshot.mjs` at 1440 and 390 px |

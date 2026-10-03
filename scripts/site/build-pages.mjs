@@ -24,7 +24,7 @@ mkdirSync(join(out, "collector"), { recursive: true });
 copyFileSync(join(root, "packages/collector/dist/bazaar-calc-collector.mjs"), join(out, "collector/bazaar-calc-collector.mjs"));
 // every page of the app is index.html; the fixed pages get their own copy (a normal 200 response), anything else
 // (item pages) gets 404.html, which GitHub Pages serves for unknown paths: the app then shows the page asked for
-for (const route of ["flips/bazaar", "flips/craft", "flips/book", "flips/forge", "outlook", "items", "events", "timing", "contribute", "api-docs", "status", "about"]) {
+for (const route of ["flips/bazaar", "flips/craft", "flips/book", "flips/forge", "flips/npc", "dips", "orders", "alerts", "record", "outlook", "items", "events", "timing", "contribute", "api-docs", "status", "about"]) {
   mkdirSync(join(out, route), { recursive: true });
   copyFileSync(join(out, "index.html"), join(out, route, "index.html"));
 }

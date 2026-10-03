@@ -7,7 +7,7 @@ import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 
 const [outDir = "screens", base = "http://127.0.0.1:8787", width = "1440", ...given] = process.argv.slice(2);
-const paths = given.length ? given : ["/", "/flips/bazaar", "/flips/craft", "/flips/book", "/flips/forge", "/outlook", "/items",
+const paths = given.length ? given : ["/", "/flips/bazaar", "/flips/craft", "/flips/book", "/flips/forge", "/flips/npc", "/dips", "/orders", "/alerts", "/record", "/outlook", "/items",
   "/item/ENCHANTED_DIAMOND", "/events", "/timing", "/api-docs", "/contribute", "/status", "/about"];
 mkdirSync(outDir, { recursive: true });
 const profile = mkdtempSync(join(outDir, ".chrome-"));

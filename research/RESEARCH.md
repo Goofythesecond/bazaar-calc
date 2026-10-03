@@ -81,5 +81,32 @@ Known limits: holds shorter than one poll (~20 s, the API refresh rate) cannot b
 - Their formulas, reproduced on every row: flips `(best sell offer × 0.9775 − best buy order) × min(instabuys/h, instasells/h)` (800/800); crafts `(product × 0.9775 − buy-order cost of ingredients) × bottleneck` (142/142). 0.9775 = a 2.25% deduction; the wiki's bazaar tax is 1.25% (1% at Bazaar Flipper II).
 - They assume you get 100% of the 7-day volume: no competition / time on top, no order size, no coins, no daily limit, no crafting or clicking time (e.g. 26,000 Enchanted Coal crafted per hour).
 - Their errors found: ingredients they cannot price count as 0 coins (Enchanted Ice, Packed Ice, Enchanted Netherrack: "cost 0"); Enchanted Brown/Red Mushroom Block priced from an old recipe (~1.4k–7k) while NEU and the market (block 250.8k ≈ 160 × Enchanted Brown Mushroom 1,562) say 160 Enchanted Mushrooms.
-- Our bugs it exposed (fixed): NEU damage-value ids (`INK_SACK-4`, `LOG-3`) did not match bazaar ids (`INK_SACK:4`, `LOG:3`), dropping ~20 craft recipes; single routes only got 1/7 of the user's coins; sub-crafting was chosen on price alone even when it meant 160 extra crafts per unit. NPC shop prices (NEU `npc_shop`, coins only) now price ingredients the bazaar does not sell at all; bazaar items are never bought from NPCs (no NPC flips).
+- Our bugs it exposed (fixed): NEU damage-value ids (`INK_SACK-4`, `LOG-3`) did not match bazaar ids (`INK_SACK:4`, `LOG:3`), dropping ~20 craft recipes; single routes only got 1/7 of the user's coins; sub-crafting was chosen on price alone even when it meant 160 extra crafts per unit. NPC shop prices (NEU `npc_shop`, coins only) now price ingredients the bazaar does not sell at all; bazaar items were never bought from NPCs then (NPC flips came on 2026-10-03, below).
 - After the fixes: every one of their 797 flips and all but 6 of their crafts are in our list (the 6: their 0-cost ones, Hot Stuff, Enchanted Carrot on a Stick), profitable/not agrees on 770/797 flips and 135/135 shared crafts, our coins/h is 0.77× theirs for flips and 0.67× for crafts (median) because of time on top, the 1.25% tax and your own limits; we list 56 clean profitable crafts they do not.
+
+## Mayor perks and NPC shops (2026-10-03)
+- **Derpy "QUAD TAXES!!!"**: "Pay 4x the normal amount of taxes!", bazaar tax included since 2024-07-02 ([wiki: Derpy](https://hypixelskyblock.minecraft.wiki/w/Derpy)); Bazaar Utils applies the same x4. `taxRate(level, quadTaxes)`.
+- **Diaz "Shopping Spree"**: NPC daily buy limits x10 ([wiki: Diaz](https://hypixelskyblock.minecraft.wiki/w/Diaz), [Shop](https://hypixelskyblock.minecraft.wiki/w/Shop)).
+- **Cole "Molten Forge"**: forge times -25% ([wiki: Cole](https://hypixelskyblock.minecraft.wiki/w/Cole)).
+- A perk counts when the current mayor has it or it is the minister's perk, read by name from Hypixel's election data (`rules/mayor-perks.ts`). With no perk active every result is unchanged (checked with `scripts/checks/outputs.mjs`).
+- **NPC shops** ([wiki: Shop](https://hypixelskyblock.minecraft.wiki/w/Shop)): most merchants sell at most 640 of an item per profile per day (6,400 in a Shopping Spree), reset 00:00 UTC. Selling to NPCs pays no bazaar tax and earns at most 500,000,000 coins per profile per day since 2025-10-15 (200M before). Selling prices come from Hypixel's `/v2/resources/skyblock/items` (`npc_sell_price`); merchant prices from NotEnoughUpdates-REPO (`npc_shop` recipes paid in coins only, in the NPC's file, e.g. `items/JAKE_NPC.json`: Lucky Dice for 1,000,000).
+- Hand-checked NPC flips: Enchanted Seeds (buy order 440.9 → NPC 480); True Protection I (buy from Nyko for 900k → sell offer 1,155,108.4, 1,140,669.54 after tax).
+
+## Real trades from Hypixel's 7-day counters (measured 2026-10-03)
+- `quick_status.sellMovingWeek` / `buyMovingWeek` rise between two polls by the units instant-sold (filling buy orders) and instant-bought (filling sell offers). They also drop in bulk when week-old trades expire, about every 30 minutes; in such a pair of polls the trades are unknown and left out (`counterTrades` returns null).
+- Stored per item and hour (`bazaar_flow_hourly`: `trade_intervals`, `trade_seconds`, `bid_trades`, `ask_trades`, migration 007) and in contribution files (optional columns). Statistics use them once an item has at least 1 hour of measured trades (`flowBasis: "trades"`), and mass-delist checks count them as exact with at least 3 hours.
+- Backtest on 14.2 hours of stored books (`scripts/checks/backtest.mjs`), predicted / realized median:
+
+  | Order size | Book-change model | Trades model |
+  |---|---|---|
+  | 64 | 1.02 | 0.96 |
+  | 640 | 1.07 | 0.99 |
+  | 71,680 | 0.88 | 0.86 |
+
+  Time on top is predicted about 12 points low in both, and estimated (too few episodes) sides fit poorly: hence the confidence factor 0.6 for estimated fill times.
+
+## Dips (2026-10-03)
+- A dip is a cheapest sell offer at least X% below the **lower** of the 24 h and 7-day medians. Using the 24 h median alone called Shard Sea Serpent "82% below" (ask 179,988; 24 h median 999,994 from a recent ~1M level; 7-day median 189,995).
+- Each dip says whether it is new: the cheapest offer about an hour earlier (latest quote 1–3 h back) was still above the threshold. Example of a lasting one: Ultimate Wisdom III, 780k for days, 13M for a few hours, then 1M again: both medians (from 16 and 21 hours) sat at 7–8M, so it showed as 86% below but "already low".
+- Hand-checked new ones: Shard Tiamat ~180k for two days, then 110k with 363 units bought within 100 s; Magma Urchin from 18.47M to 16.13M.
+

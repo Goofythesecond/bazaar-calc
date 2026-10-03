@@ -1,5 +1,5 @@
 // Route builders for the four flip types plus the acquisition search they share.
-import { BAZAAR, taxRate, booksNeeded, combineXpCost, enchantRules, bookId, type EnchantRule, forgeDurationSeconds, type Profile, type Requirement } from "../rules/index.js";
+import { BAZAAR, taxRate, npcBuyLimit, booksNeeded, combineXpCost, enchantRules, bookId, type EnchantRule, forgeDurationSeconds, type Profile, type Requirement } from "../rules/index.js";
 import { prettyName, type BookLevel, TYPICAL_BAND, bookCeiling, buyFlowH, sellFlowH, seriousFlags, typicalPrice, type ItemMarket, type Market } from "../market/index.js";
 import { type BuyLeg, type BuyMode, type Opportunity, type ProcessStep, type Route, type SellLeg, type SellMode, type Settings, evaluate } from "./engine.js";
 import { type FillModel, curve, at, fillModel } from "../fill/index.js";
@@ -17,15 +17,15 @@ export interface Ctx {
   skipped?: { kind: Route["kind"]; key: string; title: string; reason: string }[];
 }
 
-const nameOf = (ctx: Ctx, id: string) => ctx.market.get(id)?.name ?? ctx.names?.get(id) ?? id.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+export const nameOf = (ctx: Ctx, id: string) => ctx.market.get(id)?.name ?? ctx.names?.get(id) ?? id.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 const allowed = (ctx: Ctx, m: ItemMarket | undefined): m is ItemMarket =>
   !!m && (ctx.settings.includeFlagged || !!ctx.listAll || seriousFlags(m).length === 0);
 /** Both sides have orders (needed for a same-item bazaar flip). */
 const usable = (ctx: Ctx, m: ItemMarket | undefined): m is ItemMarket => allowed(ctx, m) && m.ask != null && m.bid != null;
 /** Instant buy needs sell offers to buy from; a buy order needs a best buy order to go 0.1 above. */
-const canBuy = (ctx: Ctx, m: ItemMarket | undefined, mode: BuyMode): m is ItemMarket => allowed(ctx, m) && (mode === "instant" ? m.ask != null : m.bid != null);
+export const canBuy = (ctx: Ctx, m: ItemMarket | undefined, mode: BuyMode): m is ItemMarket => allowed(ctx, m) && (mode === "instant" ? m.ask != null : m.bid != null);
 /** Instant sell needs buy orders to sell into; a sell offer needs a best sell offer to go 0.1 below. */
-const canSell = (ctx: Ctx, m: ItemMarket | undefined, mode: SellMode): m is ItemMarket => allowed(ctx, m) && (mode === "instant" ? m.bid != null : m.ask != null);
+export const canSell = (ctx: Ctx, m: ItemMarket | undefined, mode: SellMode): m is ItemMarket => allowed(ctx, m) && (mode === "instant" ? m.bid != null : m.ask != null);
 const sellable = (ctx: Ctx, m: ItemMarket | undefined) => canSell(ctx, m, "offer") || canSell(ctx, m, "instant");
 
 /** Average price of taking `units` from the book (levels best-first); beyond the visible depth the worst level is used. */
@@ -72,7 +72,7 @@ export function buyLeg(ctx: Ctx, m: ItemMarket, qty: number, mode: BuyMode): Buy
 }
 
 export function sellLeg(ctx: Ctx, m: ItemMarket, mode: SellMode): SellLeg {
-  const tax = taxRate(ctx.settings.bazaarFlipperLevel);
+  const tax = taxRate(ctx.settings.bazaarFlipperLevel, ctx.profile.quadTaxes);
   // You sell after you buy (and craft), so a price pushed well above its typical level is not counted on: the sale is
   // priced at no more than 10% above the item's typical price from history (normal swings inside that band are kept).
   if (mode === "instant") {
@@ -130,7 +130,7 @@ export function acquire(ctx: Ctx, id: string, mode: BuyMode, maxDepth = 2, seen 
     if (!best || price < best.price)
       best = { price, how: "market", steps: [], reqs: [],
         // NPC shops sell at most 640 of an item per player per day: spread over the hours you play
-        legs: [{ item: id, name: nameOf(ctx, id), qty: 1, mode: "npc", source: r.source, price, flowH: BAZAAR.npcDailyBuyLimit / Math.max(0.1, ctx.settings.hoursPerDay), share: null, undercutsH: null }] };
+        legs: [{ item: id, name: nameOf(ctx, id), qty: 1, mode: "npc", source: r.source, price, flowH: npcBuyLimit(ctx.profile.npcShoppingSpree) / Math.max(0.1, ctx.settings.hoursPerDay), share: null, undercutsH: null }] };
   }
   const canCraft = maxDepth > 0 || (!onBazaar && !best && bonus > 0);
   if (canCraft && !seen.has(id)) {
@@ -169,7 +169,7 @@ function manipulationNotes(ctx: Ctx, r: Route): string[] {
   return [...ids].flatMap(id => { const m = ctx.market.get(id); return m?.flagWhy?.likely_manipulated ? [`${m.name} looks manipulated: ${m.flagWhy.likely_manipulated}`] : []; });
 }
 
-function bestOf(ctx: Ctx, routes: Route[]): Opportunity[] {
+export function bestOf(ctx: Ctx, routes: Route[]): Opportunity[] {
   let best: Opportunity | null = null, slotFree: Opportunity | null = null;
   for (const r0 of routes) {
     const extra = manipulationNotes(ctx, r0);
@@ -185,7 +185,7 @@ function bestOf(ctx: Ctx, routes: Route[]): Opportunity[] {
   return out;
 }
 
-const skip = (ctx: Ctx, kind: Route["kind"], key: string, title: string, reason: string) => { ctx.skipped?.push({ kind, key, title, reason }); };
+export const skip = (ctx: Ctx, kind: Route["kind"], key: string, title: string, reason: string) => { ctx.skipped?.push({ kind, key, title, reason }); };
 
 // ------------------------------------------------------------------ bazaar flips (buy order -> sell offer, same item)
 export function bazaarFlips(ctx: Ctx): Opportunity[] {

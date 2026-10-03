@@ -7,6 +7,7 @@
 import { createHash } from "node:crypto";
 import { type DataFile, type ElectionResponse, emptyDataFile } from "@bc/shared";
 import { type Db, ensurePartition, insertMany } from "./db.js";
+import { FLOW_COLUMNS, FLOW_UPSERT } from "./ingest/bazaar.js";
 import { storeElection } from "./ingest/reference.js";
 
 const H = 3.6e6;
@@ -87,10 +88,10 @@ export async function importDataFiles(db: Db, files: { label: string; file: Data
     const fl = f.flow, flows: unknown[][] = [];
     for (let i = 0; i < fl.item.length; i++) {
       if (!ok.has(fl.hour[i]!)) continue;
-      flows.push([f.items[fl.item[i]!], iso(fl.hour[i]! * H), fl.intervals[i], fl.seconds[i], fl.bidOutbid[i], fl.askUndercut[i], fl.bidRemoved[i], fl.askRemoved[i]]);
+      flows.push([f.items[fl.item[i]!], iso(fl.hour[i]! * H), fl.intervals[i], fl.seconds[i], fl.bidOutbid[i], fl.askUndercut[i], fl.bidRemoved[i], fl.askRemoved[i],
+        fl.tradeIntervals?.[i] ?? 0, fl.tradeSeconds?.[i] ?? 0, fl.bidTrades?.[i] ?? 0, fl.askTrades?.[i] ?? 0]); // files before 2026-10-03 have no trades
     }
-    await insertMany(db, "bazaar_flow_hourly", ["item_id", "hour", "intervals", "seconds", "bid_outbid", "ask_undercut", "bid_removed", "ask_removed"], flows,
-      "ON CONFLICT (item_id, hour) DO UPDATE SET intervals = bazaar_flow_hourly.intervals + excluded.intervals, seconds = bazaar_flow_hourly.seconds + excluded.seconds, bid_outbid = bazaar_flow_hourly.bid_outbid + excluded.bid_outbid, ask_undercut = bazaar_flow_hourly.ask_undercut + excluded.ask_undercut, bid_removed = bazaar_flow_hourly.bid_removed + excluded.bid_removed, ask_removed = bazaar_flow_hourly.ask_removed + excluded.ask_removed");
+    await insertMany(db, "bazaar_flow_hourly", FLOW_COLUMNS, flows, FLOW_UPSERT);
     // an episode belongs to the stretch that recorded its end: the file's last poll at or before start + duration
     const e = f.episodes, eps: unknown[][] = [];
     for (let i = 0; i < e.item.length; i++) {
@@ -174,11 +175,12 @@ export async function exportDataFiles(db: Db, name: string, version: string, opt
       c.buyWeek.push(Number(r.ibuy_week ?? 0)); c.sellWeek.push(Number(r.isell_week ?? 0));
     }
     if (origin === 1) {
-      for (const r of (await db.query(`SELECT item_id, extract(epoch from hour) * 1000 AS h, intervals, seconds, bid_outbid, ask_undercut, bid_removed, ask_removed
+      for (const r of (await db.query(`SELECT item_id, extract(epoch from hour) * 1000 AS h, intervals, seconds, bid_outbid, ask_undercut, bid_removed, ask_removed, trade_intervals, trade_seconds, bid_trades, ask_trades
           FROM bazaar_flow_hourly WHERE hour BETWEEN $1 AND $2 ORDER BY hour, item_id`, range)).rows) {
         const fl = f.flow;
         fl.hour.push(Math.round(Number(r.h) / H)); fl.item.push(item(r.item_id)); fl.intervals.push(Number(r.intervals)); fl.seconds.push(Math.round(Number(r.seconds) * 10) / 10);
         fl.bidOutbid.push(Number(r.bid_outbid)); fl.askUndercut.push(Number(r.ask_undercut)); fl.bidRemoved.push(Number(r.bid_removed)); fl.askRemoved.push(Number(r.ask_removed));
+        fl.tradeIntervals!.push(Number(r.trade_intervals)); fl.tradeSeconds!.push(Math.round(Number(r.trade_seconds) * 10) / 10); fl.bidTrades!.push(Number(r.bid_trades)); fl.askTrades!.push(Number(r.ask_trades));
       }
       for (const r of (await db.query(`SELECT item_id, side, extract(epoch from start_ts) * 1000 AS s, dur_s, polls, flow, end_reason FROM bazaar_top_episodes
           WHERE end_ts BETWEEN $1 AND $2 ORDER BY item_id, side, start_ts`, range)).rows) {

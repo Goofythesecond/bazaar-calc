@@ -5,6 +5,8 @@ import { Link, useParams } from "react-router-dom";
 import { FLAG_TEXT, type GameEvent, type ItemMarket, type OutlookEntry } from "@bc/shared";
 import { Spark, TimeChart } from "../components/Chart";
 import { FillPanel } from "../components/FillPanel";
+import { QuantityCalc } from "../components/QuantityCalc";
+import { FavouriteStar } from "../components/RouteView";
 import { Icon } from "../components/Icon";
 import { api, ago, coins, num, pct, utc } from "../lib";
 
@@ -104,7 +106,7 @@ export function Item() {
   return (
     <>
       <div className="pagehead">
-        <div><span className="eyebrow mono">{it.id}</span><h1>{it.name}</h1>
+        <div><span className="eyebrow mono">{it.id}</span><h1>{it.name} <FavouriteStar id={it.id} /></h1>
           {m && <div className="row" style={{ marginTop: 8 }}><span className="small muted">updated {ago(m.ts)}</span>{m.flags.filter(f => f !== "low_history").map(f => <span key={f} className={`pill ${f === "likely_manipulated" ? "crit" : "warn"}`} title={m.flagWhy[f]}><Icon name="warn" size={12} />{FLAG_TEXT[f] ?? f}</span>)}</div>}
         </div>
         {st?.spark && st.spark.filter(v => v != null).length > 1 && <div className="card pad row" style={{ gap: 14 }}><Spark values={st.spark} width={140} height={34} /><div className="small"><div>24 h <Signed v={st.chg24} /></div><div>7 d <Signed v={st.chg7} /></div></div></div>}
@@ -130,6 +132,7 @@ export function Item() {
           <span><b>Likely manipulated.</b> {m.flagWhy.likely_manipulated}. Calculators price a sale at no more than 10% above the typical level, and the planner leaves this item out.</span></div>
       )}
       {m?.ask != null && m?.bid != null && <FillPanel id={it.id} />}
+      {m?.ask != null && m?.bid != null && <QuantityCalc m={m} />}
 
       <div className="grid cols-2" style={{ marginTop: 14 }}>
         <section className="card">

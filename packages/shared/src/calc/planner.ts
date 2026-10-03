@@ -1,6 +1,6 @@
-// Unified route planner: picks the set of bazaar / craft / book / forge flips that earns the most per DAY within
-// your order slots, forge slots, coins, daily bazaar limit and clicking time (see plan()).
-import { orderSlots, FORGE, forgeSlots, type Profile } from "../rules/index.js";
+// Unified route planner: picks the set of bazaar / craft / book / forge / NPC flips that earns the most per DAY within
+// your order slots, forge slots, coins, daily bazaar limit, NPC sell cap and clicking time (see plan()).
+import { BAZAAR, orderSlots, FORGE, forgeSlots, type Profile } from "../rules/index.js";
 import { type Opportunity, type Settings, evaluate } from "./engine.js";
 
 export interface PlanOptions {
@@ -67,6 +67,8 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
       activeSecondsH: 3600 * s.attention - others.reduce((a, x) => a + x.o.activeSecondsH, 0),
       limitCoinsDay: s.dailyLimit - others.reduce((a, x) => a + x.o.limitCoinsH, 0) * s.hoursPerDay,
       forgeSlots: forge ? forgeLeft : undefined,
+      // NPC shops pay at most 500M coins a day across all your NPC sales
+      npcSellCoinsDay: BAZAAR.npcDailySellCoins - others.reduce((a, x) => a + x.o.npcSellCoinsH, 0) * s.hoursPerDay,
     };
     const sizes = have ? [Math.min(step, free)] : [...new Set([1, 2, 4, 10].map(k => Math.min(k * step, free)).concat(free))];
     let bestMove: { o: Opportunity; idx: number; gain: number; score: number } | null = null;
@@ -84,6 +86,7 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
         share(o.activeSecondsH - (have?.activeSecondsH ?? 0), 3600 * s.attention),
         // forge slots too: a route that ties up every slot for 0.1M/h must not block one making 16M/h from one slot
         forge ? share(o.forgeSlotsUsed - (have?.forgeSlotsUsed ?? 0), fSlots) : 0,
+        share((o.npcSellCoinsH - (have?.npcSellCoinsH ?? 0)) * s.hoursPerDay, BAZAAR.npcDailySellCoins),
       );
       const gain = o.coinsH - (have?.coinsH ?? 0), extra = Math.max(1, charge);
       const score = gain / extra;

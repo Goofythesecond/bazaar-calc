@@ -26,11 +26,13 @@ if (process.argv[2] === "--freeze") {
 }
 const [dir, outFile] = process.argv.slice(2);
 if (!dir || !outFile) { console.error("usage: outputs.mjs <frozen dir> <out.json>   (or --freeze, see the top of this file)"); process.exit(2); }
-const NOW = 1790990300000;
 const j = p => JSON.parse(readFileSync(`${dir}/${p}`, "utf8"));
-// fixed clock: outputs that depend on "now" stay comparable
+
 
 const bz = [j("bz1.json"), j("bz2.json"), j("bz3.json")];
+// the clock is taken from the frozen data (a minute after its last poll): outputs stay comparable, and the collector
+// accepts the polls (a fixed date once made newer inputs look like they came from the future, so nothing was recorded)
+const NOW = bz[2].lastUpdated + 60_000;
 const sd = "site-data";
 const base = j(`${sd}/market.json`), recipeRows = j(`${sd}/recipes.json`), mayors = j(`${sd}/mayors.json`);
 const recipes = new Map();
@@ -42,7 +44,7 @@ const put = (k, v) => { out[k] = JSON.stringify(v, (_, x) => (x instanceof Map ?
 const ah = new Map(Object.entries(base.ah).filter(([, a]) => a.ts > base.asOf - 2 * 3600e3).map(([k, a]) => [k, { lowestBin: a.lowestBin, sales24h: a.sales24h, medianSale24h: a.medianSale24h }]));
 const market = S.assembleMarket({ quotes: S.quotesFromBazaar(bz[2]), stats: new Map(Object.entries(base.stats)), hold: new Map(Object.entries(base.hold)), ah, names: new Map(Object.entries(base.names)), now: NOW });
 put("market", [...market.entries()]);
-const src = { market, recipes, molten: false };
+const src = { market, recipes, perks: S.NO_PERKS };
 const build = (kind, st, pr, ahf, all) => S.buildOpportunities(src, kind, st, pr, ahf, all);
 const settingsList = [{}, { coins: 1e9, bazaarFlipperLevel: 2, checkIntervalMin: 2 }, { coins: 5e6, hoursPerDay: 12, dailyLimit: 2e9 }];
 const profiles = [{}, { ignoreRequirements: false, hotmTier: 7, collections: { Diamond: 9 } }];

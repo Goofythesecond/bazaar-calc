@@ -1,7 +1,12 @@
-// Web Worker running the static website's backend (backend.ts), so the calculations never freeze the page.
-import { HttpError, handle } from "./backend";
+// Web Worker running the static website's backend (backend.ts), so the calculations never freeze the page. Answers API
+// requests, takes the live-update mode from the page, and forwards backend events (new snapshot, new history).
+import { HttpError, type LiveMode, handle, setEmitter, setLiveMode, setPaper } from "./backend";
 
-self.onmessage = async (e: MessageEvent<{ id: number; path: string; body: unknown }>) => {
+setEmitter(ev => (self as unknown as Worker).postMessage({ type: "event", event: ev }));
+
+type Control = { type: "live"; mode: LiveMode } | { type: "paper"; config: Parameters<typeof setPaper>[0] };
+self.onmessage = async (e: MessageEvent<{ id: number; path: string; body: unknown } | Control>) => {
+  if ("type" in e.data) { if (e.data.type === "live") setLiveMode(e.data.mode); else setPaper(e.data.config); return; }
   const { id, path, body } = e.data;
   try {
     (self as unknown as Worker).postMessage({ id, ok: true, value: await handle(path, body) });

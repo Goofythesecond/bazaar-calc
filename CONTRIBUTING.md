@@ -40,8 +40,9 @@ Measured 2026-10-03 (compressed, as both collectors download it):
 
 **What is recorded:**
 - Hypixel's public bazaar, ended-auction, auction and election endpoints, which need no API key.
-- From them: the hourly best prices, how many units left the top of the book, how long each new best price stayed on
-  top, lowest BINs and sale prices.
+- From them: the hourly best prices, how many units left the top of the book, how many units really traded (the rise
+  of Hypixel's 7-day counters between polls; files from collectors updated after 2026-10-03), how long each new best
+  price stayed on top, lowest BINs and sale prices. Older files without the trade counts stay valid.
 - No player names or ids, nothing about your account.
 
 A full day is about 3.5 MB compressed.
