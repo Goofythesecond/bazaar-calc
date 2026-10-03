@@ -1,3 +1,5 @@
+// Settings & unlocks drawer: coins, Bazaar Flipper, play time, timing, and the collections / HotM / slayer
+// unlocks the recipes need. Saved in the browser.
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { DEFAULT_PROFILE, DEFAULT_SETTINGS, actionSeconds, forgeSlots, orderSlots, quickForgeReduction, taxRate, type Profile, type Settings } from "@bc/shared";

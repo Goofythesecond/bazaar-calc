@@ -1,3 +1,4 @@
+// Page frame: navigation, the strip with your settings, theme switch, and the settings drawer.
 import { Link, NavLink, Outlet } from "react-router-dom";
 import { NOTICE, orderSlots, taxRate } from "@bc/shared";
 import { STATIC, coins } from "../lib";

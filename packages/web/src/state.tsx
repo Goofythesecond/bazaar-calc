@@ -1,3 +1,4 @@
+// App state: your settings and unlocks (saved in the browser) and whether the settings drawer is open.
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import type { Profile, Settings } from "@bc/shared";
 import { loadSaved, save } from "./lib";

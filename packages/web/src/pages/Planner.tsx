@@ -1,3 +1,4 @@
+// Best route: the planner's mix of flips for your coins, slots, daily limit and time, with the daily-limit breakdown.
 import { useQuery } from "@tanstack/react-query";
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";

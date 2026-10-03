@@ -45,18 +45,21 @@ when one fails: [docs/WORKFLOWS.md](docs/WORKFLOWS.md). Working on the code with
 
 ## What's inside
 
+[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) explains how the parts fit together and where to make each kind of change.
+Every package has a README listing its files.
+
 | Path | What it is |
 |---|---|
-| `packages/shared` | All calculations in plain TypeScript, the same code on the server and in the browser. Covers:<br>• game rules: bazaar, forge, enchant combining<br>• SkyBlock calendar, action timing model, requirement parsing<br>• flip engine, route builders, planner, event-impact analysis<br>• the contribution data format and collector core<br>• an NBT reader for auction items |
-| `packages/server-core` | Postgres access, migrations, Hypixel client, ingestion, statistics, market loader, and import/export of contribution files. |
-| `packages/worker` | The scanner jobs, run on the server:<br>• bazaar every 20 s<br>• ended auctions every 30 s<br>• lowest BINs every 30 min<br>• time-on-top stats every 10 min<br>• stats every 5 min<br>• election every hour<br>• NEU recipes every 6 h<br>• items and event impact daily |
-| `packages/api` | Fastify REST API (`/api/v1/*`, OpenAPI at `/api/openapi.json`), Discord login, API keys. Also serves the website. |
-| `packages/web` | React website. Built normally it talks to the API; built with `VITE_STATIC=1` it runs the backend in a Web Worker (`src/static/`). |
-| `packages/collector` | The Node data collector, bundled into one file. `src/server-upload.mjs` is the older uploader for a self-hosted server's API. |
-| `scripts/data/` | Commands for contribution files:<br>• `export.mjs`: database to files<br>• `check-pr.mjs`: the pull-request check<br>• `build-site.mjs`: files to website data<br>• `file-inbox.mjs`: moves approved files to `data/contrib/` |
-| `scripts/build-pages.mjs` | Packages the static website for GitHub Pages. |
-| `data/contrib/<login>/` | Approved contributions: the history the website is built from. |
-| `research/RESEARCH.md` | Every rule, with its source. |
+| `packages/shared` | All calculations, the same code on the server, in the browser and in the collectors. Layered modules: `rules`, `market`, `recipes`, `fill`, `calc`, `data`, `service` |
+| `packages/server-core` | Database, Hypixel client, ingestion, statistics, import / export of contribution files |
+| `packages/worker` | The scanner's background jobs |
+| `packages/api` | REST API (`/api/v1/*`, OpenAPI at `/api/openapi.json`), Discord login, API keys; serves the website |
+| `packages/web` | The website. Built normally it talks to the API; built with `VITE_STATIC=1` it runs everything in the browser |
+| `packages/collector` | The Node data collector, bundled into one file |
+| `scripts/` | Checks (`scripts/checks/`), the contribution data pipeline (`scripts/data/`) and the site build (`scripts/site/`) |
+| `data/contrib/<login>/` | Approved contributions: the history the website is built from |
+| `docs/` | [Architecture](docs/ARCHITECTURE.md) and [workflows](docs/WORKFLOWS.md) |
+| `research/RESEARCH.md` | Every rule, with its source |
 
 ## Data sources (and only these)
 
@@ -94,7 +97,7 @@ To build the same thing locally:
 ```bash
 pnpm install && pnpm -r build
 node scripts/data/build-site.mjs --out site-data        # add --offline to skip the recipe / item / election sync
-node scripts/build-pages.mjs --site-data site-data --base / --out pages
+node scripts/site/build-pages.mjs --site-data site-data --base / --out pages
 ```
 
 ## Self-hosting
@@ -135,10 +138,11 @@ writes one file per UTC day. Run it on a copy of the database folder, or with th
 ## Checks and tests
 
 ```bash
+pnpm check                                       # architecture rules + build + all tests (what CI runs)
 pnpm -r test                                     # rules, calculators and ingestion
-node scripts/audit.mjs                           # self-hosted: re-derive every route from the exact market snapshot
-node scripts/screenshot.mjs <dir> [url] [width]  # load every page in headless Chrome, report errors / NaN / overflow
-cd packages/server-core && node ../../scripts/backtest.mjs <copy of data/pg>   # fill-model backtest on stored books
+node scripts/checks/audit.mjs                           # self-hosted: re-derive every route from the exact market snapshot
+node scripts/checks/screenshot.mjs <dir> [url] [width]  # load every page in headless Chrome, report errors / NaN / overflow
+node scripts/checks/backtest.mjs <copy of data/pg>   # fill-model backtest on stored books
 ```
 
 Contribution files are verified against the server they came from:
@@ -172,7 +176,7 @@ Every result on the site has a **Details** view that lists each step with real n
 - **Trades per hour (old + new data):** what we watched trade in the last 24 h is blended with Hypixel's 7-day average, (observed x hours watched + 7-day x 12) / (hours watched + 12), never above the 7-day average, so a rare item that did not trade for a few hours is not written off.
 - **Book ladder:** a book's sale is never priced above the cheapest sell offer of a higher level of the same enchant (nobody pays 12M for Last Stand IV while V costs 3.8M); such books are flagged "above higher level". A 50%+ spread is only flagged when it is wide for that item (expensive books often sit at 50-70%).
 - **Likely manipulated:** flagged with the evidence when a price sits far above its typical level (2x, or 1.4x plus a second sign: cheap supply bought out, one small bait buy order far above the rest, a spread 3x its usual). Flagged items stay listed (red tag) but the planner leaves them out. Both get stronger as our own history grows.
-- **Audit:** `node scripts/audit.mjs` re-derives every listed route from the exact market snapshot the calculator used (`GET /api/v1/market`), checks books and recipes against the raw sources, and compares with skyblock.bz.
+- **Audit:** `node scripts/checks/audit.mjs` re-derives every listed route from the exact market snapshot the calculator used (`GET /api/v1/market`), checks books and recipes against the raw sources, and compares with skyblock.bz.
 - **Every route is listed**, losing ones too (shown in red at your settings); routes with market warnings come after clean ones; recipes that cannot be priced are listed with the reason.
 - **Per item:** the item page shows time on top (survival curve), outbid vs filled, the order-size table and a quota calculator ("how long to buy 10,000?": p10 / p50 / p90 from 2,000 runs over real episodes). API: `GET /api/v1/bazaar/{id}/fill?check=5&qty=10000`.
 - **Requirements:** come from NEU's craft text (collections, HotM, slayer, reputation), the Forge (HotM 2), and XP costs for combining books.

@@ -1,3 +1,5 @@
+// Public API of @bc/server-core (database, ingestion, statistics, market loading, contribution import / export).
+// Other packages import from "@bc/server-core" only.
 export * from "./db.js";
 export * from "./hypixel.js";
 export * from "./market.js";

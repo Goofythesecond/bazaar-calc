@@ -1,9 +1,7 @@
 // Unified route planner: picks the set of bazaar / craft / book / forge flips that earns the most per DAY within
 // your order slots, forge slots, coins, daily bazaar limit and clicking time (see plan()).
-import { orderSlots } from "../rules/bazaar.js";
-import { FORGE, forgeSlots } from "../rules/forge.js";
+import { orderSlots, FORGE, forgeSlots, type Profile } from "../rules/index.js";
 import { type Opportunity, type Settings, evaluate } from "./engine.js";
-import type { Profile } from "../requirements.js";
 
 export interface PlanOptions {
   kinds?: Opportunity["kind"][];

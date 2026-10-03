@@ -1,3 +1,4 @@
+// Charts (uPlot): price / order history with mayor and event shading, and the small sparkline.
 import { useEffect, useRef, useState } from "react";
 import uPlot from "uplot";
 import "uplot/dist/uPlot.min.css";

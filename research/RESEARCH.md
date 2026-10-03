@@ -36,7 +36,7 @@ sell: `At what price are you selling?` → `Confirm Sell Offer`; instant buy: `H
 orders: `Your Bazaar Orders` → `Order options` (cancel / flip). Chat confirmations: `Bought`, `Sold`, `Buy Order Setup!`, `Sell Offer Setup!`, `Order Flipped!`.
 
 ## Action timing model (assumption, user-tunable)
-No source publishes action times. We model each GUI step as `ping + server_tick(50 ms) + your click delay`, and typing a custom amount/price in the sign as a separate time. Step counts per action come from the menus above (see `packages/shared/src/timing.ts`). Contributors running the mod can upload real timings to replace the defaults.
+No source publishes action times. We model each GUI step as `ping + server_tick(50 ms) + your click delay`, and typing a custom amount/price in the sign as a separate time. Step counts per action come from the menus above (see `packages/shared/src/rules/timing.ts`). Contributors running the mod can upload real timings to replace the defaults.
 
 ## Enchanted books ([wiki: Enchantments](https://hypixelskyblock.minecraft.wiki/w/Enchantments), [Enchanted Book](https://hypixelskyblock.minecraft.wiki/w/Enchanted_Book), [Anvil](https://hypixelskyblock.minecraft.wiki/w/Anvil))
 - Two books of the same enchant and level combine into the next level in an anvil, **free (0 XP)** and without anvil uses — *except* enchants with a "Cost to Combine" table (e.g. Flowstate: 50/100/150 levels).
@@ -67,12 +67,12 @@ Open-source formulas, read from their code:
 - **Forum score**: `profit per item · (instasells + instabuys per minute) / 100`; its own thread notes it ignores order competition and inventory.
 None of them model competition (how long you stay the best price), order size, relisting, or the daily limit.
 
-What we measure (`packages/shared/src/toptrack.ts`, recorded on every poll, table `bazaar_top_episodes`):
+What we measure (`packages/shared/src/fill/toptrack.ts`, recorded on every poll, table `bazaar_top_episodes`):
 - **Episode** = a freshly posted best price (beats the previous best) from the poll that first shows it to the poll that shows it beaten (`outbid`), gone with a worse best (`gone`: filled or cancelled) or a polling gap (`cut`, censored). Duration = midpoint of the interval the polls allow (60 s polls until 2026-10-02, 20 s since: Hypixel refreshes the bazaar about every 20 s), bounds kept. Survival by Kaplan-Meier.
 - **Flow on top** = units that left the book at prices the top order was ahead of while it was on top. Polls cannot separate fills from cancels, so the long-run rate is scaled to the item's measured trade rate (min of 7-day ÷ 168 and observed removals).
 - First 5.4 h replay (2026-10-01, 52,483 episodes, 897 item-sides with ≥ 20): median time on top **~2 min** (both sides, many within the 60 s poll resolution); **43%** of new best buy orders and **38%** of new best sell offers are beaten before the next poll; at a 5-minute check interval the median item gives you the top **~48–51%** of the time; flow-on-top vs Hypixel 7-day rate: median 1.4× (bids, fills + cancels) / 0.94× (asks) — hence the scaling.
 
-Order sizing (`packages/shared/src/calc/sizing.ts`): each measured episode is one cycle — post Q on top, hold T, fill at the episode's flow, notice at your next look, relist (counts Q·price toward the daily limit again). Units/h, orders/h and limit/h follow for every size; a route uses the *smallest* size per order leg that still moves the units/h the route runs at (bigger orders do not fill faster). Budgets (daily limit spread over your hours, clicking time, coins) are solved together for the route's rate. Bazaar flips can turn a fully filled buy order into the sell offer with **Flip Order**, which does not count toward the limit.
+Order sizing (`packages/shared/src/fill/sizing.ts`): each measured episode is one cycle — post Q on top, hold T, fill at the episode's flow, notice at your next look, relist (counts Q·price toward the daily limit again). Units/h, orders/h and limit/h follow for every size; a route uses the *smallest* size per order leg that still moves the units/h the route runs at (bigger orders do not fill faster). Budgets (daily limit spread over your hours, clicking time, coins) are solved together for the route's rate. Bazaar flips can turn a fully filled buy order into the sell offer with **Flip Order**, which does not count toward the limit.
 
 Known limits: holds shorter than one poll (~20 s, the API refresh rate) cannot be seen precisely; our own order would change competitors' behaviour; cancels look like fills (handled by scaling, not removed).
 

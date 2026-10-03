@@ -1,3 +1,5 @@
+// Builds and starts the Fastify API server: compression, cookies, rate limits, every route in routes/, and the
+// built website (packages/web/dist) with cache headers.
 import Fastify, { type FastifyError } from "fastify";
 import compress from "@fastify/compress";
 import cookie from "@fastify/cookie";

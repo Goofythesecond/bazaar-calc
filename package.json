@@ -8,6 +8,7 @@
     "node": ">=22.15"
   },
   "scripts": {
+    "check": "node scripts/checks/architecture.mjs && pnpm -r build && pnpm -r test",
     "build": "pnpm -r build",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
@@ -17,7 +18,7 @@
     "db:migrate": "pnpm --filter @bc/api migrate",
     "data:build": "node scripts/data/build-site.mjs",
     "data:check": "node scripts/data/check-pr.mjs",
-    "pages:build": "node scripts/build-pages.mjs"
+    "pages:build": "node scripts/site/build-pages.mjs"
   },
   "devDependencies": {
     "@bc/server-core": "workspace:*",

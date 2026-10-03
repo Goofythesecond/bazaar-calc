@@ -1,3 +1,4 @@
+// Environment settings of the API server (port, public URL, Discord login, session secret). Read once at start.
 export const ENV = {
   port: Number(process.env.API_PORT ?? 8787),
   publicUrl: (process.env.PUBLIC_URL ?? "http://localhost:5173").replace(/\/$/, ""),

@@ -1,3 +1,4 @@
+// One route in detail: the buy / process / sell flow, unlock requirements, market warnings and the full working.
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { FLAG_TEXT, type Opportunity } from "@bc/shared";

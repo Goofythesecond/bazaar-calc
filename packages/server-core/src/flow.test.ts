@@ -1,3 +1,4 @@
+// Tests: order-book flow (units removed at or past the best price) and the competition rates derived from it.
 import { describe, expect, it } from "vitest";
 import { bookFlow } from "./ingest/bazaar.js";
 import { competition } from "./stats.js";

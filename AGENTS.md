@@ -47,30 +47,56 @@ website and the published statistics.
 
 ## Repository map
 
+Start at [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md). It has the parts, the layers, how data flows, and a "where to
+change what" table. Every package and every `@bc/shared` module has a README.md listing its files, and every file
+starts with a comment saying what it is for.
+
 | Path | Contents |
 |---|---|
-| `packages/shared/src/calc/` | engine (per-route maths, batches, limits), routes (bazaar / craft / book / forge builders), planner, sizing (fill model) |
-| `packages/shared/src/market.ts`, `marketbuild.ts` | market types, flags (manipulation, mass delists, stale…), typical prices, assembling the market |
-| `packages/shared/src/service.ts` | what the API endpoints compute (calc, plan, fill report, outlook, requirements); used by the server and the website |
-| `packages/shared/src/toptrack.ts` | time-on-top episodes (who holds the best price, for how long, how much trades) |
-| `packages/shared/src/contrib/` | contribution file format `bazaar-calc-data/1` and the collector core (same processing as the server's scanner) |
-| `packages/shared/src/hypixel.ts`, `nbt.ts` | Hypixel response types and checks; NBT reader for auction items (verified identical to prismarine-nbt on 4,092 live auctions) |
-| `packages/server-core/` | Postgres / PGlite, ingestion, statistics (`stats.ts`, `hold.ts`), import and export of contribution files (`contrib.ts`) |
+| `packages/shared/src/rules/` | game rules: bazaar, Forge, enchants, calendar, timing, requirements |
+| `packages/shared/src/market/` | market types, signals and flags, names, `assembleMarket`, event impact |
+| `packages/shared/src/recipes/` | `Recipe` and the NotEnoughUpdates-REPO parser |
+| `packages/shared/src/fill/` | time-on-top episodes and the order-size / fill model |
+| `packages/shared/src/calc/` | route engine, route builders, planner |
+| `packages/shared/src/data/` | Hypixel shapes and checks, NBT reader, contribution file format, collector core |
+| `packages/shared/src/service/` | endpoint logic shared by the API and the static website |
+| `packages/server-core/` | database, ingestion, statistics, contribution import / export (Node only) |
 | `packages/api/`, `packages/worker/` | self-hosted API server and scanner jobs |
-| `packages/web/` | React site; `src/static/` is the in-browser backend used when built with `VITE_STATIC=1` |
+| `packages/web/` | the website; `src/static/` is the in-browser backend of the GitHub Pages build |
 | `packages/collector/` | the Node data collector (bundled to one file) |
-| `scripts/data/` | export, import, check-pr, build-site, file-inbox |
-| `scripts/` | audit (self-hosted), backtest, screenshot, build-pages |
+| `scripts/` | checks, data pipeline, site build (scripts/README.md lists each one) |
 | `data/contrib/<login>/<yyyy-mm>/` | approved contribution files; `data/inbox/` is where pull requests add them |
 | `research/RESEARCH.md` | every rule with its source |
+
+Layers inside `@bc/shared` (a module may import only from modules to its left, across modules only through
+`index.ts`):
+
+```
+rules  ←  market, recipes  ←  fill  ←  calc, data  ←  service
+```
+
+## How to make a change (the procedure)
+
+1. **Find the place.** Use the "where to change what" table in docs/ARCHITECTURE.md, then the README of that module.
+   Read the files you will touch and their tests.
+2. **Restructuring?** If behaviour must not change, record outputs first with `node scripts/checks/outputs.mjs` (see
+   docs/ARCHITECTURE.md). Afterwards the outputs must be byte-identical.
+3. **Make the change in the lowest layer it belongs to.** If two places need the same logic, it goes into
+   `@bc/shared`. Never copy it into the API and the static backend separately.
+4. **Keep the structure current:**
+   - new files get a role comment and a line in their folder's README
+   - moved files get every mention updated (the architecture check finds stale ones)
+5. **Run the checks:** `pnpm check` (architecture + build + tests), plus whatever the table below asks for.
+6. **Report:** what changed, what you verified and how, and what you could not verify.
 
 ## Commands
 
 ```bash
-pnpm install                       # pnpm 12 (see packageManager); Node 24 in CI, Node 22.15+ works
-pnpm -r build                      # type checks every package and builds them
-pnpm -r test                       # 34 calculator / rule tests + 4 ingestion tests (PGlite)
-pnpm --filter @bc/shared test      # just the calculators
+pnpm install                         # pnpm 12 (see packageManager); Node 24 in CI, Node 22.15+ works
+pnpm check                           # architecture rules, build every package, run every test
+node scripts/checks/architecture.mjs # just the structure rules (no install needed)
+pnpm -r build                        # type checks every package and builds them
+pnpm -r test                         # 34 calculator / rule tests + 4 ingestion tests (PGlite)
 ```
 
 After changing `package.json`, run `pnpm install` and commit `pnpm-lock.yaml`. CI installs with
@@ -82,21 +108,22 @@ Pick the checks that fit what you changed.
 
 | You changed | Run |
 |---|---|
-| Any calculation (`packages/shared/src/calc`, `market.ts`) | `pnpm --filter @bc/shared test`; on a self-hosted instance also `node scripts/audit.mjs` (must end with `NO PROBLEMS FOUND`) |
-| The fill model or episode tracking | `cd packages/server-core && node ../../scripts/backtest.mjs <copy of data/pg>` (predicted/real median should stay near 1) |
-| Statistics (`stats.ts`, `hold.ts`) or the file format / import | Export a database, rebuild the statistics from the files, and compare item by item with the server's own: 24 h / 7-day medians and counts, flow, time-on-top samples and auction prices must be **identical** |
-| A collector | Run it next to a server for a few minutes, then `node scripts/data/check-pr.mjs --data <dir with the server's export> --author <login> <file>`: shared snapshots must give 0 differing closes and episodes |
-| The website | Build with `scripts/build-pages.mjs`, serve it, then `node scripts/screenshot.mjs <dir> <url>`. No PROBLEM lines. Look at the screenshots at 1440 px and 390 px |
-| Performance | Time `buildOpportunities` for `"all"` on real data: about 0.5 s in Node today. It runs in visitors' browsers, so keep it fast |
+| Any code | `pnpm check` |
+| Code structure only (moves, renames, splitting files) | `scripts/checks/outputs.mjs` before and after: byte-identical |
+| A calculation (`packages/shared/src/calc`, `packages/shared/src/market`) | Tests; on a self-hosted instance also `node scripts/checks/audit.mjs` (must end with `NO PROBLEMS FOUND`) |
+| The fill model or episode tracking (`packages/shared/src/fill`) | `node scripts/checks/backtest.mjs <copy of data/pg>` (predicted / real median near 1) |
+| Statistics (`stats.ts`, `hold.ts`) or the file format / import | Export a database, rebuild the statistics from the files, and compare item by item with the server's own: medians, counts, flow, time-on-top samples and auction prices must be identical |
+| A collector | Run it next to a server for a few minutes, then `node scripts/data/check-pr.mjs --data <dir with the server's export> --author <login> <file>`: 0 differing closes and episodes |
+| The website | Build with `scripts/site/build-pages.mjs`, serve it, then `node scripts/checks/screenshot.mjs <dir> <url> 1440` and `... 390`. No PROBLEM lines, and look at the screenshots |
+| Performance | Time `buildOpportunities` for `"all"` on real data: about 0.5 s in Node today. It runs in visitors' browsers |
 
 Lessons from this repository's history:
-- `Number#toLocaleString(locale, options)` inside hot loops was 90% of the calculation time. Reuse an
-  `Intl.NumberFormat`.
-- Anchor `.gitignore` rules to the repository root. `pages/` once silently excluded `packages/web/src/pages/`, and a
-  fresh `git clone` plus build caught it.
-- Everything is UTC: database sessions, month partitions, hourly buckets and file names.
-- Hypixel's ended-auctions list covers about one minute. Polling it every 60 s lost about 14% of sales, so poll every
-  30 s.
+- `Number#toLocaleString(locale, options)` in hot loops was 90% of the calculation time. Reuse an `Intl.NumberFormat`.
+- Anchor `.gitignore` rules to the root. `pages/` once silently excluded `packages/web/src/pages/`.
+- A phone's layout area grows to fit content that is too wide. Measure overflow against the real screen width
+  (`clientWidth`), as screenshot.mjs does.
+- Everything is UTC.
+- Hypixel's ended-auctions list covers about one minute. Poll it every 30 s.
 
 ## Reviewing a data pull request (agent-assisted)
 

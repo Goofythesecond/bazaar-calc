@@ -1,4 +1,4 @@
-// Contribution data files (packages/shared/src/contrib/format.ts) into the database, and the database back into files.
+// Contribution data files (packages/shared/src/data/contrib-format.ts) into the database, and the database back into files.
 //
 // Several contributors can record the same hours. Bazaar data is taken per (file, UTC hour): the stretches of polling
 // with the most polls are picked first and a stretch that overlaps an already picked one in the same hour is skipped,

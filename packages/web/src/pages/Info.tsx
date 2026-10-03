@@ -1,3 +1,4 @@
+// Reference pages of the self-hosted site: Timing & limits, Contribute (accounts and keys), API, Data status, Sources.
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ACTIONS, BAZAAR, BAZAAR_SOURCES, NOTICE, actionSeconds, msUntilLimitReset, orderSlots, taxRate } from "@bc/shared";

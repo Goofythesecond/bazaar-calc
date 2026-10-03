@@ -1,3 +1,4 @@
+// Flip tables (bazaar / craft / book / forge): filters, sorting, every route incl. losing ones, route details.
 import { useQuery } from "@tanstack/react-query";
 import { Fragment, useState } from "react";
 import { Link, useParams } from "react-router-dom";

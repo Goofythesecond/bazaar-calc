@@ -89,7 +89,7 @@ episodes must be identical. In testing:
    - write the JSON files
    - bad files are skipped and listed in `manifest.json`
 4. `actions/configure-pages` reports the site's base path (`/bazaar-calc`).
-5. `scripts/build-pages.mjs` puts the site together:
+5. `scripts/site/build-pages.mjs` puts the site together:
    - Vite build with `VITE_STATIC=1`
    - the data in `data/`
    - the collector in `collector/`
@@ -104,7 +104,24 @@ episodes must be identical. In testing:
 - **Schedule:** GitHub turns the daily schedule off after 60 days without commits in a public repository. Any merge
   or push resets that; if it does get turned off, re-enable it in the Actions tab.
 
-## Workflow 3: Tests (`.github/workflows/ci.yml`)
+## Workflow 3: Architecture (`.github/workflows/architecture.yml`)
+
+**When it runs:** on every push to `main` and every pull request.
+
+**What it does:** `node scripts/checks/architecture.mjs`. It needs no install, so it reports within seconds. It
+checks the structure rules from [docs/ARCHITECTURE.md](ARCHITECTURE.md):
+1. packages depend only in the allowed direction
+2. `@bc/shared` stays browser-safe
+3. shared modules respect their layers and import each other only through `index.ts`; there are no import cycles
+4. every source, script and workflow file starts with a role comment
+5. every package and module has a README naming its files
+6. every repository path mentioned in documentation, comments, workflows and package scripts exists
+
+**When it fails:** the log lists each problem with how to fix it. Most often:
+- a new file has no role comment, or no line in its folder's README
+- a moved file is still mentioned at its old path
+
+## Workflow 4: Tests (`.github/workflows/ci.yml`)
 
 **When it runs:** on pushes to `main` and on pull requests, unless they only change `data/`.
 
@@ -166,12 +183,13 @@ gh api -X POST repos/Goofythesecond/bazaar-calc/actions/runs/<id>/approve   # le
 ### Reproducing a workflow locally
 
 ```bash
+node scripts/checks/architecture.mjs                                             # Architecture
 pnpm install && pnpm -r build && pnpm -r test                                    # Tests
 node scripts/data/check-pr.mjs --author <login> data/inbox/<file>.json.gz        # Check contributed data, for one file
 node scripts/data/build-site.mjs --out site-data                                 # Publish: data step (--offline skips the syncs)
-node scripts/build-pages.mjs --site-data site-data --base /bazaar-calc/ --out pages   # Publish: site step
+node scripts/site/build-pages.mjs --site-data site-data --base /bazaar-calc/ --out pages   # Publish: site step
 ```
 
 To preview the result, serve `pages/` under `/bazaar-calc/`, with `404.html` for missing paths (as GitHub Pages
-does). Then run `node scripts/screenshot.mjs <dir> http://localhost:<port>/bazaar-calc`. It reports script errors,
+does). Then run `node scripts/checks/screenshot.mjs <dir> http://localhost:<port>/bazaar-calc`. It reports script errors,
 empty pages, NaN/undefined text and sideways scrolling.

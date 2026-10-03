@@ -1,3 +1,4 @@
+// Light / dark / system theme, saved in the browser.
 import { useEffect, useState } from "react";
 
 export type Theme = "system" | "light" | "dark";

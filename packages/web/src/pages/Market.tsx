@@ -1,3 +1,4 @@
+// Market pages: Outlook (prices around upcoming events), Items search, one Item (charts, book, recipes), Events & mayors.
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";

@@ -1,3 +1,5 @@
+// Item page panel: time on top, fill speed by order size and "how long to fill my quota", with the evidence
+// (GET /api/v1/bazaar/{id}/fill).
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { api, coins, num, pct } from "../lib";

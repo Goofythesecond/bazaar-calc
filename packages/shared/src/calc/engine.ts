@@ -1,11 +1,8 @@
 // One evaluation engine for every flip type. A Route is: buy legs -> processing steps -> sell leg, all per ONE
 // sold output unit. evaluate() turns a route into an Opportunity with coins/hour, what limits it, capital, daily
 // bazaar-limit use, time spent clicking, requirements and a step-by-step explanation.
-import { BAZAAR, limitContribution, orderSlots, taxRate } from "../rules/bazaar.js";
-import { FORGE, forgeSlots } from "../rules/forge.js";
-import { type Profile, type Requirement, dedupeRequirements, unmet } from "../requirements.js";
-import { actionSeconds, type TimingSettings } from "../timing.js";
-import { type FillModel, at, curve } from "./sizing.js";
+import { BAZAAR, limitContribution, orderSlots, taxRate, FORGE, forgeSlots, type Profile, type Requirement, dedupeRequirements, unmet, actionSeconds, type TimingSettings } from "../rules/index.js";
+import { type FillModel, at, curve } from "../fill/index.js";
 
 export interface Settings extends TimingSettings {
   coins: number;

@@ -1,3 +1,5 @@
+// Database access: a Postgres pool or the built-in PGlite (one folder, one process), migrations, monthly partitions
+// and a chunked multi-row INSERT. Everything runs in UTC.
 import pg from "pg";
 import { mkdirSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";

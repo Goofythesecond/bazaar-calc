@@ -56,5 +56,5 @@ export class State {
   }
 }
 
-// request schemas and filters are shared with the static website (packages/shared/src/service.ts)
+// request schemas and filters are shared with the static website (packages/shared/src/service/endpoints.ts)
 export { FilterSchema, ProfileSchema, SettingsSchema, applyFilters } from "@bc/shared";

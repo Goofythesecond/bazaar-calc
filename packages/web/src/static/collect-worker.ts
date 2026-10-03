@@ -1,5 +1,5 @@
 // Browser collector: polls Hypixel's public endpoints from this tab and records them into contribution data files
-// (packages/shared/src/contrib), the same format the Node collector writes. Runs in a Web Worker; progress is saved in
+// (packages/shared/src/data), the same format the Node collector writes. Runs in a Web Worker; progress is saved in
 // the browser (IndexedDB) every few minutes so closing the tab does not lose what was recorded.
 import { type AuctionsPage, type BazaarResponse, type ElectionResponse, type EndedAuctions, DataCollector, HYPIXEL, aggregateBins, auctionItemKey, coverage, dataFileName, encodeDataFile } from "@bc/shared";
 

@@ -1,5 +1,5 @@
 // Calculator endpoints. GET uses defaults (or query params), POST takes {settings, profile, filters}. The computation is
-// shared with the static website (packages/shared/src/service.ts).
+// shared with the static website (packages/shared/src/service/endpoints.ts).
 import type { FastifyInstance } from "fastify";
 import { CALC_KINDS, calcResponse, planResponse } from "@bc/shared";
 import type { State } from "../state.js";

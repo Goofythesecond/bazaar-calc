@@ -1,25 +1,13 @@
-export * from "./rules/bazaar.js";
-export * from "./rules/forge.js";
-export * from "./rules/enchants.js";
-export * from "./calendar.js";
-export * from "./timing.js";
-export * from "./requirements.js";
-export * from "./market.js";
-export * from "./book.js";
-export * from "./toptrack.js";
-export * from "./neu.js";
-export * from "./names.js";
-export * from "./analysis.js";
-export * from "./calc/engine.js";
-export * from "./calc/routes.js";
-export * from "./calc/planner.js";
-export * from "./calc/sizing.js";
-export * from "./hypixel.js";
-export * from "./marketbuild.js";
-export * from "./service.js";
-export * from "./nbt.js";
-export * from "./contrib/format.js";
-export * from "./contrib/collector.js";
+// Public API of @bc/shared, the calculation code shared by the server, the static website and the collectors.
+// Other packages import from "@bc/shared" only, never from files inside it. Modules are listed lowest layer first: a
+// module may import only from modules listed above it (checked by scripts/checks/architecture.mjs). See README.md.
+export * from "./rules/index.js";
+export * from "./market/index.js";
+export * from "./recipes/index.js";
+export * from "./fill/index.js";
+export * from "./calc/index.js";
+export * from "./data/index.js";
+export * from "./service/index.js";
 
 export const NOTICE = {
   affiliation: "Not affiliated with or endorsed by Hypixel. NOT AN OFFICIAL MINECRAFT SERVICE. NOT APPROVED BY OR ASSOCIATED WITH MOJANG OR MICROSOFT.",

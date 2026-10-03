@@ -1,3 +1,5 @@
+// Website entry: data fetching (React Query), saved settings, and the page routes (the static build swaps in the
+// pages from Static.tsx).
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

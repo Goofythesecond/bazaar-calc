@@ -1,3 +1,4 @@
+// "Order sizes & daily limit" for one route: batches, order sizes per leg, and how each counts toward the daily limit.
 import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import type { Opportunity, OrderPlanLeg } from "@bc/shared";

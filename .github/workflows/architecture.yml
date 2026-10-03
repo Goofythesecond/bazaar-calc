@@ -1,0 +1,20 @@
+# Architecture check: package and module boundaries, role comments, READMEs and paths in documentation
+# (scripts/checks/architecture.mjs, rules in docs/ARCHITECTURE.md). Needs no install, so it reports in seconds.
+name: Architecture
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  architecture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - name: Check the architecture rules
+        run: node scripts/checks/architecture.mjs

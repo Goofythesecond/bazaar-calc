@@ -13,7 +13,7 @@ The more hours people record, the better the numbers.
 
 ### Record
 
-Either collector writes the same files (format `bazaar-calc-data/1`, see `packages/shared/src/contrib/format.ts`).
+Either collector writes the same files (format `bazaar-calc-data/1`, see `packages/shared/src/data/contrib-format.ts`).
 
 **In the browser:** open the website's **Contribute** page, enter your GitHub username and press **Start collecting**.
 - Keep the tab open and visible: browsers slow down hidden tabs, and only polls at most 150 s apart count toward fill
@@ -72,13 +72,17 @@ Hand-edited or invented data is rejected. Overlaps with other contributors make 
 Bug reports and pull requests are welcome. Before sending code:
 
 ```bash
-pnpm install && pnpm -r build && pnpm -r test
+pnpm install && pnpm check     # architecture rules, build, all tests
 ```
+
+Start with [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): it has the layers, where each kind of change goes, and the
+conventions. Every file starts with a comment saying what it is for, and every folder's README lists its files. Keep
+both current; the Architecture workflow checks them.
 
 Calculations live in `packages/shared` and run both on the server and in the browser. Any change to a number the site
 shows should come with how it was checked:
 - a test
-- `scripts/audit.mjs` (self-hosted)
+- `scripts/checks/audit.mjs` (self-hosted)
 - a comparison against the raw Hypixel data
 
 Rules and constants cite their source in `research/RESEARCH.md`. Data from Coflnet, skykings or skyblock.bz cannot be
