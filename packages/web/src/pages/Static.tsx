@@ -118,9 +118,9 @@ export function StatusStatic() {
       {q.error && <div className="note"><Icon name="warn" />{(q.error as Error).message}</div>}
       {m && q.data && <>
         <div className="grid cols-3">
-          <div className="card tile"><div className="label">Live prices</div><div className="value">{q.data.dataAt ? new Date(q.data.dataAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "–"}</div><div className="sub">from Hypixel, refreshed every 30 s</div></div>
-          <div className="card tile"><div className="label">History up to</div><div className="value">{ago(m.asOf)}</div><div className="sub">{utc(m.asOf)}{q.data.statsUsed === false ? " · too old, not used" : ""}</div></div>
-          <div className="card tile"><div className="label">Site built</div><div className="value">{ago(m.builtAt)}</div><div className="sub">recipes: NEU {m.recipesVersion?.slice(0, 7) ?? "–"}</div></div>
+          <div className="card tile"><div className="label">Live prices</div><div className="value">{q.data.dataAt ? new Date(q.data.dataAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "–"}</div><div className="sub">straight from Hypixel; updates every minute while a page is open</div></div>
+          <div className="card tile"><div className="label">History up to (newest contributed data)</div><div className="value">{ago(m.asOf)}</div><div className="sub">{utc(m.asOf)}{q.data.statsUsed === false ? " · too old, not used" : ""}</div></div>
+          <div className="card tile"><div className="label">Site built</div><div className="value">{ago(m.builtAt)}</div><div className="sub">rebuilt on every approved contribution and daily · recipes: NEU {m.recipesVersion?.slice(0, 7) ?? "–"}</div></div>
         </div>
         <h2>Coverage by day (polls from contributors)</h2>
         <div className="tablewrap"><table><thead><tr><th className="l">Day (UTC)</th><th>Polls</th><th className="l" style={{ width: "50%" }}>Share of the day</th></tr></thead><tbody>

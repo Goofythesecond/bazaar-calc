@@ -40,7 +40,8 @@ The website is only as fresh as the data people send in. To help:
    the same Hypixel snapshot recorded identical values, so overlaps must match exactly.
 4. The maintainer merges, and the site rebuilds with the data within minutes.
 
-Details, file format and limits: [CONTRIBUTING.md](CONTRIBUTING.md).
+Details, file format and limits: [CONTRIBUTING.md](CONTRIBUTING.md). How the GitHub workflows work and what to do
+when one fails: [docs/WORKFLOWS.md](docs/WORKFLOWS.md). Working on the code with an AI coding agent: [AGENTS.md](AGENTS.md).
 
 ## What's inside
 
