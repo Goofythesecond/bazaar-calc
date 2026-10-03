@@ -1,0 +1,22 @@
+{
+  "name": "@bc/collector",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Data collector: records Hypixel's public bazaar and auction data into contribution files for the GitHub repository (one dependency-free file).",
+  "bin": {
+    "bazaar-calc-collector": "dist/bazaar-calc-collector.mjs"
+  },
+  "scripts": {
+    "build": "esbuild src/collect.ts --bundle --platform=node --format=esm --target=node18 --banner:js='#!/usr/bin/env node' --outfile=dist/bazaar-calc-collector.mjs && node --check src/server-upload.mjs",
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "node --check src/server-upload.mjs"
+  },
+  "dependencies": {
+    "@bc/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.12",
+    "typescript": "^5.6.0",
+    "@types/node": "^22.10.0"
+  }
+}

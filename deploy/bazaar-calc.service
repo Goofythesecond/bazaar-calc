@@ -1,0 +1,21 @@
+# Bazaar Calc: scanner + website in one process on the built-in database. Website: http://127.0.0.1:8787 (this PC only).
+# Install it with scripts/bazaar.sh install (fills in this folder for @DIR@); manage it with scripts/bazaar.sh.
+[Unit]
+Description=Bazaar Calc (scanner + website on 127.0.0.1:8787)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+WorkingDirectory=@DIR@
+Environment=DATABASE_URL=pglite:@DIR@/data/pg
+Environment=API_HOST=127.0.0.1
+Environment=API_PORT=8787
+Environment=PUBLIC_URL=http://127.0.0.1:8787
+Environment=LOG_LEVEL=warn
+ExecStart=/usr/bin/env node packages/api/dist/all.js
+Restart=always
+RestartSec=30
+Nice=10
+
+[Install]
+WantedBy=default.target

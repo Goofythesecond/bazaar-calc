@@ -1,0 +1,5 @@
+packages:
+  - "packages/*"
+# esbuild (used by Vite and the collector bundle) installs its platform binary in a build script
+allowBuilds:
+  esbuild: true

@@ -1,0 +1,23 @@
+# Not started by default. `docker compose up -d` when you are ready to run the stack.
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: bazaar
+      POSTGRES_PASSWORD: bazaar
+      POSTGRES_DB: bazaar
+    ports: ["5432:5432"]
+    volumes: [dbdata:/var/lib/postgresql/data]
+  api:
+    build: { context: ., dockerfile: packages/api/Dockerfile }
+    env_file: .env
+    environment: { DATABASE_URL: postgres://bazaar:bazaar@db:5432/bazaar }
+    depends_on: [db]
+    ports: ["8787:8787"]
+  worker:
+    build: { context: ., dockerfile: packages/worker/Dockerfile }
+    env_file: .env
+    environment: { DATABASE_URL: postgres://bazaar:bazaar@db:5432/bazaar }
+    depends_on: [db]
+volumes:
+  dbdata: {}

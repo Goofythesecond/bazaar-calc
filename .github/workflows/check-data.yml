@@ -1,0 +1,40 @@
+# Checks the data files a pull request adds to data/inbox/ (see scripts/data/check-pr.mjs). The check script always
+# comes from the main branch, never from the pull request, so a pull request cannot change how it is checked.
+name: Check contributed data
+on:
+  pull_request:
+    paths: ["data/inbox/**"]
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          fetch-depth: 0
+      - uses: pnpm/action-setup@v6
+        with:
+          cache: true
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter @bc/shared build
+      - name: Check the added files
+        env:
+          AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR: ${{ github.event.pull_request.number }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git fetch --no-tags origin "pull/$PR/head:pr-head"
+          git diff --name-status "$BASE"...pr-head > "$RUNNER_TEMP/changes.txt"
+          mkdir -p "$RUNNER_TEMP/pr"
+          # copy the pull request's added data files out of git (nothing from the pull request is executed)
+          awk -F'\t' '$1 == "A" && $2 ~ /^data\/inbox\/[^\/]+\.json\.gz$/ { print $2 }' "$RUNNER_TEMP/changes.txt" | while read -r f; do
+            mkdir -p "$RUNNER_TEMP/pr/$(dirname "$f")"
+            git show "pr-head:$f" > "$RUNNER_TEMP/pr/$f"
+          done
+          node scripts/data/check-pr.mjs --author "$AUTHOR" --changes "$RUNNER_TEMP/changes.txt" --root "$RUNNER_TEMP/pr"

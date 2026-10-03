@@ -1,0 +1,4111 @@
+{
+ "rules": {
+  "ENCHANTMENT_ABSORB": {
+   "id": "ENCHANTMENT_ABSORB",
+   "name": "Absorb",
+   "page": "Absorb",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Absorb",
+   "max_level": null,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10,
+    10
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_ANGLER": {
+   "id": "ENCHANTMENT_ANGLER",
+   "name": "Angler",
+   "page": "Angler",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Angler",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    75
+   ],
+   "enchanting_req": 4,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_AQUA_AFFINITY": {
+   "id": "ENCHANTMENT_AQUA_AFFINITY",
+   "name": "Aqua Affinity",
+   "page": "Aqua Affinity",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Aqua_Affinity",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_BANE_OF_ARTHROPODS": {
+   "id": "ENCHANTMENT_BANE_OF_ARTHROPODS",
+   "name": "Bane of Arthropods",
+   "page": "Bane of Arthropods",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Bane_of_Arthropods",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_BIG_BRAIN": {
+   "id": "ENCHANTMENT_BIG_BRAIN",
+   "name": "Big Brain",
+   "page": "Big Brain",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Big_Brain",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    60,
+    80,
+    100
+   ],
+   "enchanting_req": 21,
+   "ultimate": false,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_BLAST_PROTECTION": {
+   "id": "ENCHANTMENT_BLAST_PROTECTION",
+   "name": "Blast Protection",
+   "page": "Blast Protection",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Blast_Protection",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_BLESSING": {
+   "id": "ENCHANTMENT_BLESSING",
+   "name": "Blessing",
+   "page": "Blessing (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Blessing_(Enchantment)",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0
+   ],
+   "enchanting_req": 9,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_ULTIMATE_BOBBIN_TIME": {
+   "id": "ENCHANTMENT_ULTIMATE_BOBBIN_TIME",
+   "name": "Bobbin' Time",
+   "page": "Bobbin' Time",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Bobbin'_Time",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [],
+   "enchanting_req": 24,
+   "ultimate": true,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_BUG_BLENDER": {
+   "id": "ENCHANTMENT_BUG_BLENDER",
+   "name": "Bug Blender",
+   "page": "Bug Blender",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Bug_Blender",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_CASTER": {
+   "id": "ENCHANTMENT_CASTER",
+   "name": "Caster",
+   "page": "Caster",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Caster",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [],
+   "enchanting_req": 15,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_CAYENNE": {
+   "id": "ENCHANTMENT_CAYENNE",
+   "name": "Cayenne",
+   "page": "Cayenne",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Cayenne",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_CHAMPION": {
+   "id": "ENCHANTMENT_CHAMPION",
+   "name": "Champion",
+   "page": "Champion",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Champion",
+   "max_level": null,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_CHANCE": {
+   "id": "ENCHANTMENT_CHANCE",
+   "name": "Chance",
+   "page": "Chance",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Chance",
+   "max_level": 5,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30,
+    45,
+    100,
+    200
+   ],
+   "enchanting_req": 11,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_CHARM": {
+   "id": "ENCHANTMENT_CHARM",
+   "name": "Charm",
+   "page": "Charm",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Charm",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    0
+   ],
+   "enchanting_req": 25,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_CHIMERA": {
+   "id": "ENCHANTMENT_ULTIMATE_CHIMERA",
+   "name": "Chimera",
+   "page": "Chimera",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Chimera",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 31,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_CLEAVE": {
+   "id": "ENCHANTMENT_CLEAVE",
+   "name": "Cleave",
+   "page": "Cleave",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Cleave",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    200
+   ],
+   "enchanting_req": 4,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_ULTIMATE_COMBO": {
+   "id": "ENCHANTMENT_ULTIMATE_COMBO",
+   "name": "Combo",
+   "page": "Combo",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Combo",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 24,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_COMPACT": {
+   "id": "ENCHANTMENT_COMPACT",
+   "name": "Compact",
+   "page": "Compact",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Compact",
+   "max_level": 10,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_CORRUPTION": {
+   "id": "ENCHANTMENT_CORRUPTION",
+   "name": "Corruption",
+   "page": "Corruption",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Corruption",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 25,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_COUNTER_STRIKE": {
+   "id": "ENCHANTMENT_COUNTER_STRIKE",
+   "name": "Counter-Strike",
+   "page": "Counter-Strike",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Counter-Strike",
+   "max_level": 5,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    60,
+    80,
+    100
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_CRITICAL": {
+   "id": "ENCHANTMENT_CRITICAL",
+   "name": "Critical",
+   "page": "Critical",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Critical",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    75,
+    100
+   ],
+   "enchanting_req": 9,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_ULTIMATE_CROP_FEVER": {
+   "id": "ENCHANTMENT_ULTIMATE_CROP_FEVER",
+   "name": "Crop Fever",
+   "page": "Crop Fever",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Crop_Fever",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    45,
+    91,
+    136,
+    179,
+    223
+   ],
+   "enchanting_req": 32,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_CUBISM": {
+   "id": "ENCHANTMENT_CUBISM",
+   "name": "Cubism",
+   "page": "Cubism",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Cubism",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    200
+   ],
+   "enchanting_req": 3,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_CULTIVATING": {
+   "id": "ENCHANTMENT_CULTIVATING",
+   "name": "Cultivating",
+   "page": "Cultivating",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Cultivating",
+   "max_level": null,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+   ]
+  },
+  "ENCHANTMENT_DEDICATION": {
+   "id": "ENCHANTMENT_DEDICATION",
+   "name": "Dedication",
+   "page": "Dedication",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Dedication",
+   "max_level": 4,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    100
+   ],
+   "enchanting_req": 12,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "ENCHANTMENT_DELICATE": {
+   "id": "ENCHANTMENT_DELICATE",
+   "name": "Delicate",
+   "page": "Delicate",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Delicate",
+   "max_level": 5,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    5
+   ]
+  },
+  "ENCHANTMENT_DIVINE_GIFT": {
+   "id": "ENCHANTMENT_DIVINE_GIFT",
+   "name": "Divine Gift",
+   "page": "Divine Gift",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Divine_Gift",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_AIMING": {
+   "id": "ENCHANTMENT_AIMING",
+   "name": "Dragon Tracer",
+   "page": "Dragon Tracer",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Dragon_Tracer",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 8,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SYPHON": {
+   "id": "ENCHANTMENT_SYPHON",
+   "name": "Drain",
+   "page": "Drain",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Drain",
+   "max_level": null,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    50,
+    200
+   ],
+   "enchanting_req": 15,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_REITERATE": {
+   "id": "ENCHANTMENT_ULTIMATE_REITERATE",
+   "name": "Duplex",
+   "page": "Duplex",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Duplex",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 28,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_EFFICIENCY": {
+   "id": "ENCHANTMENT_EFFICIENCY",
+   "name": "Efficiency",
+   "page": "Efficiency",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Efficiency",
+   "max_level": 10,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_ENDER_SLAYER": {
+   "id": "ENCHANTMENT_ENDER_SLAYER",
+   "name": "Ender Slayer",
+   "page": "Ender Slayer",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Ender_Slayer",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    25,
+    30,
+    40,
+    75,
+    200
+   ],
+   "enchanting_req": 11,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_EXECUTE": {
+   "id": "ENCHANTMENT_EXECUTE",
+   "name": "Execute",
+   "page": "Execute",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Execute",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    200
+   ],
+   "enchanting_req": 14,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_EXPERIENCE": {
+   "id": "ENCHANTMENT_EXPERIENCE",
+   "name": "Experience",
+   "page": "Experience (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Experience_(Enchantment)",
+   "max_level": 5,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30,
+    45,
+    75,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_EXPERTISE": {
+   "id": "ENCHANTMENT_EXPERTISE",
+   "name": "Expertise",
+   "page": "Expertise",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Expertise",
+   "max_level": null,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_FATAL_TEMPO": {
+   "id": "ENCHANTMENT_ULTIMATE_FATAL_TEMPO",
+   "name": "Fatal Tempo",
+   "page": "Fatal Tempo",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Fatal_Tempo",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 37,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_FEAST": {
+   "id": "ENCHANTMENT_FEAST",
+   "name": "Feast",
+   "page": "Feast",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Feast",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 5,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_FEATHER_FALLING": {
+   "id": "ENCHANTMENT_FEATHER_FALLING",
+   "name": "Feather Falling",
+   "page": "Feather Falling",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Feather_Falling",
+   "max_level": 10,
+   "combine_cap": 10,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [],
+   "enchanting_req": null,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    20
+   ]
+  },
+  "ENCHANTMENT_FIRE_PROTECTION": {
+   "id": "ENCHANTMENT_FIRE_PROTECTION",
+   "name": "Fire Protection",
+   "page": "Fire Protection",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Fire_Protection",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_FIRST_IMPRESSION": {
+   "id": "ENCHANTMENT_ULTIMATE_FIRST_IMPRESSION",
+   "name": "First Impression",
+   "page": "First Impression",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/First_Impression",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 14,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_FIRST_STRIKE": {
+   "id": "ENCHANTMENT_FIRST_STRIKE",
+   "name": "First Strike",
+   "page": "First Strike",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/First_Strike",
+   "max_level": null,
+   "combine_cap": 4,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    30,
+    40,
+    75,
+    200
+   ],
+   "enchanting_req": 10,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_FLASH": {
+   "id": "ENCHANTMENT_ULTIMATE_FLASH",
+   "name": "Flash",
+   "page": "Flash",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Flash",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 30,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_FLOWSTATE": {
+   "id": "ENCHANTMENT_ULTIMATE_FLOWSTATE",
+   "name": "Flowstate",
+   "page": "Flowstate",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Flowstate",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {
+    "1": 50,
+    "2": 100,
+    "3": 150
+   },
+   "apply_xp_cost": [
+    50,
+    100,
+    150
+   ],
+   "enchanting_req": 15,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_FOREST_PLEDGE": {
+   "id": "ENCHANTMENT_FOREST_PLEDGE",
+   "name": "Forest Pledge",
+   "page": "Forest Pledge",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Forest_Pledge",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    30,
+    40,
+    50,
+    0
+   ],
+   "enchanting_req": 12,
+   "ultimate": false,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_FORTUNE": {
+   "id": "ENCHANTMENT_FORTUNE",
+   "name": "Fortune",
+   "page": "Fortune",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Fortune",
+   "max_level": 4,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30,
+    45,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_FRAIL": {
+   "id": "ENCHANTMENT_FRAIL",
+   "name": "Frail",
+   "page": "Frail",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Frail",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    75,
+    0
+   ],
+   "enchanting_req": 14,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_GIANT_KILLER": {
+   "id": "ENCHANTMENT_GIANT_KILLER",
+   "name": "Giant Killer",
+   "page": "Giant Killer",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Giant_Killer",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    100,
+    200
+   ],
+   "enchanting_req": 8,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_DRAGON_HUNTER": {
+   "id": "ENCHANTMENT_DRAGON_HUNTER",
+   "name": "Gravity",
+   "page": "Gravity",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Gravity",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100
+   ],
+   "enchanting_req": 16,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_GREAT_SPOOK": {
+   "id": "ENCHANTMENT_GREAT_SPOOK",
+   "name": "Great Spook",
+   "page": "Great Spook (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Great_Spook_(Enchantment)",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": []
+  },
+  "ENCHANTMENT_GREEN_THUMB": {
+   "id": "ENCHANTMENT_GREEN_THUMB",
+   "name": "Green Thumb",
+   "page": "Green Thumb (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Green_Thumb_(Enchantment)",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 24,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_GROWTH": {
+   "id": "ENCHANTMENT_GROWTH",
+   "name": "Growth",
+   "page": "Growth",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Growth",
+   "max_level": 7,
+   "combine_cap": 4,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    100,
+    200
+   ],
+   "enchanting_req": 5,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_HABANERO_TACTICS": {
+   "id": "ENCHANTMENT_ULTIMATE_HABANERO_TACTICS",
+   "name": "Habanero Tactics",
+   "page": "Habanero Tactics",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Habanero_Tactics",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    250,
+    300
+   ],
+   "enchanting_req": 28,
+   "ultimate": true,
+   "bazaar_levels": [
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_HARDENED_MANA": {
+   "id": "ENCHANTMENT_HARDENED_MANA",
+   "name": "Hardened Vitality",
+   "page": "Hardened Vitality",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Hardened_Vitality",
+   "max_level": 10,
+   "combine_cap": 10,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    30,
+    45,
+    60,
+    75,
+    90,
+    180,
+    240,
+    300,
+    360,
+    420
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_HARVESTING": {
+   "id": "ENCHANTMENT_HARVESTING",
+   "name": "Harvesting",
+   "page": "Harvesting",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Harvesting",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    5,
+    10,
+    15,
+    20,
+    25,
+    0
+   ],
+   "enchanting_req": 2,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_HECATOMB": {
+   "id": "ENCHANTMENT_HECATOMB",
+   "name": "Hecatomb",
+   "page": "Hecatomb",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Hecatomb",
+   "max_level": null,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_ICE_COLD": {
+   "id": "ENCHANTMENT_ICE_COLD",
+   "name": "Ice Cold",
+   "page": "Ice Cold",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Ice_Cold",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    27,
+    41,
+    55,
+    68,
+    82
+   ],
+   "enchanting_req": 30,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_IMPALING": {
+   "id": "ENCHANTMENT_IMPALING",
+   "name": "Impaling",
+   "page": "Impaling",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Impaling",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30
+   ],
+   "enchanting_req": 12,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_INFERNO": {
+   "id": "ENCHANTMENT_ULTIMATE_INFERNO",
+   "name": "Inferno",
+   "page": "Inferno",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Inferno",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 37,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_INFINITE_QUIVER": {
+   "id": "ENCHANTMENT_INFINITE_QUIVER",
+   "name": "Infinite Quiver",
+   "page": "Infinite Quiver",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Infinite_Quiver",
+   "max_level": 10,
+   "combine_cap": 10,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    60,
+    80,
+    100,
+    120,
+    140
+   ],
+   "enchanting_req": 2,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_KARMA": {
+   "id": "ENCHANTMENT_KARMA",
+   "name": "Karma",
+   "page": "Karma",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Karma",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_KNOCKBACK": {
+   "id": "ENCHANTMENT_KNOCKBACK",
+   "name": "Knockback",
+   "page": "Knockback (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Knockback_(Enchantment)",
+   "max_level": null,
+   "combine_cap": 2,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2
+   ]
+  },
+  "ENCHANTMENT_LAPIDARY": {
+   "id": "ENCHANTMENT_LAPIDARY",
+   "name": "Lapidary",
+   "page": "Lapidary",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Lapidary",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    50,
+    100,
+    150,
+    200
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_LAST_STAND": {
+   "id": "ENCHANTMENT_ULTIMATE_LAST_STAND",
+   "name": "Last Stand",
+   "page": "Last Stand",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Last_Stand",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 30,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_LEGION": {
+   "id": "ENCHANTMENT_ULTIMATE_LEGION",
+   "name": "Legion",
+   "page": "Legion",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Legion",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 34,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_LETHALITY": {
+   "id": "ENCHANTMENT_LETHALITY",
+   "name": "Lethality",
+   "page": "Lethality",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Lethality",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    200
+   ],
+   "enchanting_req": 14,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_LIFE_STEAL": {
+   "id": "ENCHANTMENT_LIFE_STEAL",
+   "name": "Life Steal",
+   "page": "Life Steal",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Life_Steal",
+   "max_level": null,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    50,
+    200
+   ],
+   "enchanting_req": 5,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_LOOTING": {
+   "id": "ENCHANTMENT_LOOTING",
+   "name": "Looting",
+   "page": "Looting",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Looting",
+   "max_level": null,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30,
+    45,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_LUCK": {
+   "id": "ENCHANTMENT_LUCK",
+   "name": "Luck",
+   "page": "Luck",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Luck",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    75,
+    200
+   ],
+   "enchanting_req": 3,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_LUCK_OF_THE_SEA": {
+   "id": "ENCHANTMENT_LUCK_OF_THE_SEA",
+   "name": "Luck of the Sea",
+   "page": "Luck of the Sea",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Luck_of_the_Sea",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    50,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_LURE": {
+   "id": "ENCHANTMENT_LURE",
+   "name": "Lure",
+   "page": "Lure",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Lure",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    50
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_MAGNET": {
+   "id": "ENCHANTMENT_MAGNET",
+   "name": "Magnet",
+   "page": "Magnet",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Magnet",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    75
+   ],
+   "enchanting_req": 13,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_MANA_STEAL": {
+   "id": "ENCHANTMENT_MANA_STEAL",
+   "name": "Mana Steal",
+   "page": "Mana Steal",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Mana_Steal",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30
+   ],
+   "enchanting_req": 20,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_MISSILE": {
+   "id": "ENCHANTMENT_ULTIMATE_MISSILE",
+   "name": "Missile",
+   "page": "Missile",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Missile",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 14,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_NO_PAIN_NO_GAIN": {
+   "id": "ENCHANTMENT_ULTIMATE_NO_PAIN_NO_GAIN",
+   "name": "No Pain No Gain",
+   "page": "No Pain No Gain",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/No_Pain_No_Gain",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 29,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_ONE_FOR_ALL": {
+   "id": "ENCHANTMENT_ULTIMATE_ONE_FOR_ALL",
+   "name": "One For All",
+   "page": "One For All",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/One_For_All",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50
+   ],
+   "enchanting_req": 38,
+   "ultimate": true,
+   "bazaar_levels": [
+    0,
+    1
+   ]
+  },
+  "ENCHANTMENT_OVERLOAD": {
+   "id": "ENCHANTMENT_OVERLOAD",
+   "name": "Overload",
+   "page": "Overload",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Overload",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 33,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_PALEONTOLOGIST": {
+   "id": "ENCHANTMENT_PALEONTOLOGIST",
+   "name": "Paleontologist",
+   "page": "Paleontologist",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Paleontologist",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    23,
+    45,
+    91,
+    136,
+    179
+   ],
+   "enchanting_req": 27,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_PESTERMINATOR": {
+   "id": "ENCHANTMENT_PESTERMINATOR",
+   "name": "Pesterminator",
+   "page": "Pesterminator",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Pesterminator",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    5,
+    9,
+    13,
+    18,
+    23,
+    0
+   ],
+   "enchanting_req": 10,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_PETALFALL": {
+   "id": "ENCHANTMENT_PETALFALL",
+   "name": "Petalfall",
+   "page": "Petalfall",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Petalfall",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    50,
+    75,
+    100,
+    150
+   ],
+   "enchanting_req": 12,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_PIERCING": {
+   "id": "ENCHANTMENT_PIERCING",
+   "name": "Piercing",
+   "page": "Piercing",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Piercing",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    30
+   ],
+   "enchanting_req": 17,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_PISCARY": {
+   "id": "ENCHANTMENT_PISCARY",
+   "name": "Piscary",
+   "page": "Piscary",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Piscary",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    8,
+    16,
+    24,
+    36,
+    48,
+    60,
+    0
+   ],
+   "enchanting_req": 8,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_POWER": {
+   "id": "ENCHANTMENT_POWER",
+   "name": "Power",
+   "page": "Power",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Power",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_PRISTINE": {
+   "id": "ENCHANTMENT_PRISTINE",
+   "name": "Prismatic",
+   "page": "Prismatic",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Prismatic",
+   "max_level": 1,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    50,
+    100,
+    150,
+    200
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_PROJECTILE_PROTECTION": {
+   "id": "ENCHANTMENT_PROJECTILE_PROTECTION",
+   "name": "Projectile Protection",
+   "page": "Projectile Protection",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Projectile_Protection",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_PROSECUTE": {
+   "id": "ENCHANTMENT_PROSECUTE",
+   "name": "Prosecute",
+   "page": "Prosecute",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Prosecute",
+   "max_level": 6,
+   "combine_cap": 4,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    200
+   ],
+   "enchanting_req": 25,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_PROSPERITY": {
+   "id": "ENCHANTMENT_PROSPERITY",
+   "name": "Prosperity",
+   "page": "Prosperity",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Prosperity",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    100,
+    100,
+    100,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_PROTECTION": {
+   "id": "ENCHANTMENT_PROTECTION",
+   "name": "Protection",
+   "page": "Protection",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Protection",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_PUNCH": {
+   "id": "ENCHANTMENT_PUNCH",
+   "name": "Punch",
+   "page": "Punch",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Punch",
+   "max_level": 2,
+   "combine_cap": 2,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_MAGMARIZER": {
+   "id": "ENCHANTMENT_MAGMARIZER",
+   "name": "Pyroclasm",
+   "page": "Pyroclasm",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Pyroclasm",
+   "max_level": 6,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100
+   ],
+   "enchanting_req": 9,
+   "ultimate": false,
+   "bazaar_levels": [
+    6
+   ]
+  },
+  "ENCHANTMENT_QUICK_BITE": {
+   "id": "ENCHANTMENT_QUICK_BITE",
+   "name": "Quick Bite",
+   "page": "Quick Bite",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Quick_Bite",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    18,
+    23,
+    27,
+    36,
+    45
+   ],
+   "enchanting_req": 23,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_RAINBOW": {
+   "id": "ENCHANTMENT_RAINBOW",
+   "name": "Rainbow",
+   "page": "Rainbow",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Rainbow",
+   "max_level": 3,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    0,
+    0
+   ],
+   "enchanting_req": 6,
+   "ultimate": false,
+   "bazaar_levels": []
+  },
+  "ENCHANTMENT_REFLECTION": {
+   "id": "ENCHANTMENT_REFLECTION",
+   "name": "Reflection",
+   "page": "Reflection",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Reflection",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "enchanting_req": 24,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_REFRIGERATE": {
+   "id": "ENCHANTMENT_ULTIMATE_REFRIGERATE",
+   "name": "Refrigerate",
+   "page": "Refrigerate",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Refrigerate",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 20,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_REJUVENATE": {
+   "id": "ENCHANTMENT_REJUVENATE",
+   "name": "Rejuvenate",
+   "page": "Rejuvenate",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Rejuvenate",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 10,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_REND": {
+   "id": "ENCHANTMENT_ULTIMATE_REND",
+   "name": "Rend",
+   "page": "Rend",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Rend",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 32,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_REPLENISH": {
+   "id": "ENCHANTMENT_REPLENISH",
+   "name": "Replenish",
+   "page": "Replenish",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Replenish",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50
+   ],
+   "enchanting_req": 7,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_RESPIRATION": {
+   "id": "ENCHANTMENT_RESPIRATION",
+   "name": "Respiration",
+   "page": "Respiration (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Respiration_(Enchantment)",
+   "max_level": 4,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40
+   ],
+   "enchanting_req": 7,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "ENCHANTMENT_RESPITE": {
+   "id": "ENCHANTMENT_RESPITE",
+   "name": "Respite",
+   "page": "Respite",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Respite",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 23,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SCAVENGER": {
+   "id": "ENCHANTMENT_SCAVENGER",
+   "name": "Scavenger",
+   "page": "Scavenger",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Scavenger",
+   "max_level": null,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0
+   ],
+   "enchanting_req": 1,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SCUBA": {
+   "id": "ENCHANTMENT_SCUBA",
+   "name": "Scuba",
+   "page": "Scuba",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Scuba",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0
+   ],
+   "enchanting_req": 5,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SHARPNESS": {
+   "id": "ENCHANTMENT_SHARPNESS",
+   "name": "Sharpness",
+   "page": "Sharpness",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Sharpness",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_SILK_TOUCH": {
+   "id": "ENCHANTMENT_SILK_TOUCH",
+   "name": "Silk Touch",
+   "page": "Silk Touch",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Silk_Touch",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_SMALL_BRAIN": {
+   "id": "ENCHANTMENT_SMALL_BRAIN",
+   "name": "Small Brain",
+   "page": "Small Brain",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Small_Brain",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    60,
+    80,
+    100
+   ],
+   "enchanting_req": 21,
+   "ultimate": false,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SMARTY_PANTS": {
+   "id": "ENCHANTMENT_SMARTY_PANTS",
+   "name": "Smarty Pants",
+   "page": "Smarty Pants",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Smarty_Pants",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    40,
+    60,
+    80,
+    100
+   ],
+   "enchanting_req": 21,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SMELTING_TOUCH": {
+   "id": "ENCHANTMENT_SMELTING_TOUCH",
+   "name": "Smelting Touch",
+   "page": "Smelting Touch",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Smelting_Touch",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    5
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_SMITE": {
+   "id": "ENCHANTMENT_SMITE",
+   "name": "Smite",
+   "page": "Smite",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Smite",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100,
+    200
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_SMOLDERING": {
+   "id": "ENCHANTMENT_SMOLDERING",
+   "name": "Smoldering",
+   "page": "Smoldering",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Smoldering",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50
+   ],
+   "enchanting_req": 23,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SNIPE": {
+   "id": "ENCHANTMENT_SNIPE",
+   "name": "Snipe",
+   "page": "Snipe",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Snipe",
+   "max_level": 4,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    0
+   ],
+   "enchanting_req": 6,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_SOUL_EATER": {
+   "id": "ENCHANTMENT_ULTIMATE_SOUL_EATER",
+   "name": "Soul Eater",
+   "page": "Soul Eater",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Soul_Eater",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 36,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_SPIKED_HOOK": {
+   "id": "ENCHANTMENT_SPIKED_HOOK",
+   "name": "Spiked Hook",
+   "page": "Spiked Hook",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Spiked_Hook",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    75,
+    0
+   ],
+   "enchanting_req": 18,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_STEALTH": {
+   "id": "ENCHANTMENT_STEALTH",
+   "name": "Stealth",
+   "page": "Stealth",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Stealth",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_STRONG_MANA": {
+   "id": "ENCHANTMENT_STRONG_MANA",
+   "name": "Strong Vitality",
+   "page": "Strong Vitality",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Strong_Vitality",
+   "max_level": 10,
+   "combine_cap": 10,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    30,
+    45,
+    60,
+    75,
+    90,
+    180,
+    240,
+    300,
+    360,
+    420
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_SUGAR_RUSH": {
+   "id": "ENCHANTMENT_SUGAR_RUSH",
+   "name": "Sugar Rush",
+   "page": "Sugar Rush",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Sugar_Rush",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30
+   ],
+   "enchanting_req": 7,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_SUNDER": {
+   "id": "ENCHANTMENT_SUNDER",
+   "name": "Sunder",
+   "page": "Sunder",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Sunder",
+   "max_level": 6,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    5,
+    10,
+    15,
+    20,
+    25,
+    0
+   ],
+   "enchanting_req": 2,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_SUNSET": {
+   "id": "ENCHANTMENT_ULTIMATE_SUNSET",
+   "name": "Sunset",
+   "page": "Sunset",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Sunset",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 27,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_SWARM": {
+   "id": "ENCHANTMENT_ULTIMATE_SWARM",
+   "name": "Swarm",
+   "page": "Swarm",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Swarm",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 35,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TABASCO": {
+   "id": "ENCHANTMENT_TABASCO",
+   "name": "Tabasco",
+   "page": "Tabasco",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Tabasco",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    300,
+    500
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_TELEKINESIS": {
+   "id": "ENCHANTMENT_TELEKINESIS",
+   "name": "Telekinesis",
+   "page": "Telekinesis (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Telekinesis_(Enchantment)",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    5
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": []
+  },
+  "ENCHANTMENT_ULTIMATE_THE_ONE": {
+   "id": "ENCHANTMENT_ULTIMATE_THE_ONE",
+   "name": "The One",
+   "page": "The One",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/The_One",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    0,
+    0,
+    0,
+    250,
+    300
+   ],
+   "enchanting_req": 14,
+   "ultimate": true,
+   "bazaar_levels": [
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_THORNS": {
+   "id": "ENCHANTMENT_THORNS",
+   "name": "Thorns",
+   "page": "Thorns",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Thorns",
+   "max_level": 4,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30,
+    45,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_THUNDERBOLT": {
+   "id": "ENCHANTMENT_THUNDERBOLT",
+   "name": "Thunderbolt",
+   "page": "Thunderbolt",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Thunderbolt",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    200,
+    250
+   ],
+   "enchanting_req": 20,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_THUNDERLORD": {
+   "id": "ENCHANTMENT_THUNDERLORD",
+   "name": "Thunderlord",
+   "page": "Thunderlord",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Thunderlord",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    9,
+    13,
+    18,
+    23,
+    27,
+    91,
+    179
+   ],
+   "enchanting_req": 14,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_TIDAL": {
+   "id": "ENCHANTMENT_TIDAL",
+   "name": "Tidal",
+   "page": "Tidal",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Tidal",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    40,
+    55
+   ],
+   "enchanting_req": 13,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ]
+  },
+  "ENCHANTMENT_TITAN_KILLER": {
+   "id": "ENCHANTMENT_TITAN_KILLER",
+   "name": "Titan Killer",
+   "page": "Titan Killer",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Titan_Killer",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    100,
+    200
+   ],
+   "enchanting_req": 28,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+   ]
+  },
+  "ENCHANTMENT_TOXOPHILITE": {
+   "id": "ENCHANTMENT_TOXOPHILITE",
+   "name": "Toxophilite",
+   "page": "Toxophilite (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Toxophilite_(Enchantment)",
+   "max_level": null,
+   "combine_cap": null,
+   "combine_status": "no_combine",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25,
+    25
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_TRANSYLVANIAN": {
+   "id": "ENCHANTMENT_TRANSYLVANIAN",
+   "name": "Transylvanian",
+   "page": "Transylvanian",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Transylvanian",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    100,
+    150
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TRIPLE_STRIKE": {
+   "id": "ENCHANTMENT_TRIPLE_STRIKE",
+   "name": "Triple-Strike",
+   "page": "Triple-Strike",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Triple-Strike",
+   "max_level": 5,
+   "combine_cap": 4,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    30,
+    40,
+    75,
+    200
+   ],
+   "enchanting_req": 19,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TRUE_PROTECTION": {
+   "id": "ENCHANTMENT_TRUE_PROTECTION",
+   "name": "True Protection",
+   "page": "True Protection",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/True_Protection",
+   "max_level": 1,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    40
+   ],
+   "enchanting_req": 15,
+   "ultimate": false,
+   "bazaar_levels": [
+    1
+   ]
+  },
+  "ENCHANTMENT_TURBO_WHEAT": {
+   "id": "ENCHANTMENT_TURBO_WHEAT",
+   "name": "Turbo-Wheat",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_CARROT": {
+   "id": "ENCHANTMENT_TURBO_CARROT",
+   "name": "Turbo-Carrot",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_POTATO": {
+   "id": "ENCHANTMENT_TURBO_POTATO",
+   "name": "Turbo-Potato",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_PUMPKIN": {
+   "id": "ENCHANTMENT_TURBO_PUMPKIN",
+   "name": "Turbo-Pumpkin",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_MELON": {
+   "id": "ENCHANTMENT_TURBO_MELON",
+   "name": "Turbo-Melon",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_MUSHROOMS": {
+   "id": "ENCHANTMENT_TURBO_MUSHROOMS",
+   "name": "Turbo-Mushrooms",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_CACTUS": {
+   "id": "ENCHANTMENT_TURBO_CACTUS",
+   "name": "Turbo-Cacti",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_CANE": {
+   "id": "ENCHANTMENT_TURBO_CANE",
+   "name": "Turbo-Cane",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_WARTS": {
+   "id": "ENCHANTMENT_TURBO_WARTS",
+   "name": "Turbo-Warts",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_COCO": {
+   "id": "ENCHANTMENT_TURBO_COCO",
+   "name": "Turbo-Cocoa",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_SUNFLOWER": {
+   "id": "ENCHANTMENT_TURBO_SUNFLOWER",
+   "name": "Turbo-Sunflower",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_MOONFLOWER": {
+   "id": "ENCHANTMENT_TURBO_MOONFLOWER",
+   "name": "Turbo-Moonflower",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_TURBO_ROSE": {
+   "id": "ENCHANTMENT_TURBO_ROSE",
+   "name": "Turbo-Rose",
+   "page": "Turbo-Crop",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Turbo-Crop",
+   "max_level": 7,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30,
+    40,
+    50,
+    0,
+    0
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_JERRY": {
+   "id": "ENCHANTMENT_ULTIMATE_JERRY",
+   "name": "Ultimate Jerry",
+   "page": "Ultimate Jerry",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Ultimate_Jerry",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 18,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_WISE": {
+   "id": "ENCHANTMENT_ULTIMATE_WISE",
+   "name": "Ultimate Wise",
+   "page": "Ultimate Wise",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Ultimate_Wise",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 20,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_MANA_VAMPIRE": {
+   "id": "ENCHANTMENT_MANA_VAMPIRE",
+   "name": "Vampiric Vitality",
+   "page": "Vampiric Vitality",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Vampiric_Vitality",
+   "max_level": 10,
+   "combine_cap": 10,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    30,
+    45,
+    60,
+    75,
+    90,
+    180,
+    240,
+    300,
+    360,
+    420
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_VAMPIRISM": {
+   "id": "ENCHANTMENT_VAMPIRISM",
+   "name": "Vampirism",
+   "page": "Vampirism",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Vampirism",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    200
+   ],
+   "enchanting_req": 15,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_VENOMOUS": {
+   "id": "ENCHANTMENT_VENOMOUS",
+   "name": "Venomous",
+   "page": "Venomous",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Venomous",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    20,
+    25,
+    30,
+    40,
+    50,
+    200,
+    0
+   ],
+   "enchanting_req": 17,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ]
+  },
+  "ENCHANTMENT_VICIOUS": {
+   "id": "ENCHANTMENT_VICIOUS",
+   "name": "Vicious",
+   "page": "Vicious",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Vicious",
+   "max_level": null,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    60,
+    80,
+    100
+   ],
+   "enchanting_req": 26,
+   "ultimate": false,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_FEROCIOUS_MANA": {
+   "id": "ENCHANTMENT_FEROCIOUS_MANA",
+   "name": "Vivacious Vitality",
+   "page": "Vivacious Vitality",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Vivacious_Vitality",
+   "max_level": 10,
+   "combine_cap": 10,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    30,
+    45,
+    60,
+    75,
+    90,
+    180,
+    240,
+    300,
+    360,
+    420
+   ],
+   "enchanting_req": 22,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ]
+  },
+  "ENCHANTMENT_ULTIMATE_WISDOM": {
+   "id": "ENCHANTMENT_ULTIMATE_WISDOM",
+   "name": "Wisdom",
+   "page": "Wisdom (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Wisdom_(Enchantment)",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 27,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_ARCANE": {
+   "id": "ENCHANTMENT_ARCANE",
+   "name": "Woodsplitter",
+   "page": "Woodsplitter",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Woodsplitter",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    15,
+    20,
+    25,
+    30,
+    100
+   ],
+   "enchanting_req": 5,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_ULTIMATE_BANK": {
+   "id": "ENCHANTMENT_ULTIMATE_BANK",
+   "name": "Bank",
+   "page": "Bank (Enchantment)",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Bank_(Enchantment)",
+   "max_level": 5,
+   "combine_cap": 5,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    100,
+    150,
+    200,
+    250
+   ],
+   "enchanting_req": 16,
+   "ultimate": true,
+   "bazaar_levels": [
+    1,
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_DEPTH_STRIDER": {
+   "id": "ENCHANTMENT_DEPTH_STRIDER",
+   "name": "Depth Strider",
+   "page": "Depth Strider",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Depth_Strider",
+   "max_level": 3,
+   "combine_cap": 3,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    10,
+    20,
+    30
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_FROST_WALKER": {
+   "id": "ENCHANTMENT_FROST_WALKER",
+   "name": "Frost Walker",
+   "page": "Frost Walker",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Frost_Walker",
+   "max_level": 2,
+   "combine_cap": 2,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    15,
+    30
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_QUANTUM": {
+   "id": "ENCHANTMENT_QUANTUM",
+   "name": "Quantum",
+   "page": "Quantum",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Quantum",
+   "max_level": 5,
+   "combine_cap": null,
+   "combine_status": "unknown",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    50,
+    50,
+    100
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    3,
+    4,
+    5
+   ]
+  },
+  "ENCHANTMENT_FLAME": {
+   "id": "ENCHANTMENT_FLAME",
+   "name": "Flame",
+   "page": "Flame",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Flame",
+   "max_level": 2,
+   "combine_cap": 2,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [
+    25,
+    50
+   ],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2
+   ],
+   "cap_source": "enchantment_table_levels"
+  },
+  "ENCHANTMENT_FIRE_ASPECT": {
+   "id": "ENCHANTMENT_FIRE_ASPECT",
+   "name": "Fire Aspect",
+   "page": "Fire Aspect",
+   "url": "https://hypixelskyblock.minecraft.wiki/w/Fire_Aspect",
+   "max_level": 3,
+   "combine_cap": 2,
+   "combine_status": "combinable",
+   "combine_xp_cost": {},
+   "apply_xp_cost": [],
+   "enchanting_req": 0,
+   "ultimate": false,
+   "bazaar_levels": [
+    1,
+    2,
+    3
+   ],
+   "cap_source": "enchantment_table_levels"
+  }
+ },
+ "unmapped_bazaar_ids": [
+  "ENCHANTMENT_CURSE_OF_VANISHING",
+  "ENCHANTMENT_WITHER_HUNTER"
+ ],
+ "cap_rule_note": "combine_cap from the page's 'combined ... up to' sentence or anvil recipes; where a page has neither, cap_source=enchantment_table_levels: the highest level the page lists from the Enchantment Table (wiki 'Enchanted Book': levels not obtainable from the table cannot be combined)."
+}

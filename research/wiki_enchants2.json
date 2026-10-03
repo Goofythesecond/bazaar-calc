@@ -1,0 +1,3657 @@
+{
+ "Absorb": {
+  "page": "Absorb",
+  "id": "ENCHANTMENT_ABSORB",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ABSORB",
+    "name": "Absorb",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Angler": {
+  "page": "Angler",
+  "id": "ENCHANTMENT_ANGLER",
+  "max": 6,
+  "req": "4",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ANGLER",
+    "name": "Angler",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Aqua Affinity": {
+  "page": "Aqua Affinity",
+  "id": "ENCHANTMENT_AQUA_AFFINITY",
+  "max": 1,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Aspect (disambiguation)": {
+  "page": "Aspect (disambiguation)",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Bane of Arthropods": {
+  "page": "Bane of Arthropods",
+  "id": "ENCHANTMENT_BANE_OF_ARTHROPODS",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Bank (Enchantment)": {
+  "page": "Bank (Enchantment)",
+  "id": "ULTIMATE_BANK",
+  "max": 5,
+  "req": "16",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ULTIMATE_BANK",
+    "name": "Bank",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Big Brain": {
+  "page": "Big Brain",
+  "id": "ENCHANTMENT_BIG_BRAIN",
+  "max": 5,
+  "req": "21",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_BIG_BRAIN",
+    "name": "Big Brain",
+    "min": 3,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Blast Protection": {
+  "page": "Blast Protection",
+  "id": "ENCHANTMENT_BLAST_PROTECTION",
+  "max": 7,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_BLAST_PROTECTION",
+    "name": "Blast Protection",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Blessing (Enchantment)": {
+  "page": "Blessing (Enchantment)",
+  "id": "ENCHANTMENT_BLESSING",
+  "max": 6,
+  "req": "9",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_BLESSING",
+    "name": "Blessing",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Bobbin' Time": {
+  "page": "Bobbin' Time",
+  "id": "ENCHANTMENT_ULTIMATE_BOBBIN_TIME",
+  "max": 5,
+  "req": "24",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_BOBBIN_TIME",
+    "name": "Bobbin' Time",
+    "min": 3,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Bug Blender": {
+  "page": "Bug Blender",
+  "id": "ENCHANTMENT_BUG_BLENDER",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 5,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_BUG_BLENDER",
+    "name": "Bug Blender",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Caster": {
+  "page": "Caster",
+  "id": "ENCHANTMENT_CASTER",
+  "max": 6,
+  "req": "15",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CASTER",
+    "name": "Caster",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Cayenne": {
+  "page": "Cayenne",
+  "id": "ENCHANTMENT_CAYENNE",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CAYENNE",
+    "name": "Cayenne",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Champion": {
+  "page": "Champion",
+  "id": "ENCHANTMENT_CHAMPION",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CHAMPION",
+    "name": "Champion",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Chance": {
+  "page": "Chance",
+  "id": "ENCHANTMENT_CHANCE",
+  "max": 5,
+  "req": "11",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CHANCE",
+    "name": "Chance",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Charm": {
+  "page": "Charm",
+  "id": "ENCHANTMENT_CHARM",
+  "max": 6,
+  "req": "25",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CHARM",
+    "name": "Charm",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Chimera": {
+  "page": "Chimera",
+  "id": "ENCHANTMENT_ULTIMATE_CHIMERA",
+  "max": 5,
+  "req": "31",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_CHIMERA",
+    "name": "Chimera",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Cleave": {
+  "page": "Cleave",
+  "id": "ENCHANTMENT_CLEAVE",
+  "max": 6,
+  "req": "4",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CLEAVE",
+    "name": "Cleave",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Combo": {
+  "page": "Combo",
+  "id": "ENCHANTMENT_ULTIMATE_COMBO",
+  "max": 5,
+  "req": "24",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_COMBO",
+    "name": "Combo",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Compact": {
+  "page": "Compact",
+  "id": "ENCHANTMENT_COMPACT",
+  "max": 10,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_COMPACT",
+    "name": "Compact",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Corruption": {
+  "page": "Corruption",
+  "id": "ENCHANTMENT_Corruption",
+  "max": 5,
+  "req": "25",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CORRUPTION",
+    "name": "Corruption",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Counter-Strike": {
+  "page": "Counter-Strike",
+  "id": "ENCHANTMENT_COUNTER_STRIKE",
+  "max": 5,
+  "req": "22",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_COUNTER_STRIKE",
+    "name": "Counter-Strike",
+    "min": 5,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Critical": {
+  "page": "Critical",
+  "id": "ENCHANTMENT_CRITICAL",
+  "max": 7,
+  "req": "9",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CRITICAL",
+    "name": "Critical",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Crop Fever": {
+  "page": "Crop Fever",
+  "id": "ENCHANTMENT_ULTIMATE_CROP_FEVER",
+  "max": 5,
+  "req": "32",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_CROP_FEVER",
+    "name": "Crop Fever",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Cubism": {
+  "page": "Cubism",
+  "id": "ENCHANTMENT_CUBISM",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CUBISM",
+    "name": "Cubism",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Cultivating": {
+  "page": "Cultivating",
+  "id": "ENCHANTMENT_CULTIVATING",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_CULTIVATING",
+    "name": "Cultivating",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Dedication": {
+  "page": "Dedication",
+  "id": "ENCHANTMENT_DEDICATION",
+  "max": 4,
+  "req": "12",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_DEDICATION",
+    "name": "Dedication",
+    "min": 1,
+    "max": 4
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Delicate": {
+  "page": "Delicate",
+  "id": "ENCHANTMENT_DELICATE",
+  "max": 5,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_DELICATE",
+    "name": "Delicate",
+    "min": 5,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Depth Strider": {
+  "page": "Depth Strider",
+  "id": "ENCHANTMENT_Depth_Strider",
+  "max": 3,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Divine Gift": {
+  "page": "Divine Gift",
+  "id": "ENCHANTMENT_DIVINE_GIFT",
+  "max": 3,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_DIVINE_GIFT",
+    "name": "Divine Gift",
+    "min": 1,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Dragon Tracer": {
+  "page": "Dragon Tracer",
+  "id": "ENCHANTMENT_AIMING",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Drain": {
+  "page": "Drain",
+  "id": "ENCHANTMENT_SYPHON",
+  "max": null,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SYPHON",
+    "name": "Drain",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Duplex": {
+  "page": "Duplex",
+  "id": "ENCHANTMENT_ULTIMATE_REITERATE",
+  "max": 5,
+  "req": "28",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_REITERATE",
+    "name": "Duplex",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Efficiency": {
+  "page": "Efficiency",
+  "id": "ENCHANTMENT_EFFICIENCY",
+  "max": 10,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments": {
+  "page": "Enchantments",
+  "id": "enchantments-list|Show/Hide",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/Armor": {
+  "page": "Enchantments/Armor",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/Bow": {
+  "page": "Enchantments/Bow",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/Equipment": {
+  "page": "Enchantments/Equipment",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/Fishing Rod": {
+  "page": "Enchantments/Fishing Rod",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/List": {
+  "page": "Enchantments/List",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/Sword": {
+  "page": "Enchantments/Sword",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Enchantments/Tool": {
+  "page": "Enchantments/Tool",
+  "id": null,
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Ender Slayer": {
+  "page": "Ender Slayer",
+  "id": "ENCHANTMENT_ENDER_SLAYER",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Execute": {
+  "page": "Execute",
+  "id": "ENCHANTMENT_EXECUTE",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_EXECUTE",
+    "name": "Execute",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Experience (Enchantment)": {
+  "page": "Experience (Enchantment)",
+  "id": "ENCHANTMENT_EXPERIENCE",
+  "max": 5,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 4,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_EXPERIENCE",
+    "name": "Experience",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Expertise": {
+  "page": "Expertise",
+  "id": "ENCHANTMENT_EXPERTISE",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_EXPERTISE",
+    "name": "Expertise",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Fatal Tempo": {
+  "page": "Fatal Tempo",
+  "id": "ENCHANTMENT_ULTIMATE_FATAL_TEMPO",
+  "max": 5,
+  "req": "37",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_FATAL_TEMPO",
+    "name": "Fatal Tempo",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Feast": {
+  "page": "Feast",
+  "id": "ENCHANTMENT_FEAST",
+  "max": 5,
+  "req": "5",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 5,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FEAST",
+    "name": "Feast",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Feather Falling": {
+  "page": "Feather Falling",
+  "id": "ENCHANTMENT_FEATHER_FALLING",
+  "max": 10,
+  "req": null,
+  "combine_cap": 10,
+  "cap_sources": {
+   "sentence": [
+    10,
+    10
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FEATHER_FALLING",
+    "name": "Feather Falling",
+    "min": 6,
+    "max": 10
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Fire Aspect": {
+  "page": "Fire Aspect",
+  "id": "ENCHANTMENT_FIRE_ASPECT",
+  "max": 3,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FIRE_ASPECT",
+    "name": "Fire Aspect",
+    "min": 3,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Fire Protection": {
+  "page": "Fire Protection",
+  "id": "ENCHANTMENT_FIRE_PROTECTION",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FIRE_PROTECTION",
+    "name": "Fire Protection",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "First Impression": {
+  "page": "First Impression",
+  "id": "ENCHANTMENT_ULTIMATE_FIRST_IMPRESSION",
+  "max": 5,
+  "req": "14",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_FIRST_IMPRESSION",
+    "name": "First Impression",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "First Strike": {
+  "page": "First Strike",
+  "id": "ENCHANTMENT_FIRST_STRIKE",
+  "max": null,
+  "req": null,
+  "combine_cap": 4,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 5,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FIRST_STRIKE",
+    "name": "First Strike",
+    "min": 5,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Flame": {
+  "page": "Flame",
+  "id": "ENCHANTMENT_FIRE_ASPECT",
+  "max": 2,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Flash": {
+  "page": "Flash",
+  "id": "ENCHANTMENT_ULTIMATE_FLASH",
+  "max": 5,
+  "req": "30",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_FLASH",
+    "name": "Flash",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Flowstate": {
+  "page": "Flowstate",
+  "id": "ULTIMATE_FLOWSTATE",
+  "max": 3,
+  "req": "15",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_FLOWSTATE",
+    "name": "Flowstate",
+    "min": 1,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {
+   "1": 50,
+   "2": 100,
+   "3": 150
+  }
+ },
+ "Forest Pledge": {
+  "page": "Forest Pledge",
+  "id": "ENCHANTMENT_FOREST_PLEDGE",
+  "max": 5,
+  "req": "12",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FOREST_PLEDGE",
+    "name": "Forest Pledge",
+    "min": 3,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Fortune": {
+  "page": "Fortune",
+  "id": "ENCHANTMENT_FORTUNE",
+  "max": 4,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FORTUNE",
+    "name": "Fortune",
+    "min": 4,
+    "max": 4
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Frail": {
+  "page": "Frail",
+  "id": "ENCHANTMENT_FRAIL",
+  "max": 7,
+  "req": "14",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 7,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Frost Walker": {
+  "page": "Frost Walker",
+  "id": "ENCHANTMENT_Frost_Walker",
+  "max": 2,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Giant Killer": {
+  "page": "Giant Killer",
+  "id": "ENCHANTMENT_GIANT_KILLER",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_GIANT_KILLER",
+    "name": "Giant Killer",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Gravity": {
+  "page": "Gravity",
+  "id": "ENCHANTMENT_DRAGON_HUNTER",
+  "max": 6,
+  "req": "16",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_DRAGON_HUNTER",
+    "name": "Gravity",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Great Spook (Enchantment)": {
+  "page": "Great Spook (Enchantment)",
+  "id": "ENCHANTMENT_GREAT_SPOOK",
+  "max": 1,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 1,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Green Thumb (Enchantment)": {
+  "page": "Green Thumb (Enchantment)",
+  "id": "ENCHANTMENT_GREEN_THUMB",
+  "max": 5,
+  "req": "24",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_GREEN_THUMB",
+    "name": "Green Thumb",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Growth": {
+  "page": "Growth",
+  "id": "ENCHANTMENT_GROWTH",
+  "max": 7,
+  "req": "5",
+  "combine_cap": 4,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    2
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_GROWTH",
+    "name": "Growth",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Habanero Tactics": {
+  "page": "Habanero Tactics",
+  "id": "ENCHANTMENT_ULTIMATE_HABANERO_TACTICS",
+  "max": 5,
+  "req": "28",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_HABANERO_TACTICS",
+    "name": "Habanero Tactics",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Hardened Vitality": {
+  "page": "Hardened Vitality",
+  "id": "ENCHANTMENT_HARDENED_MANA",
+  "max": 10,
+  "req": "22",
+  "combine_cap": 10,
+  "cap_sources": {
+   "sentence": [
+    10
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_HARDENED_MANA",
+    "name": "Hardened Vitality",
+    "min": 1,
+    "max": 10
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Harvesting": {
+  "page": "Harvesting",
+  "id": "ENCHANTMENT_HARVESTING",
+  "max": 6,
+  "req": "2",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_HARVESTING",
+    "name": "Harvesting",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Hecatomb": {
+  "page": "Hecatomb",
+  "id": "ENCHANTMENT_HECATOMB",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_HECATOMB",
+    "name": "Hecatomb",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Ice Cold": {
+  "page": "Ice Cold",
+  "id": "ENCHANTMENT_ICE_COLD",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ICE_COLD",
+    "name": "Ice Cold",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Impaling": {
+  "page": "Impaling",
+  "id": "ENCHANTMENT_IMPALING",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Inferno": {
+  "page": "Inferno",
+  "id": "ENCHANTMENT_ULTIMATE_INFERNO",
+  "max": 5,
+  "req": "37",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_INFERNO",
+    "name": "Inferno",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Infinite Quiver": {
+  "page": "Infinite Quiver",
+  "id": "ENCHANTMENT_INFINITE_QUIVER",
+  "max": 10,
+  "req": "2",
+  "combine_cap": 10,
+  "cap_sources": {
+   "sentence": [
+    10,
+    10
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_INFINITE_QUIVER",
+    "name": "Infinite Quiver",
+    "min": 6,
+    "max": 10
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Karma": {
+  "page": "Karma",
+  "id": "ENCHANTMENT_KARMA",
+  "max": 6,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_KARMA",
+    "name": "Karma",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Knockback (Enchantment)": {
+  "page": "Knockback (Enchantment)",
+  "id": "ENCHANTMENT_KNOCKBACK",
+  "max": null,
+  "req": null,
+  "combine_cap": 2,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Lapidary": {
+  "page": "Lapidary",
+  "id": "ENCHANTMENT_LAPIDARY",
+  "max": 5,
+  "req": "22",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_LAPIDARY",
+    "name": "Lapidary",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Last Stand": {
+  "page": "Last Stand",
+  "id": "ENCHANTMENT_ULTIMATE_LAST_STAND",
+  "max": 5,
+  "req": "30",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_LAST_STAND",
+    "name": "Last Stand",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Legion": {
+  "page": "Legion",
+  "id": "ENCHANTMENT_ULTIMATE_LEGION",
+  "max": 5,
+  "req": "34",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_LEGION",
+    "name": "Legion",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Lethality": {
+  "page": "Lethality",
+  "id": "ENCHANTMENT_LETHALITY",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_LETHALITY",
+    "name": "Lethality",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Life Steal": {
+  "page": "Life Steal",
+  "id": "ENCHANTMENT_LIFE_STEAL",
+  "max": null,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 4,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_LIFE_STEAL",
+    "name": "Life Steal",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Looting": {
+  "page": "Looting",
+  "id": "ENCHANTMENT_LOOTING",
+  "max": null,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 4,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_LOOTING",
+    "name": "Looting",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Luck": {
+  "page": "Luck",
+  "id": "ENCHANTMENT_LUCK",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_LUCK",
+    "name": "Luck",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Luck of the Sea": {
+  "page": "Luck of the Sea",
+  "id": "ENCHANTMENT_LUCK_OF_THE_SEA",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Lure": {
+  "page": "Lure",
+  "id": "ENCHANTMENT_LURE",
+  "max": 6,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Magnet": {
+  "page": "Magnet",
+  "id": "ENCHANTMENT_MAGNET",
+  "max": 6,
+  "req": "13",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Mana Steal": {
+  "page": "Mana Steal",
+  "id": "ENCHANTMENT_MANA_STEAL",
+  "max": 3,
+  "req": "20",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 1,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_MANA_STEAL",
+    "name": "Mana Steal",
+    "min": 1,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Metallurgy": {
+  "page": "Metallurgy",
+  "id": "unknown",
+  "max": 1,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Missile": {
+  "page": "Missile",
+  "id": "ENCHANTMENT_ULTIMATE_MISSILE",
+  "max": 5,
+  "req": "14",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_MISSILE",
+    "name": "Missile",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "No Pain No Gain": {
+  "page": "No Pain No Gain",
+  "id": "ENCHANTMENT_ULTIMATE_NO_PAIN_NO_GAIN",
+  "max": 5,
+  "req": "29",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_NO_PAIN_NO_GAIN",
+    "name": "No Pain No Gain",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "One For All": {
+  "page": "One For All",
+  "id": "ENCHANTMENT_ULTIMATE_ONE_FOR_ALL",
+  "max": 1,
+  "req": "38",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_ONE_FOR_ALL",
+    "name": "One For All",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Overload": {
+  "page": "Overload",
+  "id": "ENCHANTMENT_OVERLOAD",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_OVERLOAD",
+    "name": "Overload",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Paleontologist": {
+  "page": "Paleontologist",
+  "id": "ENCHANTMENT_PALEONTOLOGIST",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PALEONTOLOGIST",
+    "name": "Paleontologist",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Pesterminator": {
+  "page": "Pesterminator",
+  "id": "ENCHANTMENT_PESTERMINATOR",
+  "max": 6,
+  "req": "10",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Petalfall": {
+  "page": "Petalfall",
+  "id": "ENCHANTMENT_PETALFALL",
+  "max": 5,
+  "req": "12",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PETALFALL",
+    "name": "Petalfall",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Piercing": {
+  "page": "Piercing",
+  "id": "ENCHANTMENT_PIERCING",
+  "max": 1,
+  "req": "17",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Piscary": {
+  "page": "Piscary",
+  "id": "ENCHANTMENT_PISCARY",
+  "max": 7,
+  "req": "8",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Power": {
+  "page": "Power",
+  "id": "ENCHANTMENT_POWER",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_POWER",
+    "name": "Power",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Prismatic": {
+  "page": "Prismatic",
+  "id": "ENCHANTMENT_PRISTINE",
+  "max": 1,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PRISTINE",
+    "name": "Prismatic",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Projectile Protection": {
+  "page": "Projectile Protection",
+  "id": "ENCHANTMENT_PROJECTILE_PROTECTION",
+  "max": 7,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PROJECTILE_PROTECTION",
+    "name": "Projectile Protection",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Prosecute": {
+  "page": "Prosecute",
+  "id": "ENCHANTMENT_PROSECUTE",
+  "max": 6,
+  "req": null,
+  "combine_cap": 4,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PROSECUTE",
+    "name": "Prosecute",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Prosperity": {
+  "page": "Prosperity",
+  "id": "ENCHANTMENT_PROSPERITY",
+  "max": 5,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PROSPERITY",
+    "name": "Prosperity",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Protection": {
+  "page": "Protection",
+  "id": "ENCHANTMENT_PROTECTION",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_PROTECTION",
+    "name": "Protection",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Punch": {
+  "page": "Punch",
+  "id": "ENCHANTMENT_PUNCH",
+  "max": 2,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Pyroclasm": {
+  "page": "Pyroclasm",
+  "id": "ENCHANTMENT_MAGMARIZER",
+  "max": 6,
+  "req": "9",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_MAGMARIZER",
+    "name": "Pyroclasm",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Quantum": {
+  "page": "Quantum",
+  "id": "QUANTUM",
+  "max": 5,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "QUANTUM",
+    "name": "Quantum",
+    "min": 3,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Quick Bite": {
+  "page": "Quick Bite",
+  "id": "ENCHANTMENT_QUICK_BITE",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_QUICK_BITE",
+    "name": "Quick Bite",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Rainbow": {
+  "page": "Rainbow",
+  "id": "ENCHANTMENT_RAINBOW",
+  "max": 3,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Reflection": {
+  "page": "Reflection",
+  "id": "ENCHANTMENT_REFLECTION_1<br>ENCHANTMENT_REFLECTION_2<br>ENCHANTMENT_REFLECTION_3<br>ENCHANTMENT_REFLECTION_4<br>ENCHANTMENT_REFLECTION_5",
+  "max": 5,
+  "req": "24",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_REFLECTION",
+    "name": "Reflection",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Refrigerate": {
+  "page": "Refrigerate",
+  "id": "ENCHANTMENT_ULTIMATE_REFRIGERATE",
+  "max": 5,
+  "req": "20",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_REFRIGERATE",
+    "name": "Refrigerate",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Rejuvenate": {
+  "page": "Rejuvenate",
+  "id": "ENCHANTMENT_REJUVENATE",
+  "max": 5,
+  "req": "10",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_REJUVENATE",
+    "name": "Rejuvenate",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Rend": {
+  "page": "Rend",
+  "id": "ENCHANTMENT_ULTIMATE_REND",
+  "max": 5,
+  "req": "32",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_REND",
+    "name": "Rend",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Replenish": {
+  "page": "Replenish",
+  "id": "ENCHANTMENT_REPLENISH",
+  "max": 1,
+  "req": "7",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 1,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_REPLENISH",
+    "name": "Replenish",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Respiration (Enchantment)": {
+  "page": "Respiration (Enchantment)",
+  "id": "ENCHANTMENT_RESPIRATION",
+  "max": 4,
+  "req": "7",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_RESPIRATION",
+    "name": "Respiration",
+    "min": 4,
+    "max": 4
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Respite": {
+  "page": "Respite",
+  "id": "ENCHANTMENT_RESPITE",
+  "max": 5,
+  "req": "23",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_RESPITE",
+    "name": "Respite",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Scavenger": {
+  "page": "Scavenger",
+  "id": "ENCHANTMENT_SCAVENGER",
+  "max": null,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 4,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Scuba": {
+  "page": "Scuba",
+  "id": "ENCHANTMENT_SCUBA",
+  "max": 6,
+  "req": "5",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SCUBA",
+    "name": "Scuba",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Sharpness": {
+  "page": "Sharpness",
+  "id": "ENCHANTMENT_SHARPNESS",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SHARPNESS",
+    "name": "Sharpness",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Silk Touch": {
+  "page": "Silk Touch",
+  "id": "ENCHANTMENT_SILK_TOUCH",
+  "max": 1,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Small Brain": {
+  "page": "Small Brain",
+  "id": "ENCHANTMENT_SMALL_BRAIN",
+  "max": 5,
+  "req": "21",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SMALL_BRAIN",
+    "name": "Small Brain",
+    "min": 3,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Smarty Pants": {
+  "page": "Smarty Pants",
+  "id": "ENCHANTMENT_SMARTY_PANTS",
+  "max": 5,
+  "req": "21",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 1,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SMARTY_PANTS",
+    "name": "Smarty Pants",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Smelting Touch": {
+  "page": "Smelting Touch",
+  "id": "ENCHANTMENT_SMELTING_TOUCH",
+  "max": 1,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Smite": {
+  "page": "Smite",
+  "id": "ENCHANTMENT_SMITE",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Smoldering": {
+  "page": "Smoldering",
+  "id": "ENCHANTMENT_SMOLDERING",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SMOLDERING",
+    "name": "Smoldering",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Snipe": {
+  "page": "Snipe",
+  "id": "ENCHANTMENT_SNIPE",
+  "max": 4,
+  "req": "6",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 4,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Soul Eater": {
+  "page": "Soul Eater",
+  "id": "ENCHANTMENT_ULTIMATE_SOUL_EATER",
+  "max": 5,
+  "req": "36",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_SOUL_EATER",
+    "name": "Soul Eater",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Spiked Hook": {
+  "page": "Spiked Hook",
+  "id": "ENCHANTMENT_SPIKED_HOOK",
+  "max": 7,
+  "req": "18",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Stealth": {
+  "page": "Stealth",
+  "id": "ENCHANTMENT_STEALTH",
+  "max": 6,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_STEALTH",
+    "name": "Stealth",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Strong Vitality": {
+  "page": "Strong Vitality",
+  "id": "ENCHANTMENT_STRONG_MANA",
+  "max": 10,
+  "req": "22",
+  "combine_cap": 10,
+  "cap_sources": {
+   "sentence": [
+    10
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_STRONG_MANA",
+    "name": "Strong Vitality",
+    "min": 1,
+    "max": 10
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Sugar Rush": {
+  "page": "Sugar Rush",
+  "id": "ENCHANTMENT_SUGAR_RUSH",
+  "max": 3,
+  "req": "7",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 1,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_SUGAR_RUSH",
+    "name": "Sugar Rush",
+    "min": 1,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Sunder": {
+  "page": "Sunder",
+  "id": "ENCHANTMENT_SUNDER",
+  "max": 6,
+  "req": "2",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Sunset": {
+  "page": "Sunset",
+  "id": "ENCHANTMENT_ULTIMATE_SUNSET",
+  "max": 5,
+  "req": "27",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_SUNSET",
+    "name": "Sunset",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Swarm": {
+  "page": "Swarm",
+  "id": "ENCHANTMENT_ULTIMATE_SWARM",
+  "max": 5,
+  "req": "35",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_SWARM",
+    "name": "Swarm",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Tabasco": {
+  "page": "Tabasco",
+  "id": "ENCHANTMENT_TABASCO",
+  "max": 3,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TABASCO",
+    "name": "Tabasco",
+    "min": 2,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Telekinesis (Enchantment)": {
+  "page": "Telekinesis (Enchantment)",
+  "id": "ENCHANTMENT_TELEKINESIS",
+  "max": 1,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "The One": {
+  "page": "The One",
+  "id": "ENCHANTMENT_ULTIMATE_THE_ONE",
+  "max": 5,
+  "req": "14",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_THE_ONE",
+    "name": "The One",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Thorns": {
+  "page": "Thorns",
+  "id": "ENCHANTMENT_THORNS",
+  "max": 4,
+  "req": null,
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Thunderbolt": {
+  "page": "Thunderbolt",
+  "id": "ENCHANTMENT_THUNDERBOLT",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_THUNDERBOLT",
+    "name": "Thunderbolt",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Thunderlord": {
+  "page": "Thunderlord",
+  "id": "ENCHANTMENT_THUNDERLORD",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_THUNDERLORD",
+    "name": "Thunderlord",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Tidal": {
+  "page": "Tidal",
+  "id": "ENCHANTMENT_TIDAL",
+  "max": 3,
+  "req": "13",
+  "combine_cap": 3,
+  "cap_sources": {
+   "sentence": [
+    3
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TIDAL",
+    "name": "Tidal",
+    "min": 1,
+    "max": 3
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Titan Killer": {
+  "page": "Titan Killer",
+  "id": "ENCHANTMENT_TITAN_KILLER",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TITAN_KILLER",
+    "name": "Titan Killer",
+    "min": 6,
+    "max": 7
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Toxophilite (Enchantment)": {
+  "page": "Toxophilite (Enchantment)",
+  "id": "ENCHANTMENT_TOXOPHILITE",
+  "max": null,
+  "req": null,
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "no_combine",
+  "no_combine_flag": true,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TOXOPHILITE",
+    "name": "Toxophilite",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Transylvanian": {
+  "page": "Transylvanian",
+  "id": "ENCHANTMENT_TRANSYLVANIAN",
+  "max": 5,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TRANSYLVANIAN",
+    "name": "Transylvanian",
+    "min": 4,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Triple-Strike": {
+  "page": "Triple-Strike",
+  "id": "ENCHANTMENT_TRIPLE_STRIKE",
+  "max": 5,
+  "req": "19",
+  "combine_cap": 4,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 5,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TRIPLE_STRIKE",
+    "name": "Triple-Strike",
+    "min": 5,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "True Protection": {
+  "page": "True Protection",
+  "id": "ENCHANTMENT_TRUE_PROTECTION",
+  "max": 1,
+  "req": "15",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": 1,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TRUE_PROTECTION",
+    "name": "True Protection",
+    "min": 1,
+    "max": 1
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Turbo-Crop": {
+  "page": "Turbo-Crop",
+  "id": "|rarity",
+  "max": 7,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_TURBO_WHEAT",
+    "name": "Turbo-Wheat",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_CARROT",
+    "name": "Turbo-Carrot",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_POTATO",
+    "name": "Turbo-Potato",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_PUMPKIN",
+    "name": "Turbo-Pumpkin",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_MELON",
+    "name": "Turbo-Melon",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_MUSHROOMS",
+    "name": "Turbo-Mushrooms",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_CACTUS",
+    "name": "Turbo-Cacti",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_CANE",
+    "name": "Turbo-Cane",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_WARTS",
+    "name": "Turbo-Warts",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_COCO",
+    "name": "Turbo-Cocoa",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_SUNFLOWER",
+    "name": "Turbo-Sunflower",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_MOONFLOWER",
+    "name": "Turbo-Moonflower",
+    "min": 1,
+    "max": 5
+   },
+   {
+    "id": "ENCHANTMENT_TURBO_ROSE",
+    "name": "Turbo-Rose",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Ultimate Jerry": {
+  "page": "Ultimate Jerry",
+  "id": "ENCHANTMENT_ULTIMATE_JERRY",
+  "max": 5,
+  "req": "18",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_JERRY",
+    "name": "Ultimate Jerry",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Ultimate Wise": {
+  "page": "Ultimate Wise",
+  "id": "ENCHANTMENT_ULTIMATE_WISE",
+  "max": 5,
+  "req": "20",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_WISE",
+    "name": "Ultimate Wise",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Vampiric Vitality": {
+  "page": "Vampiric Vitality",
+  "id": "ENCHANTMENT_MANA_VAMPIRE",
+  "max": 10,
+  "req": "22",
+  "combine_cap": 10,
+  "cap_sources": {
+   "sentence": [
+    10
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_MANA_VAMPIRE",
+    "name": "Vampiric Vitality",
+    "min": 1,
+    "max": 10
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Vampirism": {
+  "page": "Vampirism",
+  "id": "ENCHANTMENT_VAMPIRISM",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_VAMPIRISM",
+    "name": "Vampirism",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Venomous": {
+  "page": "Venomous",
+  "id": "ENCHANTMENT_VENOMOUS",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    2,
+    3,
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": 6,
+  "bazaar": [],
+  "combine_xp_cost": {}
+ },
+ "Vicious": {
+  "page": "Vicious",
+  "id": "ENCHANTMENT_VICIOUS",
+  "max": null,
+  "req": null,
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": [
+    4,
+    5
+   ]
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_VICIOUS",
+    "name": "Vicious",
+    "min": 3,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Vivacious Vitality": {
+  "page": "Vivacious Vitality",
+  "id": "ENCHANTMENT_FEROCIOUS_MANA",
+  "max": 10,
+  "req": "22",
+  "combine_cap": 10,
+  "cap_sources": {
+   "sentence": [
+    10
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_FEROCIOUS_MANA",
+    "name": "Vivacious Vitality",
+    "min": 1,
+    "max": 10
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Wisdom (Enchantment)": {
+  "page": "Wisdom (Enchantment)",
+  "id": "ENCHANTMENT_ULTIMATE_WISDOM",
+  "max": 5,
+  "req": "27",
+  "combine_cap": 5,
+  "cap_sources": {
+   "sentence": [
+    5
+   ],
+   "anvil": []
+  },
+  "status": "combinable",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ULTIMATE_WISDOM",
+    "name": "Wisdom",
+    "min": 1,
+    "max": 5
+   }
+  ],
+  "combine_xp_cost": {}
+ },
+ "Woodsplitter": {
+  "page": "Woodsplitter",
+  "id": "ENCHANTMENT_ARCANE",
+  "max": 5,
+  "req": "5",
+  "combine_cap": null,
+  "cap_sources": {
+   "sentence": [],
+   "anvil": []
+  },
+  "status": "unknown",
+  "no_combine_flag": false,
+  "high_level_mark": null,
+  "bazaar": [
+   {
+    "id": "ENCHANTMENT_ARCANE",
+    "name": "Woodsplitter",
+    "min": 6,
+    "max": 6
+   }
+  ],
+  "combine_xp_cost": {}
+ }
+}

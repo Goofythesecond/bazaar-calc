@@ -1,0 +1,28 @@
+{
+  "name": "bazaar-calc",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Hypixel SkyBlock market calculator: bazaar, craft, book and forge flips with a unified route planner. Not affiliated with Hypixel, Mojang or Microsoft.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.15"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "dev:api": "pnpm --filter @bc/api dev",
+    "dev:web": "pnpm --filter @bc/web dev",
+    "dev:worker": "pnpm --filter @bc/worker dev",
+    "db:migrate": "pnpm --filter @bc/api migrate",
+    "data:build": "node scripts/data/build-site.mjs",
+    "data:check": "node scripts/data/check-pr.mjs",
+    "pages:build": "node scripts/build-pages.mjs"
+  },
+  "devDependencies": {
+    "@bc/server-core": "workspace:*",
+    "@bc/shared": "workspace:*"
+  },
+  "packageManager": "pnpm@12.8.1",
+  "license": "MIT"
+}

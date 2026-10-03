@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.env
+*.log
+/export/
+# the server's database; contributed data under data/contrib and data/inbox IS part of the repository
+/data/pg/
+# build output of the static website
+/site-data/
+/pages/
