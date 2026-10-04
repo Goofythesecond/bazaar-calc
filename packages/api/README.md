@@ -13,9 +13,9 @@ process.
 | `src/server.ts` | Builds the Fastify app: compression, cookies, rate limits, routes, static files |
 | `src/env.ts` | Environment settings |
 | `src/state.ts` | In-memory market, recipes and events, refreshed every 30 s; caches calculator results |
-| `src/routes/calc.ts` | `/api/v1/calc/*`: wraps `calcResponse` / `planResponse` from `@bc/shared` |
+| `src/routes/calc.ts` | `/api/v1/calc/*`: wraps `calcResponse` / `planResponse` from `@bc/shared`; `POST /api/v1/alerts/check` (`alertCheckResponse`) |
 | `src/routes/fill.ts` | `/api/v1/bazaar/{id}/fill`: wraps `fillReport` |
-| `src/routes/public.ts` | Items, history, order books, auctions, mayors, events, outlook, dips, rules (with the active mayor perks), status |
+| `src/routes/public.ts` | Items, history, order books, auctions, mayors, events, outlook, dips, rules (with the active mayor perks), perks, order check (`POST /api/v1/orders/check`), status |
 | `src/jobs.ts` | Paper trading around the clock (`GET /api/v1/paper`) and Discord alerts from `ALERTS_FILE` |
 | `src/routes/contribute.ts` | Uploads with an API key (raw Hypixel responses, cross-checked) |
 | `src/auth.ts` | Discord OAuth2, sessions, API keys |

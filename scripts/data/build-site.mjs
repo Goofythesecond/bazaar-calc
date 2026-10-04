@@ -6,7 +6,8 @@
 // 3. syncs recipes (NotEnoughUpdates-REPO), items and the current election (Hypixel) unless --offline
 // 4. computes the same statistics the server computes, as of the newest contributed poll
 // 5. writes JSON files the website reads: manifest, market statistics, items, recipes, mayors, per-item history and
-//    time-on-top episodes, per-key auction data
+//    time-on-top episodes, per-key auction data, the scanner's paper-trading record (data/paper/) and, unless --offline,
+//    the paper-trading picks the scanner follows (the calculator's best bazaar flips on the live market right now)
 import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
 import zlib from "node:zlib";
@@ -14,7 +15,10 @@ import {
   computeAuctionStats, computeEventImpact, computeHoldStats, computeStats, createPool, importDataFiles, ingestElection, ingestItems, loadMayors,
   migrate, syncNeuRecipes,
 } from "@bc/server-core";
-import { DATA_FILE_RE, coverage, decodeDataFile, prettyName, sanityCheck, siteFileId } from "@bc/shared";
+import {
+  DATA_FILE_RE, DEFAULT_PROFILE, DEFAULT_SETTINGS, HYPIXEL, assembleMarket, buildOpportunities, coverage, currentTerm, decodeDataFile, paperCandidates,
+  perkEffects, prettyName, quotesFromBazaar, sanityCheck, siteFileId,
+} from "@bc/shared";
 
 const arg = (k, d) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : d; };
 const DATA = arg("--data", "data"), OUT = arg("--out", "site-data"), OFFLINE = process.argv.includes("--offline");
@@ -52,7 +56,8 @@ if (!OFFLINE) {
   log(`items: ${await ingestItems(db)}`);
   await ingestElection(db); log("election synced");
 }
-await db.query("UPDATE items SET on_bazaar = true WHERE id IN (SELECT DISTINCT item_id FROM bazaar_quotes)");
+// every product in the bazaar data is searchable, also the ones Hypixel's item list leaves out (all enchanted books)
+await db.query("INSERT INTO items (id, on_bazaar) SELECT DISTINCT item_id, true FROM bazaar_quotes ON CONFLICT (id) DO UPDATE SET on_bazaar = true");
 
 // ---- 4. statistics as of the newest poll
 const asOf = Number((await db.query("SELECT extract(epoch from max(ts)) * 1000 AS t FROM bazaar_snapshots WHERE origin = 2")).rows[0]?.t ?? 0)
@@ -142,10 +147,41 @@ for (const [i, f] of report.files.entries()) {
 }
 const daily = (await q(`SELECT floor(extract(epoch from ts) / 86400) AS d, count(*)::int AS polls FROM bazaar_snapshots WHERE origin = 2 GROUP BY 1 ORDER BY 1`))
   .map(r => ({ day: new Date(Number(r.d) * 86400_000).toISOString().slice(0, 10), polls: r.polls }));
+// the always-on scanner's paper trading (packages/collector/src/scanner.ts pushes data/paper/<login>.json with its data)
+const paper = [];
+if (existsSync(join(DATA, "paper"))) for (const n of readdirSync(join(DATA, "paper")).filter(n => /^[A-Za-z0-9-]{1,39}\.json$/.test(n)).sort()) {
+  try { const r = JSON.parse(readFileSync(join(DATA, "paper", n), "utf8")); paper.push({ name: r.name, updatedAt: r.updatedAt, summary: r.summary, state: r.state }); }
+  catch (e) { log(`paper record ${n} skipped: ${e.message}`); }
+}
+if (paper.length) write("paper.json", { records: paper });
+
+// picks for that paper trading: the calculator's best bazaar flips with the default settings, on the live market now,
+// built exactly as the website builds its market (statistics as of the newest poll; no "hour ago" when they are older
+// than 3 hours). The scanner opens new paper trades only from picks under 2 hours old.
+if (!OFFLINE) {
+  try {
+    const live = await (await fetch(`${HYPIXEL}/skyblock/bazaar`, { signal: AbortSignal.timeout(60_000) })).json();
+    const age = live.lastUpdated - asOf, now = Date.now();
+    if (age > 7 * 86400_000) throw new Error("the newest data is over 7 days old");
+    const statsMap = new Map(Object.entries(stats).map(([k, s]) => [k, age > 3 * H ? { ...s, hourAgo: null } : s]));
+    const ahMap = new Map(Object.entries(ah).filter(([, a]) => a.ts > asOf - 2 * H).map(([k, a]) => [k, { lowestBin: a.lowestBin, sales24h: a.sales24h, medianSale24h: a.medianSale24h }]));
+    const npcSell = new Map((await q("SELECT id, npc_sell_price FROM items WHERE npc_sell_price IS NOT NULL")).map(r => [r.id, Number(r.npc_sell_price)]));
+    const market = assembleMarket({ quotes: quotesFromBazaar(live), stats: statsMap, hold: new Map(Object.entries(holdStats)), ah: ahMap, names, now, npcSell });
+    const perks = perkEffects(currentTerm(await loadMayors(db, 0, now + 400 * 86400_000), now));
+    const { list } = buildOpportunities({ market, recipes: new Map(), perks, statsAgeH: Math.max(0, age / H) }, "bazaar", DEFAULT_SETTINGS, DEFAULT_PROFILE);
+    const candidates = paperCandidates(list).slice(0, 20);
+    write("paper-candidates.json", { at: live.lastUpdated, statsAt: asOf, settings: "defaults", quadTaxes: perks.quadTaxes, candidates });
+    log(`paper picks: ${candidates.length} (best: ${candidates[0]?.title ?? "none"})`);
+  } catch (e) { log(`paper picks not written: ${e.message}`); }
+}
+
+// the file list keeps the newest 500 (the scanner adds 48 files a day); the totals cover every file
+const fileRows = report.files.map((f, i) => ({ ...f, kind: files[i].file.collector.kind, source: files[i].file.collector.source, from: files[i].file.from, to: files[i].file.to, warnings: files[i].warnings }));
 write("manifest.json", {
   format: "bazaar-calc-site/1", builtAt: Date.now(), asOf, recipesVersion,
   contributors: [...byName.values()].sort((a, b) => b.hours - a.hours).map(c => ({ ...c, hours: Math.round(c.hours * 10) / 10 })),
-  files: report.files.map((f, i) => ({ ...f, kind: files[i].file.collector.kind, source: files[i].file.collector.source, from: files[i].file.from, to: files[i].file.to, warnings: files[i].warnings })),
+  fileCount: fileRows.length, files: fileRows.sort((a, b) => a.to - b.to).slice(-500),
+  paper: paper.map(p => ({ name: p.name, updatedAt: p.updatedAt })),
   rejected, daily, counts: { items: Object.keys(stats).length, holdSides: hold.items, ahKeys: Object.keys(ah).length, itemFiles, ahFiles },
 });
 log(`wrote ${OUT}: ${itemFiles} item files, ${ahFiles} auction files`);

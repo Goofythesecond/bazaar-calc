@@ -10,8 +10,6 @@ import { notify } from "./notify";
 import { alertSettings, favourites, paperRecord, trackedOrders } from "./prefs";
 import { useApp } from "./state";
 
-const RANK = { low: 0, medium: 1, high: 2 } as const;
-
 export function useAlertRunner() {
   const s = alertSettings.use(), fav = favourites.use(), live = useLive();
   const { settings, profile } = useApp();
@@ -20,12 +18,14 @@ export function useAlertRunner() {
   useEffect(() => {
     if (!s.enabled || !live.dataAt) return;
     let cancelled = false;
-    void api<{ rows: RankedOpportunity[] }>("/api/v1/calc/all", { settings, profile,
-      filters: { limit: 500, minCoinsH: s.minCoinsH || undefined, minMargin: s.minMarginPct ? s.minMarginPct / 100 : undefined, noFlags: s.noWarnings || undefined, profitableOnly: true, sort: "scoreH" } })
+    // the same rules as the server's Discord alerts and POST /api/v1/alerts/check (alertMatches in @bc/shared)
+    if (s.favouritesOnly && !fav.length) return;
+    void api<{ rows: RankedOpportunity[] }>("/api/v1/alerts/check", { settings, profile, limit: 200,
+      rules: { minCoinsH: s.minCoinsH || undefined, minMarginPct: s.minMarginPct || undefined, kinds: s.kinds, noWarnings: s.noWarnings, minConfidence: s.minConfidence,
+        items: s.favouritesOnly ? fav : undefined } })
       .then(r => {
         if (cancelled) return;
-        const ok = r.rows.filter(o => s.kinds.includes(o.kind) && RANK[o.confidence.level] >= RANK[s.minConfidence] && !o.key.endsWith(":instant")
-          && (!s.favouritesOnly || fav.includes(o.outputId)));
+        const ok = r.rows;
         if (seen.current) for (const o of ok.filter(o => !seen.current!.has(o.key)).slice(0, 5))
           notify({ channel: "flips", level: "good", link: `/flips/${o.kind}`, title: `${KIND_LABEL[o.kind]}: ${o.title}`,
             body: `${coins(o.coinsH)}/h · ${coins(o.profitPerUnit)} per unit · ${pct(o.marginPct)} margin · ${o.confidence.level} confidence` });

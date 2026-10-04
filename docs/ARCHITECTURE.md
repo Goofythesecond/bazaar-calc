@@ -84,6 +84,10 @@ without the calculators, and the import graph has no cycles.
 
 Details: [docs/WORKFLOWS.md](WORKFLOWS.md).
 
+**The always-on scanner** (`packages/collector/src/scanner.ts`): records like any collector on a small host and every 30
+minutes commits the new file plus its paper-trading record to `data/contrib/` and `data/paper/` through GitHub's API;
+the publish workflow rebuilds the site and writes the picks the scanner trades next (`paper-candidates.json`).
+
 **Live updates and trading tools:**
 - Static website: the backend worker fetches Hypixel's bazaar about 1.5 s after each 20-second snapshot while a tab is
   visible (once a minute in the background when alerts or tracked orders need it, otherwise paused) and checks for

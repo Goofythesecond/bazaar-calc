@@ -23,11 +23,17 @@ when one fails. For AI coding agents working on this repository, see [AGENTS.md]
                                         moves files to data/contrib/<login>/<yyyy-mm>/
                                         builds statistics from all data ─────────────────▶ GitHub Pages
                                         builds the static site and deploys it               goofythesecond.github.io/bazaar-calc
+                                                    ▲
+ always-on scanner (maintainer)                     │
+   the same recording, on a small host (Wispbyte)   │
+   every 30 min: new data + paper-trading record ───┘ one commit straight to data/contrib/ and data/paper/
+                                                      (no pull request: the maintainer's own token)
 ```
 
 The website itself has no server. Each visitor's browser fetches live bazaar prices from Hypixel and runs the
-calculator in a Web Worker. The prices update about once a minute while a page is open: the pages re-ask every 60 s,
-and the worker fetches from Hypixel at most once every 30 s. Everything that needs history comes from the files the publish workflow builds:
+calculator in a Web Worker: about 1.5 s after each of Hypixel's 20-second snapshots while a tab is visible, once a
+minute in a background tab that has alerts or tracked orders, otherwise not at all. Everything that needs history comes
+from the files the publish workflow builds:
 - fill times and competition
 - typical prices and manipulation checks
 - auction prices and mayors
@@ -73,21 +79,23 @@ episodes must be identical. In testing:
 ## Workflow 2: Publish the website (`.github/workflows/publish.yml`)
 
 **When it runs:**
-- on every push to `main`, including every merged pull request
+- on every push to `main`, including every merged pull request and every scanner push (every 30 minutes)
 - daily at 04:23 UTC, so recipes, items and the election stay current
 - by hand: Actions > *Publish the website* > **Run workflow**
 
 **Steps (job `build`, then job `deploy`):**
 1. `pnpm install --frozen-lockfile`, then build `shared`, `server-core` and `collector`.
 2. `scripts/data/file-inbox.mjs`: `git mv` every `data/inbox/*.json.gz` to `data/contrib/<login>/<yyyy-mm>/`, commit
-   as `github-actions[bot]` and push. Pushes made with the workflow token do not start another run.
+   as `github-actions[bot]` and push (rebasing onto a scanner push that came in meanwhile). Pushes made with the
+   workflow token do not start another run.
 3. `scripts/data/build-site.mjs --out site-data`:
    - import every file into a temporary in-memory database; for each hour, the stretches of polling with the most
      polls win, and overlaps are never counted twice
    - sync recipes (NotEnoughUpdates-REPO), items and the election (Hypixel)
    - compute the same statistics the self-hosted server computes, **as of the newest contributed poll**
-   - write the JSON files
-   - bad files are skipped and listed in `manifest.json`
+   - write the JSON files, including the scanner's paper-trading record (`paper.json`) and the picks it trades next
+     (`paper-candidates.json`: the calculator's best bazaar flips on the live market at build time, default settings)
+   - bad files are skipped and listed in `manifest.json` (which lists the newest 500 files and counts all of them)
 4. `actions/configure-pages` reports the site's base path (`/bazaar-calc`).
 5. `scripts/site/build-pages.mjs` puts the site together:
    - Vite build with `VITE_STATIC=1`
@@ -144,6 +152,10 @@ rules and calculators and 4 of ingestion on PGlite.
    - the file is over 25 MB
 
 ### Adding your own data
+- **Always-on scanner (recommended):** `bazaar-calc-scanner.mjs` on any small Node host, pushing every 30 minutes.
+  Setup: [packages/collector/README.md](../packages/collector/README.md). Its commits are titled "Data from <login>'s
+  scanner"; each one starts *Publish the website* (about 2 minutes). Nothing else runs: CI and the architecture
+  check ignore `data/**`.
 - **Collector:** run it like everyone else. You can also commit its files straight into
   `data/contrib/<login>/<yyyy-mm>/`.
 - **From a self-hosted server:**

@@ -68,9 +68,10 @@ export function paperStep(st: PaperState, ts: number, market: Map<string, ItemMa
   let lastPick = st.lastPick;
   const open = trades.filter(t => t.phase === "buying" || t.phase === "selling");
   if ((!lastPick || ts - lastPick >= PICK_EVERY) && open.length < MAX_OPEN) {
-    lastPick = ts;
-    const busy = new Set(open.map(t => t.item));
-    const c = candidates().find(x => !busy.has(x.item) && x.qty > 0 && x.unitsH > 0 && x.profitPerUnit > 0);
+    const busy = new Set(open.map(t => t.item)), list = candidates();
+    // no picks yet (still loading, or none qualify): try again next snapshot instead of waiting 5 minutes
+    if (list.length) lastPick = ts;
+    const c = list.find(x => !busy.has(x.item) && x.qty > 0 && x.unitsH > 0 && x.profitPerUnit > 0);
     const m = c && market.get(c.item);
     if (c && m?.bid != null) trades.push({ id: `${ts}-${c.item}`, key: c.key, title: c.title, item: c.item, qty: c.qty, openedAt: ts, closedAt: null, phase: "buying",
       price: Math.round((m.bid + 0.1) * 10) / 10, onTop: true, nextLook: ts + check, bought: 0, sold: 0, cost: 0, revenue: 0, relists: 0,

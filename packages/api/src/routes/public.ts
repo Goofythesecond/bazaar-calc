@@ -4,7 +4,7 @@ import type { FastifyInstance } from "fastify";
 import { type Db, loadMayors } from "@bc/server-core";
 import {
   BAZAAR, BAZAAR_SOURCES, ENCHANT_SOURCE, type ItemMarket, FORGE, FORGE_SOURCES, NOTICE, type EventImpact, enchantRules, forgeSlots, orderSlots,
-  booksResponse, describePerks, dipsResponse, outlookResponse, parseBookId, prettyName, quickForgeReduction, requirementsCatalog, taxRate, timingTable, unpackLevels,
+  booksResponse, describePerks, dipsResponse, ordersCheckResponse, outlookResponse, perksResponse, parseBookId, prettyName, quickForgeReduction, requirementsCatalog, taxRate, timingTable, unpackLevels,
 } from "@bc/shared";
 import type { State } from "../state.js";
 
@@ -28,7 +28,7 @@ export function registerPublic(app: FastifyInstance, db: Db, state: State) {
     const q = (req.query.q ?? "").trim().toUpperCase();
     const res = await db.query(
       `SELECT id, name, category, tier, on_bazaar FROM items WHERE ($1 = '' OR id LIKE '%' || replace($1, ' ', '_') || '%' OR upper(name) LIKE '%' || $1 || '%')
-         AND ($2::boolean IS NULL OR on_bazaar = $2) ORDER BY on_bazaar DESC, length(id) LIMIT $3`,
+         AND ($2::boolean IS NULL OR on_bazaar = $2) ORDER BY on_bazaar DESC, length(id), id LIMIT $3`,
       [q, req.query.bazaar == null ? null : req.query.bazaar === "1", Math.min(500, toNum(req.query.limit, 50))]);
     return res.rows.map(r => ({ ...r, name: prettyName(r.id, r.name) }));
   });
@@ -128,6 +128,8 @@ export function registerPublic(app: FastifyInstance, db: Db, state: State) {
 
   app.get<{ Querystring: { minDrop?: string; flipperLevel?: string; limit?: string } }>("/api/v1/dips", async req => dipsResponse(state.market, req.query, state.perks));
   app.get<{ Querystring: { ids?: string } }>("/api/v1/books", async req => booksResponse(state.market, (req.query.ids ?? "").split(",").filter(Boolean)));
+  app.post("/api/v1/orders/check", async req => ordersCheckResponse(state.market, req.body));
+  app.get("/api/v1/perks", async () => perksResponse(state.perks));
 
   app.get("/api/v1/rules/bazaar", async () => ({
     ...BAZAAR, orderSlotsByFlipperLevel: [0, 1, 2].map(orderSlots), taxByFlipperLevel: [0, 1, 2].map(l => taxRate(l, state.perks.quadTaxes)),

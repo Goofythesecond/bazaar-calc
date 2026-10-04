@@ -5,18 +5,19 @@ import { useState } from "react";
 import { Icon } from "../components/Icon";
 import { KIND_LABEL, STATIC } from "../lib";
 import { notify } from "../notify";
-import { type AlertSettings, alertSettings } from "../prefs";
+import { type AlertSettings, alertSettings, favourites } from "../prefs";
 import { useApp } from "../state";
 
 const KINDS = ["bazaar", "craft", "book", "forge", "npc"] as const;
 
 export function Alerts() {
-  const s = alertSettings.use();
+  const s = alertSettings.use(), fav = favourites.use();
   const { settings, profile } = useApp();
   const set = (p: Partial<AlertSettings>) => alertSettings.set(v => ({ ...v, ...p }));
   const [perm, setPerm] = useState(typeof Notification !== "undefined" ? Notification.permission : "denied");
   const webhookOk = !s.discordWebhook || /^https:\/\/(discord|discordapp)\.com\/api\/webhooks\/\d+\/[\w-]+$/.test(s.discordWebhook.trim());
-  const serverConfig = JSON.stringify({ discordWebhook: s.discordWebhook, rules: { minCoinsH: s.minCoinsH, minMarginPct: s.minMarginPct, kinds: s.kinds, noWarnings: s.noWarnings, minConfidence: s.minConfidence }, settings, profile }, null, 2);
+  const serverConfig = JSON.stringify({ discordWebhook: s.discordWebhook, rules: { minCoinsH: s.minCoinsH, minMarginPct: s.minMarginPct, kinds: s.kinds, noWarnings: s.noWarnings, minConfidence: s.minConfidence,
+    ...(s.favouritesOnly ? { items: fav } : {}) }, settings, profile }, null, 2);
   return (
     <>
       <div className="pagehead"><div><span className="eyebrow">Trading</span><h1>Alerts</h1>

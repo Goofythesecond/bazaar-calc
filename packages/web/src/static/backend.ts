@@ -5,7 +5,7 @@
 import {
   type BazaarResponse, BAZAAR, BAZAAR_SOURCES, CALC_KINDS, type CalcKind, ENCHANT_SOURCE, FORGE, FORGE_SOURCES, type EventImpact, type GameEvent, HYPIXEL,
   type HoldStats, type ItemMarket, type ItemStats, type MayorTerm, NOTICE, type Opportunity, type RankedOpportunity, type Profile, type Recipe, type Settings, type TopEpisode,
-  type PaperState, type PerkEffects, ProfileSchema, SettingsSchema, assembleMarket, booksResponse, buildOpportunities, dipsResponse, paperCandidates, paperStep, currentTerm, describePerks, perkEffects, calcResponse, calendarEvents, enchantRules, fillReport, forgeSlots, mayorEvents, orderSlots, outlookResponse, parseBookId,
+  type PaperState, type PerkEffects, ProfileSchema, SettingsSchema, alertCheckResponse, assembleMarket, booksResponse, ordersCheckResponse, paperResponse, perksResponse, buildOpportunities, dipsResponse, paperCandidates, paperStep, currentTerm, describePerks, perkEffects, calcResponse, calendarEvents, enchantRules, fillReport, forgeSlots, mayorEvents, orderSlots, outlookResponse, parseBookId,
   planResponse, prettyName, quickForgeReduction, quotesFromBazaar, realtimeEvents, requirementsCatalog, siteFileId, taxRate, timingTable,
 } from "@bc/shared";
 
@@ -24,6 +24,8 @@ export interface Manifest {
   files: { label: string; name: string; kind: string; source: string; from: number; to: number; hours: number; picked: number; polls: number; warnings: string[] }[];
   rejected: { label: string; error: string }[]; daily: { day: string; polls: number }[];
   counts: Record<string, number>;
+  /** files in total (`files` lists the newest 500); records of the scanner's paper trading */
+  fileCount?: number; paper?: { name: string; updatedAt: number }[];
 }
 interface Base {
   manifest: Manifest; asOf: number;
@@ -270,9 +272,12 @@ export async function handle(path: string, body: unknown): Promise<unknown> {
   }
   if (p === "/api/v1/items") {
     const q = (qs.get("q") ?? "").trim().toUpperCase(), bz = qs.get("bazaar"), limit = Math.min(500, num(qs.get("limit"), 50));
-    const live = cur?.market;
-    return b.items.filter(i => (!q || i.id.includes(q.replace(/ /g, "_")) || (i.name ?? "").toUpperCase().includes(q)) && (bz == null || (i.on_bazaar || !!live?.get(i.id)?.ts) === (bz === "1")))
-      .sort((x, y) => Number(y.on_bazaar) - Number(x.on_bazaar) || x.id.length - y.id.length).slice(0, limit);
+    const live = (await market().catch(() => null))?.market;
+    // every product in the live snapshot is searchable even if the published item list lacks it
+    const known = new Set(b.items.map(i => i.id));
+    const extra: ItemRow[] = live ? [...live.values()].filter(m => !known.has(m.id)).map(m => ({ id: m.id, name: m.name, category: null, tier: null, on_bazaar: true, npc_sell_price: null })) : [];
+    return [...b.items, ...extra].filter(i => (!q || i.id.includes(q.replace(/ /g, "_")) || (i.name ?? "").toUpperCase().includes(q)) && (bz == null || (i.on_bazaar || !!live?.get(i.id)?.ts) === (bz === "1")))
+      .sort((x, y) => Number(y.on_bazaar) - Number(x.on_bazaar) || x.id.length - y.id.length || x.id.localeCompare(y.id)).slice(0, limit);
   }
   if ((r = /^\/api\/v1\/items\/([^/]+)$/.exec(p))) {
     const id = decodeURIComponent(r[1]!), m = await market();
@@ -311,6 +316,19 @@ export async function handle(path: string, body: unknown): Promise<unknown> {
   }
   if (p === "/api/v1/dips") { const m = await market(); return dipsResponse(m.market, query, m.perks); }
   if (p === "/api/v1/books") { const m = await market(); return booksResponse(m.market, (qs.get("ids") ?? "").split(",").filter(Boolean)); }
+  if (p === "/api/v1/orders/check") { const m = await market(); return ordersCheckResponse(m.market, body); }
+  if (p === "/api/v1/perks") { const m = await market(); return perksResponse(m.perks); }
+  if (p === "/api/v1/alerts/check") {
+    const m = await market();
+    return alertCheckResponse(builder(m, b.recipes), body, { marketAt: m.marketAt, dataAt: m.dataAt, statsAt: m.statsAt, statsUsed: m.statsUsed, perks: describePerks(m.perks) });
+  }
+  if (p === "/api/v1/paper") {
+    // the project's always-on scanner trades on paper around the clock and publishes its record with the data
+    const rec = b.manifest.paper?.length ? await getJson<{ records: { name: string; updatedAt: number; state: Omit<PaperState, "counters"> }[] }>(`${DATA}paper.json`, "paper record").catch(() => null) : null;
+    const r = rec?.records[0];
+    if (!r) throw new HttpError(404, "no paper-trading record is published yet");
+    return paperResponse({ ...r.state, counters: {} }, { source: "scanner", name: r.name, updatedAt: r.updatedAt, since: r.state.trades[0]?.openedAt ?? null });
+  }
   if (p === "/api/v1/status" || p === "/api/v1/health") {
     const m = await market().catch(() => null);
     return { static: true, notice: NOTICE, manifest: b.manifest, marketLoadedAt: m?.marketAt ?? null, dataAt: m?.dataAt ?? null, statsAt: b.asOf, statsUsed: m?.statsUsed ?? null };

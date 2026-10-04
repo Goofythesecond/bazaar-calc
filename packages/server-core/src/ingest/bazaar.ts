@@ -14,6 +14,9 @@ const pack = (orders: HypixelOrder[]) =>
 export const FLOW_COLUMNS = ["item_id", "hour", "intervals", "seconds", "bid_outbid", "ask_undercut", "bid_removed", "ask_removed", "trade_intervals", "trade_seconds", "bid_trades", "ask_trades"];
 export const FLOW_UPSERT = `ON CONFLICT (item_id, hour) DO UPDATE SET ${FLOW_COLUMNS.slice(2).map(c => `${c} = bazaar_flow_hourly.${c} + excluded.${c}`).join(", ")}`;
 
+/** Mark ids ($1, text[]) as sold on the bazaar, adding the ones the item list does not have (name from prettyName). */
+export const BAZAAR_ITEMS_UPSERT = "INSERT INTO items (id, on_bazaar) SELECT unnest($1::text[]), true ON CONFLICT (id) DO UPDATE SET on_bazaar = true WHERE NOT items.on_bazaar";
+
 export interface IngestResult { status: "accepted" | "duplicate" | "rejected"; reason?: string; changes?: number; ts?: number }
 
 /** `tracker` (our own polls only) follows the top of every book and records time-on-top episodes. */
@@ -77,7 +80,8 @@ export async function ingestBazaar(db: Db, data: BazaarResponse, origin: number,
     await storeEpisodes(client, episodes);
     await client.query("INSERT INTO bazaar_snapshots (ts, origin, contributor_id, n_products, n_changes, keyframe) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT DO NOTHING",
       [tsIso, origin, contributorId, Object.keys(data.products).length, quoteRows.length, keyframe]);
-    await client.query("UPDATE items SET on_bazaar = true WHERE id = ANY($1) AND NOT on_bazaar", [Object.keys(data.products)]);
+    // every bazaar product gets an item row: Hypixel's item list leaves some out (all enchanted books, ENCHANTMENT_*)
+    await client.query(BAZAAR_ITEMS_UPSERT, [Object.keys(data.products)]);
     await client.query("COMMIT");
   } catch (e) {
     await client.query("ROLLBACK");

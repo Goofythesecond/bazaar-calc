@@ -4,6 +4,7 @@ name: Architecture
 on:
   push:
     branches: [main]
+    paths-ignore: ["data/**"] # data pushes (the scanner, every 30 min) change no code
   pull_request:
 permissions:
   contents: read

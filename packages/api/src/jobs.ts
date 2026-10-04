@@ -5,15 +5,14 @@
 //    first check only records what already qualifies, so a restart does not repeat old alerts.
 import { readFileSync } from "node:fs";
 import type { Db } from "@bc/server-core";
-import { DEFAULT_PROFILE, DEFAULT_SETTINGS, type PaperState, ProfileSchema, SettingsSchema, applyFilters, newPaperState, paperCandidates, paperStep } from "@bc/shared";
+import { AlertRulesSchema, DEFAULT_PROFILE, DEFAULT_SETTINGS, type PaperState, ProfileSchema, SettingsSchema, alertMatches, newPaperState, paperCandidates, paperStep } from "@bc/shared";
 import type { State } from "./state.js";
 
 interface AlertsFile {
   discordWebhook?: string;
-  rules?: { minCoinsH?: number; minMarginPct?: number; kinds?: string[]; noWarnings?: boolean; minConfidence?: "low" | "medium" | "high" };
+  rules?: unknown; // AlertRulesSchema (the same rules as the website and POST /api/v1/alerts/check)
   settings?: unknown; profile?: unknown;
 }
-const RANK = { low: 0, medium: 1, high: 2 } as const;
 const log = (...a: unknown[]) => console.log(new Date().toISOString(), "[jobs]", ...a);
 
 export async function startServerJobs(state: State, db: Db): Promise<{ stop: () => void; paper: () => { state: PaperState; since: number | null } }> {
@@ -49,10 +48,7 @@ export async function startServerJobs(state: State, db: Db): Promise<{ stop: () 
     await db.query("INSERT INTO kv (key, value, source, updated_at) VALUES ('paper', $1, 'server paper trading', now()) ON CONFLICT (key) DO UPDATE SET value = excluded.value, updated_at = now()", [JSON.stringify(paper)]);
     // Discord alerts
     if (!webhook) return;
-    const r = cfg.rules ?? {};
-    const rows = applyFilters(state.opportunities("all", settings, profile, false, true).list, {
-      sort: "scoreH", profitableOnly: true, minCoinsH: r.minCoinsH, minMargin: r.minMarginPct ? r.minMarginPct / 100 : undefined, noFlags: r.noWarnings });
-    const ok = rows.filter(o => (!r.kinds || r.kinds.includes(o.kind)) && RANK[o.confidence.level] >= RANK[r.minConfidence ?? "low"] && !o.key.endsWith(":instant"));
+    const ok = alertMatches(state.opportunities("all", settings, profile, false, true).list, AlertRulesSchema.parse(cfg.rules ?? {}));
     if (seen) for (const o of ok.filter(o => !seen!.has(o.key)).slice(0, 5))
       await post(`**${o.title}** (${o.kind})\n${Math.round(o.coinsH).toLocaleString("en-US")} coins/h · ${Math.round(o.profitPerUnit).toLocaleString("en-US")} per unit · ${(o.marginPct * 100).toFixed(1)}% margin · ${o.confidence.level} confidence`);
     seen = new Set(ok.map(o => o.key));

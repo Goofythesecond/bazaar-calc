@@ -122,7 +122,7 @@ export function StatusStatic() {
         <div className="grid cols-3">
           <div className="card tile"><div className="label">Live prices</div><div className="value">{q.data.dataAt ? new Date(q.data.dataAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "–"}</div><div className="sub">straight from Hypixel; updates every minute while a page is open</div></div>
           <div className="card tile"><div className="label">History up to (newest contributed data)</div><div className="value">{ago(m.asOf)}</div><div className="sub">{utc(m.asOf)}{q.data.statsUsed === false ? " · too old, not used" : ""}</div></div>
-          <div className="card tile"><div className="label">Site built</div><div className="value">{ago(m.builtAt)}</div><div className="sub">rebuilt on every approved contribution and daily · recipes: NEU {m.recipesVersion?.slice(0, 7) ?? "–"}</div></div>
+          <div className="card tile"><div className="label">Site built</div><div className="value">{ago(m.builtAt)}</div><div className="sub">rebuilt on every approved contribution and every scanner push · recipes: NEU {m.recipesVersion?.slice(0, 7) ?? "–"}</div></div>
         </div>
         <h2>Coverage by day (polls from contributors)</h2>
         <div className="tablewrap"><table><thead><tr><th className="l">Day (UTC)</th><th>Polls</th><th className="l" style={{ width: "50%" }}>Share of the day</th></tr></thead><tbody>
@@ -130,6 +130,7 @@ export function StatusStatic() {
             <td className="l"><div className="meter"><div className="track"><div className="fill" style={{ width: `${Math.min(100, (d.polls / 4320) * 100)}%` }} /></div></div></td></tr>)}
         </tbody></table></div>
         <h2>Files</h2>
+        <p className="small muted">{(m.fileCount ?? m.files.length) > 200 ? `The newest 200 of ${num(m.fileCount ?? m.files.length)} files.` : `${num(m.files.length)} files.`}</p>
         <div className="tablewrap"><table><thead><tr><th className="l">File</th><th>From</th><th>To</th><th>Hours used</th><th className="l">Notes</th></tr></thead><tbody>
           {[...m.files].reverse().slice(0, 200).map(f => <tr key={f.label}><td className="l mono small">{f.label}</td><td className="n">{utc(f.from)}</td><td className="n">{utc(f.to)}</td><td className="n">{f.picked}/{f.hours}</td>
             <td className="l small muted" style={{ whiteSpace: "normal" }}>{f.source === "wayback" ? "Internet Archive copy" : f.kind}{f.warnings.length ? ` · ${f.warnings.join("; ")}` : ""}</td></tr>)}

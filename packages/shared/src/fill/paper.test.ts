@@ -24,6 +24,12 @@ describe("paper trading", () => {
     const s = paperSummary(st);
     expect(s.closed).toBe(1); expect(s.capture).toBeCloseTo(t.realized! / 800, 6); expect(s.winRate).toBe(1);
   });
+  it("opens a trade as soon as picks arrive (no picks yet does not use up the 5-minute turn)", () => {
+    let st = paperStep(newPaperState(), 1_000, mk(10, 20, 1000, 1000), () => [], o);
+    expect(st.trades).toHaveLength(0); expect(st.lastPick).toBe(0);
+    st = paperStep(st, 21_000, mk(10, 20, 1000, 1000), pick, o);
+    expect(st.trades).toHaveLength(1);
+  });
   it("stops filling when beaten and relists at the next look", () => {
     let st = paperStep(newPaperState(), 1_000, mk(10, 20, 1000, 1000), pick, o);
     st = paperStep(st, 21_000, mk(10.2, 20, 1000, 1050), pick, o); // someone posted 10.2 > our 10.1

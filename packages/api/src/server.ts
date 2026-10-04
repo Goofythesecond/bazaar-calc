@@ -8,7 +8,7 @@ import fastifyStatic from "@fastify/static";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 import { type Db, migrate } from "@bc/server-core";
-import { NOTICE } from "@bc/shared";
+import { NOTICE, paperResponse } from "@bc/shared";
 import { registerAuth, userFromRequest } from "./auth.js";
 import { ENV } from "./env.js";
 import { OPENAPI } from "./openapi.js";
@@ -59,7 +59,7 @@ app.setErrorHandler((err: FastifyError, _req, reply) => {
 app.get("/api/openapi.json", async () => OPENAPI);
 registerAuth(app, db);
 registerPublic(app, db, state);
-app.get("/api/v1/paper", async () => jobs.paper());
+app.get("/api/v1/paper", async () => { const p = jobs.paper(); return paperResponse(p.state, { source: "server", since: p.since }); });
 registerFill(app, db, state);
 registerCalc(app, state);
 registerContribute(app, db);

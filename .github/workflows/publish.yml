@@ -1,5 +1,6 @@
 # Builds the website's data from every approved contribution and publishes the static site on GitHub Pages.
-# Runs after every merge to main, once a day (recipes, items and the mayor election stay current), or by hand.
+# Runs after every merge to main, after every push of the always-on scanner (every 30 min, packages/collector/src/scanner.ts),
+# once a day (recipes, items and the mayor election stay current), or by hand.
 name: Publish the website
 on:
   push:
@@ -35,7 +36,8 @@ jobs:
             git config user.name "github-actions[bot]"
             git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
             git commit -m "Move approved data from data/inbox to data/contrib"
-            git push
+            # the scanner may have pushed meanwhile: put this commit on top of it and try again
+            for i in 1 2 3; do git push && break; git pull --rebase origin main; done
           fi
       - name: Build the site data
         run: node scripts/data/build-site.mjs --out site-data

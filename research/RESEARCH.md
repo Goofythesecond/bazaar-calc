@@ -110,3 +110,19 @@ Known limits: holds shorter than one poll (~20 s, the API refresh rate) cannot b
 - Each dip says whether it is new: the cheapest offer about an hour earlier (latest quote 1–3 h back) was still above the threshold. Example of a lasting one: Ultimate Wisdom III, 780k for days, 13M for a few hours, then 1M again: both medians (from 16 and 21 hours) sat at 7–8M, so it showed as 86% below but "already low".
 - Hand-checked new ones: Shard Tiamat ~180k for two days, then 110k with 363 units bought within 100 s; Magma Urchin from 18.47M to 16.13M.
 
+
+## Always-on scanner, item list, paper trading (measured 2026-10-04)
+- **Hypixel's item list leaves out bazaar products:** `/v2/resources/skyblock/items` has no `ENCHANTMENT_*` ids (all
+  enchanted books). The website's item list had 1 of them, so books could not be found; every product seen in the bazaar
+  now gets an item row (778 books in the rebuilt list). The list has 13 "Enchanted Book Bundle" items with the same
+  name; names now say which enchant (e.g. "Enchanted Book Bundle (Power)").
+- **Scanner memory** (15 minutes, two BIN scans of all pages at 2 pages at a time, bazaar every 20 s): peak RSS 360 MB
+  with Node's default heap, 329 MB with `--max-old-space-size=192` (Node 24, Linux). Keeping every auction page until
+  the end of a scan peaked at 431 MB.
+- **Splitting data into files** (every 30 min) loses nothing on import: 12 real polls recorded as one file and as three
+  files imported to identical flow, trades and time-on-top episodes (1,258), also with the polls shifted to straddle a UTC hour. Each file
+  repeats its own hourly close, so the database has more quote rows; statistics use the last per hour.
+- **Paper trading, first results** (self-hosted server, 2026-10-03/04, default settings): 3 closed trades, all
+  profitable, 16.7M realized vs 36.6M expected (46%), 8.3 h per trade vs 1.3 h predicted (including about 4 hours with
+  the PC off). The fill model is optimistic for the illiquid high-margin items these picks favour; more trades are
+  needed before changing it.

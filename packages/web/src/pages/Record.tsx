@@ -15,6 +15,7 @@ function PaperTable({ st }: { st: PaperState }) {
   const s = paperSummary(st);
   return (
     <>
+      {st.lastTs > 0 && <p className="small muted" style={{ marginTop: 0 }}>Last market snapshot processed {ago(st.lastTs)}: open trades fill only from real trades while their virtual order is the best price, and an outbid order is relisted at the next look (every check interval).</p>}
       <div className="grid cols-3">
         <div className="card tile"><div className="label">Realized / expected</div><div className="value">{s.capture != null ? pct(s.capture, 0) : "–"}</div><div className="sub">{coins(s.realized)} of {coins(s.expected)} over {s.closed} closed trades</div></div>
         <div className="card tile"><div className="label">Trades that made money</div><div className="value">{s.winRate != null ? pct(s.winRate, 0) : "–"}</div><div className="sub">{s.open} still running</div></div>
@@ -26,7 +27,9 @@ function PaperTable({ st }: { st: PaperState }) {
           <tbody>{[...st.trades].reverse().slice(0, 100).map(t => (
             <tr key={t.id}>
               <td className="l">{t.title}</td>
-              <td className="l">{t.phase === "done" ? <span className="pill good">done</span> : t.phase === "expired" ? <span className="pill warn">expired after 6 h</span> : <span className="pill">{t.phase} @ {num(t.price, 1)}{t.onTop ? "" : " (beaten)"}</span>}</td>
+              <td className="l">{t.phase === "done" ? <span className="pill good">done</span> : t.phase === "expired" ? <span className="pill warn">expired after 6 h</span>
+                : <><span className={`pill ${t.onTop ? "good" : "warn"}`}>{t.phase} @ {num(t.price, 1)}{t.onTop ? ", on top" : ", outbid"}</span>
+                  {!t.onTop && st.lastTs > 0 && <span className="small muted"> relists {t.nextLook > st.lastTs ? `in ${dur((t.nextLook - st.lastTs) / 3.6e6)}` : "now"}</span>}</>}</td>
               <td className="n">{num(t.bought)} / {num(t.qty)}</td><td className="n">{num(t.sold)}</td>
               <td className="n">{coins(t.expected.profit)}</td><td className={`n ${t.realized != null && t.realized < 0 ? "down" : ""}`}>{t.realized != null ? coins(t.realized) : "–"}</td>
               <td className="n">{t.relists}</td><td className="n small muted">{ago(t.openedAt)}</td>
@@ -40,15 +43,22 @@ function PaperTable({ st }: { st: PaperState }) {
 export function Record() {
   const local = paperRecord.use(), decisions = journal.use(), orders = trackedOrders.use();
   const { settings } = useApp();
-  const server = useQuery({ queryKey: ["paper"], enabled: !STATIC, queryFn: () => api<{ state: PaperState; since: number | null }>("/api/v1/paper") });
+  // self-hosted: the server's own record; static site: the project scanner's record, published with its data every 30 min
+  const server = useQuery({ queryKey: ["paper"], retry: false, queryFn: () => api<{ state: PaperState; since: number | null; source: string; name?: string; updatedAt?: number }>("/api/v1/paper") });
   const tax = taxRate(settings.bazaarFlipperLevel);
   return (
     <>
       <div className="pagehead"><div><span className="eyebrow">Trading</span><h1>Track record</h1>
         <p className="lede">How the predictions hold up against the real market. Paper trading runs the calculator's own best bazaar flip as virtual orders (filled only by real trades, relisted when beaten, sold the same way); the journal follows the routes you chose.</p></div></div>
       <h2>Paper trading</h2>
-      <p className="small muted">{STATIC ? "Runs in this browser while the site is open, with your settings; the record is saved here." : "Runs on this server on every poll, around the clock."}</p>
-      {STATIC ? <PaperTable st={local} /> : server.data ? <PaperTable st={server.data.state} /> : <div className="card empty">{server.error ? (server.error as Error).message : "Loading…"}</div>}
+      <h3>Around the clock</h3>
+      <p className="small muted">{STATIC
+        ? <>The project's scanner trades on paper on every Hypixel snapshot, with the default settings{server.data?.updatedAt ? <> (record from {server.data.name}'s scanner, updated {ago(server.data.updatedAt)}; it is published with the data every 30 minutes)</> : null}.</>
+        : "Runs on this server on every poll."}</p>
+      {server.data ? <PaperTable st={server.data.state} /> : <div className="card empty">{server.error ? (server.error as Error).message : "Loading…"}</div>}
+      {STATIC && <><h3>In this browser</h3>
+        <p className="small muted">Runs while the site is open, with your settings; the record is saved here.</p>
+        <PaperTable st={local} /></>}
       {STATIC && local.trades.length > 0 && <button className="ghost" style={{ marginTop: 10 }} onClick={() => paperRecord.set({ trades: [], lastPick: 0, counters: {}, lastTs: 0 })}>Start the paper record over</button>}
 
       <h2>Your decisions</h2>

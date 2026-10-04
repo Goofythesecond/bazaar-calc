@@ -114,6 +114,27 @@ node scripts/data/build-site.mjs --out site-data        # add --offline to skip 
 node scripts/site/build-pages.mjs --site-data site-data --base / --out pages
 ```
 
+## The always-on scanner
+
+`bazaar-calc-scanner.mjs` records around the clock on any small Node host (a free 512 MB container is enough) and
+commits the new data to this repository every 30 minutes, so the website's history is never more than about 35 minutes
+behind. It also runs paper trading around the clock; the Track record page shows that record. Setup (token, config,
+memory): [packages/collector/README.md](packages/collector/README.md#the-always-on-scanner).
+
+## Where the data lives, and what is kept
+
+- **Everything recorded is kept.** Every data file stays in `data/contrib/` (and in git history even if deleted). No
+  workflow deletes or rewrites them. The website is rebuilt from all of them each time.
+- **What the website shows** is computed from those files on every build: prices hourly for 30 days, then every 6
+  hours; lowest BINs hourly for 90 days; auction sales for 7 days; typical prices and competition over 14 days; event
+  outlook over a year. Older data stays in the files and feeds longer windows when they are added.
+- **Size:** about 3.5 to 5 MB of files a day (about 1.3 to 1.8 GB a year). GitHub recommends keeping a repository under
+  1 GB (5 GB at most), and every build reads every file, so a long-running archive needs a plan within months: for
+  example yearly archives as release assets, with the site built from the recent ones plus precomputed long-term
+  numbers.
+- **A self-hosted server's own database** keeps full order books for `BOOK_DETAIL_DAYS` (default 3) and everything
+  else indefinitely.
+
 ## Self-hosting
 
 - `DATABASE_URL=postgres://user:pass@host/db`: a normal Postgres server. Use this for a public site (API and worker can

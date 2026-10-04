@@ -1,10 +1,10 @@
 // What the API endpoints compute, independent of where the data comes from: the server answers HTTP requests with it,
 // the static website runs it in the visitor's browser. Inputs are validated and clamped the same way in both.
 import { z } from "zod";
-import { BAZAAR, limitContribution, type PerkEffects, DEFAULT_PROFILE, type Profile, type GameEvent, SB_YEAR, mayorEvents, termStart } from "../rules/index.js";
+import { BAZAAR, describePerks, limitContribution, type PerkEffects, DEFAULT_PROFILE, type Profile, type GameEvent, SB_YEAR, mayorEvents, termStart } from "../rules/index.js";
 import { type Ctx, type RankedOpportunity, bazaarFlips, bookFlips, craftFlips, forgeFlips, npcFlips, routeConfidence, DEFAULT_SETTINGS, type Opportunity, type Settings, plan } from "../calc/index.js";
 import type { Recipe } from "../recipes/index.js";
-import { type BookSnapshot, type PaperCandidate, curve, fillModel, sizeFor, type TopEpisode, quotaTime, survival } from "../fill/index.js";
+import { type BookSnapshot, type OrderEvent, type PaperCandidate, type PaperState, type TrackedOrder, curve, fillModel, paperSummary, sizeFor, type TopEpisode, quotaTime, survival, trackOrder, updateOrder } from "../fill/index.js";
 import { type HoldStats, type ItemMarket, buyFlowH, sellFlowH, type EventImpact, findDips, outlook, prettyName } from "../market/index.js";
 
 /** Drop keys whose value is undefined, so they fall back to the defaults instead of overwriting them. */
@@ -240,4 +240,68 @@ export function paperCandidates(list: RankedOpportunity[]): PaperCandidate[] {
     .filter(o => o.kind === "bazaar" && o.coinsH > 0 && !o.key.endsWith(":instant") && o.flags.every(f => f === "low_history" || f === "mass_delists"))
     .sort((a, b) => b.scoreH - a.scoreH)
     .map(o => ({ key: o.key, title: o.title, item: o.outputId, qty: o.orderPlan.find(l => l.side === "buy")?.qty ?? o.batch, profitPerUnit: o.profitPerUnit, unitsH: o.unitsH, kind: o.kind }));
+}
+
+// ---- alerts: one rule set for the website's alerts, the server's Discord alerts (api/src/jobs.ts) and POST /api/v1/alerts/check
+export const AlertRulesSchema = z.object({
+  minCoinsH: num(0, 1e12).optional(),
+  minMarginPct: num(0, 10_000).optional(),
+  kinds: z.array(z.enum(["bazaar", "craft", "book", "forge", "npc"])).optional(),
+  noWarnings: z.coerce.boolean().optional(),
+  minConfidence: z.enum(["low", "medium", "high"]).optional(),
+  /** only these items (favourites) */
+  items: z.array(z.string().max(80)).max(500).optional(),
+});
+export type AlertRules = z.infer<typeof AlertRulesSchema>;
+const CONFIDENCE_RANK = { low: 0, medium: 1, high: 2 } as const;
+
+/** Routes that meet alert rules, best first (coins/h x confidence): profitable, order routes only (an instant variant
+ *  of the same flip would alert twice). */
+export function alertMatches(list: RankedOpportunity[], r: AlertRules): RankedOpportunity[] {
+  const rows = applyFilters(list, FilterSchema.parse({ sort: "scoreH", profitableOnly: true, minCoinsH: r.minCoinsH || undefined,
+    minMargin: r.minMarginPct ? r.minMarginPct / 100 : undefined, noFlags: r.noWarnings || undefined }));
+  return rows.filter(o => (!r.kinds || r.kinds.includes(o.kind as never)) && CONFIDENCE_RANK[o.confidence.level] >= CONFIDENCE_RANK[r.minConfidence ?? "low"]
+    && !o.key.endsWith(":instant") && (!r.items?.length || r.items.includes(o.outputId)));
+}
+
+const AlertCheckBody = z.object({ settings: z.unknown().optional(), profile: z.unknown().optional(), rules: z.unknown().optional(), limit: num(1, 200) });
+/** POST /api/v1/alerts/check {settings, profile, rules}: the routes that meet these alert rules right now, best first
+ *  (what an alert would announce). */
+export function alertCheckResponse(build: Build, input: unknown, meta: Record<string, unknown>) {
+  const b = AlertCheckBody.parse(input ?? {});
+  const settings = SettingsSchema.parse(b.settings ?? {}), profile = ProfileSchema.parse(b.profile ?? {}), rules = AlertRulesSchema.parse(b.rules ?? {});
+  const rows = alertMatches(build("all", settings, profile, false, true).list, rules);
+  return { total: rows.length, rules, rows: rows.slice(0, b.limit ?? 50).map(compact), ...meta };
+}
+
+// ---- order tracking without a browser: POST /api/v1/orders/check
+const OrderSpec = z.object({ id: z.string().max(80).optional(), item: z.string().min(1).max(80), side: z.enum(["buy", "sell"]), price: z.number().positive().max(1e10), amount: z.number().int().min(1).max(71_680) });
+// an order returned by an earlier call (TrackedOrder): sent back as it was, so its queue position carries on
+const Tracked = OrderSpec.extend({ id: z.string().max(80), name: z.string().max(200), createdAt: z.number(), updatedAt: z.number(), ahead: z.number(), filled: z.number(),
+  confirmed: z.boolean(), seen: z.boolean(), status: z.enum(["top", "behind", "filled"]), best: z.number().nullable(), level: z.number(), better: z.number(),
+  buyWeek: z.number().nullable().optional(), sellWeek: z.number().nullable().optional(), decisionId: z.string().max(80).optional() });
+const OrdersCheckBody = z.object({ orders: z.array(z.union([Tracked, OrderSpec])).min(1).max(50) });
+/** POST /api/v1/orders/check: new orders ({item, side, price, amount}) are placed in the queue; orders from an earlier
+ *  answer are advanced to the current book (fill/order-tracker.ts), with the events since (outbid, filled, back on top). */
+export function ordersCheckResponse(market: Map<string, ItemMarket>, input: unknown) {
+  const body = OrdersCheckBody.parse(input ?? {});
+  const books = booksResponse(market, [...new Set(body.orders.map(o => o.item))]).items;
+  const orders: TrackedOrder[] = [], events: OrderEvent[] = [], missing: string[] = [];
+  body.orders.forEach((o, i) => {
+    const b = books[o.item];
+    if (!b) { missing.push(o.item); return; }
+    if ("updatedAt" in o) { const u = updateOrder(o as TrackedOrder, b); orders.push(u.order); events.push(...u.events); }
+    else orders.push(trackOrder({ id: o.id ?? `${b.ts}-${i}-${o.item}`, item: o.item, name: b.name, side: o.side, price: o.price, amount: Math.round(o.amount) }, b));
+  });
+  return { at: Math.max(0, ...Object.values(books).map(b => b.ts)), orders, events, missing: [...new Set(missing)] };
+}
+
+/** GET /api/v1/perks: mayor perks that change the calculator right now. */
+export function perksResponse(perks: PerkEffects) {
+  return { effects: perks, active: describePerks(perks) };
+}
+
+/** GET /api/v1/paper: a paper-trading record with its summary (realized vs expected, win rate, time per trade). */
+export function paperResponse(state: PaperState, extra: Record<string, unknown>) {
+  return { ...extra, summary: paperSummary(state), state };
 }

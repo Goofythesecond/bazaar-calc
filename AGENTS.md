@@ -63,9 +63,10 @@ starts with a comment saying what it is for.
 | `packages/server-core/` | database, ingestion, statistics, contribution import / export (Node only) |
 | `packages/api/`, `packages/worker/` | self-hosted API server and scanner jobs |
 | `packages/web/` | the website; `src/static/` is the in-browser backend of the GitHub Pages build |
-| `packages/collector/` | the Node data collector (bundled to one file) |
+| `packages/collector/` | the Node data collector and the always-on scanner (each bundled to one file; the scanner pushes to this repository every 30 min) |
 | `scripts/` | checks, data pipeline, site build (scripts/README.md lists each one) |
 | `data/contrib/<login>/<yyyy-mm>/` | approved contribution files; `data/inbox/` is where pull requests add them |
+| `data/paper/<login>.json` | the scanner's paper-trading record (written by the scanner on every push) |
 | `research/RESEARCH.md` | every rule with its source |
 
 Layers inside `@bc/shared` (a module may import only from modules to its left, across modules only through
@@ -96,7 +97,7 @@ pnpm install                         # pnpm 12 (see packageManager); Node 24 in 
 pnpm check                           # architecture rules, build every package, run every test
 node scripts/checks/architecture.mjs # just the structure rules (no install needed)
 pnpm -r build                        # type checks every package and builds them
-pnpm -r test                         # 45 calculator / rule tests + 4 ingestion tests (PGlite)
+pnpm -r test                         # 46 calculator / rule tests, 4 ingestion tests (PGlite), 3 GitHub-client tests
 ```
 
 After changing `package.json`, run `pnpm install` and commit `pnpm-lock.yaml`. CI installs with
@@ -115,6 +116,8 @@ Pick the checks that fit what you changed.
 | Statistics (`stats.ts`, `hold.ts`) or the file format / import | Export a database, rebuild the statistics from the files, and compare item by item with the server's own: medians, counts, flow, time-on-top samples and auction prices must be identical |
 | A collector | Run it next to a server for a few minutes, then `node scripts/data/check-pr.mjs --data <dir with the server's export> --author <login> <file>`: 0 differing closes and episodes |
 | The website | Build with `scripts/site/build-pages.mjs`, serve it, then `node scripts/checks/screenshot.mjs <dir> <url> 1440` and `... 390`. No PROBLEM lines, and look at the screenshots |
+| Live behaviour of the website (prices, search, orders, paper trading) | `node scripts/checks/live-test.mjs <site url> <out dir> [paper minutes]`, against a local build and, after a deploy, the real site: `ALL PASSED`, and read report.json |
+| The scanner | `bazaar-calc-scanner.mjs --dry-run` with `"everyMin": 1` for a few minutes: files in `out/pending`, a paper trade within a minute, memory in the log; `pnpm --filter @bc/collector test` |
 | Performance | Time `buildOpportunities` for `"all"` on real data: about 0.5 s in Node today. It runs in visitors' browsers |
 
 Lessons from this repository's history:

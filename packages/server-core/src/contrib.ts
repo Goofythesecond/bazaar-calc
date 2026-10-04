@@ -7,7 +7,7 @@
 import { createHash } from "node:crypto";
 import { type DataFile, type ElectionResponse, emptyDataFile } from "@bc/shared";
 import { type Db, ensurePartition, insertMany } from "./db.js";
-import { FLOW_COLUMNS, FLOW_UPSERT } from "./ingest/bazaar.js";
+import { BAZAAR_ITEMS_UPSERT, FLOW_COLUMNS, FLOW_UPSERT } from "./ingest/bazaar.js";
 import { storeElection } from "./ingest/reference.js";
 
 const H = 3.6e6;
@@ -92,12 +92,17 @@ export async function importDataFiles(db: Db, files: { label: string; file: Data
         fl.tradeIntervals?.[i] ?? 0, fl.tradeSeconds?.[i] ?? 0, fl.bidTrades?.[i] ?? 0, fl.askTrades?.[i] ?? 0]); // files before 2026-10-03 have no trades
     }
     await insertMany(db, "bazaar_flow_hourly", FLOW_COLUMNS, flows, FLOW_UPSERT);
+    if (snaps.length) await db.query(BAZAAR_ITEMS_UPSERT, [f.items]);
     // an episode belongs to the stretch that recorded its end: the file's last poll at or before start + duration
     const e = f.episodes, eps: unknown[][] = [];
     for (let i = 0; i < e.item.length; i++) {
       // with regular polls start + midpoint duration lands on the poll that ended the episode (or, for a cut one, about
       // half a gap after its last poll): the end is that poll
-      const p = lastAtOrBefore(f.polls, e.start[i]! + e.dur[i]! * 100 + 1000);
+      let p = lastAtOrBefore(f.polls, e.start[i]! + e.dur[i]! * 100 + 1000);
+      // with uneven gaps between polls, start + duration can fall a little before the poll that ended the episode; when
+      // that poll is the file's first one (the episode began in the previous file: the scanner starts a file every 30
+      // minutes and the tracker carries on), the episode belongs to that first poll
+      if (p < 0 && f.polls.length && f.polls[0]! - (e.start[i]! + e.dur[i]! * 100) <= 150_000) p = 0;
       if (p < 0 || !ok.has(Math.floor(f.polls[p]! / H))) continue;
       const d = e.dur[i]! / 10;
       eps.push([f.items[e.item[i]!], e.side[i] === 0 ? "b" : "a", iso(e.start[i]!), iso(Math.max(e.start[i]!, f.polls[p]!)), 0, d, d, d, e.polls[i], e.flow[i], 0, 0, 0, END[e.end[i]!]]);

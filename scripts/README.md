@@ -9,6 +9,7 @@ Commands run from the repository root with `node scripts/...`. Each file starts 
 | `scripts/checks/audit.mjs` | Self-hosted: re-derives every listed route from the exact market snapshot and compares with raw sources |
 | `scripts/checks/backtest.mjs` | Fill-model backtest on stored order books (run on a copy of the database) |
 | `scripts/checks/outputs.mjs` | Records every public output of @bc/shared on frozen inputs: run before and after a refactor, the files must be identical |
+| `scripts/checks/live-test.mjs` | End-to-end check of a running site in headless Chrome, with evidence: the site's own Hypixel fetches and that the page shows exactly those prices, item search, tracked orders, paper trading, flip pages |
 | `scripts/checks/screenshot.mjs` | Loads pages in headless Chrome: script errors, empty pages, NaN / undefined, content past the screen edge; saves screenshots |
 | `scripts/data/export.mjs` | Database to contribution files (one per UTC day) |
 | `scripts/data/import.mjs` | Contribution files to a self-hosted database (hours it already has are kept) |
