@@ -149,8 +149,15 @@ result("paper trading (around the clock): the scanner's published record is show
 // ---- 5. flip pages
 const flips = {};
 for (const k of ["bazaar", "craft", "book", "forge", "npc"]) {
-  await go(`flips/${k}`);
-  flips[k] = await evalJs(`(() => { const m = document.body.innerText.match(/([\\d,]+) routes, ([\\d,]+) make money/); return m ? m[0] : document.body.innerText.slice(0, 200); })()`);
+  // the calculation runs in the visitor's browser: wait up to 40 s and record how long it took
+  await send("Page.navigate", { url: `${SITE}flips/${k}` }, page);
+  const start = Date.now();
+  let found = null;
+  while (!found && Date.now() - start < 40_000) {
+    await sleep(500);
+    found = await evalJs(`(document.body.innerText.match(/([\\d,]+) routes, ([\\d,]+) make money/) || [null])[0]`);
+  }
+  flips[k] = found ? `${found} (shown after ${((Date.now() - start) / 1000).toFixed(1)} s)` : `nothing after 40 s: ${(await text()).slice(0, 200)}`;
 }
 await shot("5-flips-npc");
 result("flip pages: every kind lists routes", Object.values(flips).every(v => /routes, [\d,]+ make money/.test(v) && !/^0 routes/.test(v)), { flips });

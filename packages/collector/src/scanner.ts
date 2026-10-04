@@ -208,6 +208,7 @@ log(`scanner ${VERSION} as ${cfg.name}: bazaar every 20 s, auction sales every 3
 if (!DRY) {
   const token = readToken();
   if (!token) log(`no GitHub token yet: put it in ${resolve(CONFIG_PATH, "..", cfg.tokenFile)} or GITHUB_TOKEN (recording goes on; files wait until then)`);
-  else void repoFor(token).checkWrite().then(() => { log(`GitHub: ${cfg.repo} writable with this token`); return pushPending(); },
+  // files left from the last run go out now; otherwise the first push is at the next file (no commit of the paper record alone)
+  else void repoFor(token).checkWrite().then(() => { log(`GitHub: ${cfg.repo} writable with this token`); return readdirSync(PENDING).length ? pushPending() : undefined; },
     e => log(`GitHub check failed (recording goes on; pushes retry): ${(e as Error).message}`));
 }
