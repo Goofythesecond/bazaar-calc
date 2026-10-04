@@ -4,6 +4,7 @@
 import type { BookLevel, HoldStats, ItemMarket } from "./types.js";
 import { computeFlags, flagBookLadders } from "./signals.js";
 import { prettyName } from "./names.js";
+import { parseBookId } from "../rules/index.js";
 import type { EventImpact } from "./event-impact.js";
 
 /** Per-item statistics (server: item_stats.data; website: market.json). */
@@ -40,6 +41,8 @@ export interface MarketInputs {
   names: Map<string, string | null>;
   /** what NPC shops pay per item (Hypixel's items resource, npc_sell_price) */
   npcSell?: Map<string, number | null>;
+  /** ids Hypixel's items list marks unstackable (enchanted books are not in that list: they are always unstackable) */
+  unstackable?: Set<string>;
   /** wall-clock time for auction-only rows */
   now?: number;
 }
@@ -61,6 +64,7 @@ export function assembleMarket(inp: MarketInputs): Map<string, ItemMarket> {
       holdBid: inp.hold.get(r.id)?.bid ?? null, holdAsk: inp.hold.get(r.id)?.ask ?? null,
       ahLowestBin: a?.lowestBin ?? null, ahSales24h: a?.sales24h ?? 0, ahMedianSale24h: a?.medianSale24h ?? null,
       npcSellPrice: inp.npcSell?.get(r.id) ?? null,
+      unstackable: !!inp.unstackable?.has(r.id) || !!parseBookId(r.id),
       flags: [], flagWhy: {},
     };
     computeFlags(m, s?.hourAgo ?? undefined);

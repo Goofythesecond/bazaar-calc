@@ -48,6 +48,13 @@ function gridInputs(grid: Record<string, unknown>): { id: string; qty: number }[
   return [...by].map(([id, qty]) => ({ id, qty }));
 }
 
+/** NEU pet "BEE;2" -> the auction key of that pet and rarity, "PET_BEE_RARE" (NEU numbers rarities 0 = common ... 5 = mythic). */
+const PET_TIERS = ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"];
+export function petAuctionKey(neuPet: string): string | null {
+  const m = /^([A-Z0-9_]+);(\d)$/.exec(neuPet);
+  return m && PET_TIERS[Number(m[2])] ? `PET_${m[1]}_${PET_TIERS[Number(m[2])]}` : null;
+}
+
 export function parseNeuItem(item: NeuItem): Recipe[] {
   const reqs: Requirement[] = [...parseCraftText(item.crafttext), ...parseSlayerReq(item.slayer_req), ...parseReputationReq(item.reputation_req)];
   const out: Recipe[] = [];
@@ -69,6 +76,15 @@ export function parseNeuItem(item: NeuItem): Recipe[] {
       const npc = String(item.displayname ?? item.internalname).replace(/§./g, "").replace(/\s*\(NPC\)\s*$/, "");
       out.push({ outputId: res.id, kind: "npc", inputs: [{ id: "SKYBLOCK_COIN", qty: cost.reduce((a, c) => a + c!.qty, 0) }], outputCount: res.qty, requirements: [],
         source: `${npc}${item.island ? ` (${item.island.replace(/_/g, " ")})` : ""}` });
+    } else if (type === "katgrade") {
+      // Kat: the pet one rarity up for coins, items and time (wiki: Kat). The coin cost falls 0.3% per pet level; the
+      // base cost is kept (an upper bound: auctioned pets' levels are unknown)
+      const input = petAuctionKey(String(r.input ?? "")), output = petAuctionKey(String(r.output ?? ""));
+      const items = ((r.items as string[] | undefined) ?? []).map(parseStack).filter((x): x is { id: string; qty: number } => !!x);
+      const coins = Number(r.coins ?? 0), time = Number(r.time ?? 0);
+      if (!input || !output || !(time >= 0)) continue;
+      add({ outputId: output, kind: "kat", inputs: [{ id: input, qty: 1 }, ...items, ...(coins > 0 ? [{ id: "SKYBLOCK_COIN", qty: coins }] : [])],
+        outputCount: 1, durationS: time, requirements: [] });
     } else if (type === "forge") {
       const inputs = (r.inputs as string[] | undefined ?? []).map(parseStack).filter((x): x is { id: string; qty: number } => !!x);
       add({ outputId, kind: "forge", inputs, outputCount: Number(r.count ?? 1) || 1, durationS: Number(r.duration ?? 0) || null, requirements: reqs });

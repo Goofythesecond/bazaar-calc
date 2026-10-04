@@ -8,7 +8,7 @@ import { notify } from "../notify";
 import { type AlertSettings, alertSettings, favourites } from "../prefs";
 import { useApp } from "../state";
 
-const KINDS = ["bazaar", "craft", "book", "forge", "npc"] as const;
+const KINDS = ["bazaar", "craft", "book", "forge", "npc", "kat", "fusion"] as const;
 
 export function Alerts() {
   const s = alertSettings.use(), fav = favourites.use();

@@ -1,8 +1,8 @@
 // Route builders for the four flip types plus the acquisition search they share.
-import { BAZAAR, taxRate, npcBuyLimit, booksNeeded, combineXpCost, enchantRules, bookId, type EnchantRule, forgeDurationSeconds, type Profile, type Requirement } from "../rules/index.js";
+import { BAZAAR, ahBinFeeText, ahBinNet, maxUnitsPerOrder, taxRate, npcBuyLimit, booksNeeded, combineXpCost, enchantRules, bookId, type EnchantRule, forgeDurationSeconds, type Profile, type Requirement } from "../rules/index.js";
 import { prettyName, type BookLevel, TYPICAL_BAND, bookCeiling, buyFlowH, sellFlowH, seriousFlags, typicalPrice, type ItemMarket, type Market } from "../market/index.js";
 import { type BuyLeg, type BuyMode, type Opportunity, type ProcessStep, type Route, type SellLeg, type SellMode, type Settings, evaluate } from "./engine.js";
-import { type FillModel, curve, at, fillModel } from "../fill/index.js";
+import { type FillCalibration, type FillModel, curve, at, fillFactor, fillModel } from "../fill/index.js";
 import type { Recipe } from "../recipes/index.js";
 
 export interface Ctx {
@@ -15,6 +15,8 @@ export interface Ctx {
   listAll?: boolean;
   /** recipes / books that could not be priced, with the reason (filled while building routes) */
   skipped?: { kind: Route["kind"]; key: string; title: string; reason: string }[];
+  /** fill-speed correction measured by paper trading (fill/calibration.ts); none = the model as measured */
+  calibration?: FillCalibration;
 }
 
 export const nameOf = (ctx: Ctx, id: string) => ctx.market.get(id)?.name ?? ctx.names?.get(id) ?? id.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
@@ -59,16 +61,18 @@ function modelFor(ctx: Ctx, m: ItemMarket, side: "bid" | "ask"): FillModel {
 }
 
 /** Most a single order can hold: 71,680 units, and a sell offer is also capped at 1B coins of value. */
-const maxOrderQty = (price: number, sell: boolean) => Math.max(1, Math.min(BAZAAR.maxUnitsPerOrder, sell ? Math.floor(BAZAAR.maxSellOfferValue / Math.max(price, 0.1)) : BAZAAR.maxUnitsPerOrder));
+const maxOrderQty = (price: number, sell: boolean, unstackable?: boolean) =>
+  Math.max(1, Math.min(maxUnitsPerOrder(unstackable), sell ? Math.floor(BAZAAR.maxSellOfferValue / Math.max(price, 0.1)) : Infinity));
 
 export function buyLeg(ctx: Ctx, m: ItemMarket, qty: number, mode: BuyMode): BuyLeg {
   if (mode === "instant") {
     const flow = sellFlowH(m);
     return { item: m.id, name: m.name, qty, mode, price: walkBook(m.topAsk, instantBatch(ctx, qty, flow), m.ask!), flowH: flow, share: null, undercutsH: null };
   }
-  const fill = modelFor(ctx, m, "bid"), maxQty = maxOrderQty(m.bid! + 0.1, false);
+  const fill = modelFor(ctx, m, "bid"), maxQty = maxOrderQty(m.bid! + 0.1, false, m.unstackable);
   const top = at(curve(fill, ctx.settings.checkIntervalMin), maxQty);
-  return { item: m.id, name: m.name, qty, mode, price: m.bid! + 0.1, flowH: top.unitsH, share: top.onTop, undercutsH: m.undercutBuyH, fill, maxQty };
+  const rateScale = 1 / fillFactor(ctx.calibration, m.id, "buy");
+  return { item: m.id, name: m.name, qty, mode, price: m.bid! + 0.1, flowH: top.unitsH * rateScale, share: top.onTop, undercutsH: m.undercutBuyH, fill, maxQty, rateScale };
 }
 
 export function sellLeg(ctx: Ctx, m: ItemMarket, mode: SellMode): SellLeg {
@@ -85,21 +89,22 @@ export function sellLeg(ctx: Ctx, m: ItemMarket, mode: SellMode): SellLeg {
   let gross = ta && TYPICAL_BAND * ta.price - 0.1 < now ? TYPICAL_BAND * ta.price - 0.1 : now;
   let basis = ta && gross < now ? `typical sell offer + 10% (${ta.basis}, ${ta.hours} h of history), minus 0.1` : "";
   if (ceil && ceil.price - 0.1 < gross) { gross = ceil.price - 0.1; basis = `price of ${ctx.market.get(ceil.item)?.name ?? ceil.item} (a higher level costs less), minus 0.1`; }
-  const fill = modelFor(ctx, m, "ask"), maxQty = maxOrderQty(gross, true);
+  const fill = modelFor(ctx, m, "ask"), maxQty = maxOrderQty(gross, true, m.unstackable);
   const top = at(curve(fill, ctx.settings.checkIntervalMin), maxQty);
-  return { item: m.id, name: m.name, mode, grossPrice: gross, netPrice: gross * (1 - tax), flowH: top.unitsH, share: top.onTop, undercutsH: m.undercutSellH, fill, maxQty,
+  const rateScale = 1 / fillFactor(ctx.calibration, m.id, "sell");
+  return { item: m.id, name: m.name, mode, grossPrice: gross, netPrice: gross * (1 - tax), flowH: top.unitsH * rateScale, share: top.onTop, undercutsH: m.undercutSellH, fill, maxQty, rateScale,
     ...(gross < now ? { currentPrice: now, priceBasis: basis } : {}) };
 }
 
 // ------------------------------------------------------------------ acquisition search
-interface Acq { price: number; legs: BuyLeg[]; steps: ProcessStep[]; reqs: Requirement[]; how: "market" | "craft" }
+export interface Acq { price: number; legs: BuyLeg[]; steps: ProcessStep[]; reqs: Requirement[]; how: "market" | "craft" }
 
-const scale = (a: Acq, f: number): Acq => ({
+export const scale = (a: Acq, f: number): Acq => ({
   price: a.price * f, how: a.how, reqs: a.reqs,
   legs: a.legs.map(l => ({ ...l, qty: l.qty * f })), steps: a.steps.map(st => ({ ...st, opsPerUnit: st.opsPerUnit * f })),
 });
 
-function mergeLegs(legs: BuyLeg[]): BuyLeg[] {
+export function mergeLegs(legs: BuyLeg[]): BuyLeg[] {
   const by = new Map<string, BuyLeg>();
   for (const l of legs) {
     const k = `${l.item}|${l.mode}|${l.source ?? ""}`;
@@ -253,14 +258,15 @@ export function craftFlips(ctx: Ctx, opts: { includeAhOutputs?: boolean } = {}):
         if (depth === 1 && parts.some(x => x.how === "craft")) subCrafted.add(`${bm}`);
         if (onBazaar ? !canSell(ctx, m, sm) : sm === "instant") continue; // AH output: one route per buy mode
         const sell: SellLeg = onBazaar ? sellLeg(ctx, m!, sm)
-          : { item: outId, name: nameOf(ctx, outId), mode: "ah_reference", grossPrice: m!.ahLowestBin!, netPrice: m!.ahLowestBin!, flowH: (m!.ahSales24h ?? 0) / 24, share: null, undercutsH: null };
+          : { item: outId, name: nameOf(ctx, outId), mode: "ah_reference", grossPrice: m!.ahLowestBin!, netPrice: ahBinNet(m!.ahLowestBin!, ctx.profile.quadTaxes), flowH: (m!.ahSales24h ?? 0) / 24, share: null, undercutsH: null,
+            priceBasis: `lowest BIN on the auction house, minus ${ahBinFeeText(m!.ahLowestBin!, ctx.profile.quadTaxes)}` };
         routes.push({
           kind: "craft", key: `craft:${outId}`, title: nameOf(ctx, outId), outputId: outId,
           buys: mergeLegs(parts.flatMap(x => x.legs)),
           steps: [...parts.flatMap(x => x.steps), { type: "craft", label: `Craft ${nameOf(ctx, outId)}`, opsPerUnit: 1 / r.outputCount, outputPerOp: r.outputCount, requirements: r.requirements }],
           sell,
           requirements: [...parts.flatMap(x => x.reqs), ...r.requirements],
-          flags: [...(onBazaar ? m!.flags : ["sold on the auction house: lowest BIN shown, AH fees not included"]),
+          flags: [...(onBazaar ? m!.flags : ["sold on the auction house: lowest BIN shown, minus the AH fees"]),
             ...parts.flatMap(x => x.legs.flatMap(l => ctx.market.get(l.item)?.flags.map(f => `${l.name}: ${f}`) ?? []))].filter(f => !f.endsWith("low_history")),
           notes: r.outputCount > 1 ? [`one craft makes ${r.outputCount}`] : [],
         });
@@ -360,13 +366,14 @@ export function forgeFlips(ctx: Ctx, opts: { includeAhOutputs?: boolean } = {}):
         if (depth === 1 && parts.some(x => x.how === "craft")) subCrafted.add(`${bm}`);
         if (onBazaar ? !canSell(ctx, m, sm) : sm === "instant") continue; // AH output: one route per buy mode
         const sell: SellLeg = onBazaar ? sellLeg(ctx, m, sm)
-          : { item: outId, name: nameOf(ctx, outId), mode: "ah_reference", grossPrice: m.ahLowestBin!, netPrice: m.ahLowestBin!, flowH: (m.ahSales24h ?? 0) / 24, share: null, undercutsH: null };
+          : { item: outId, name: nameOf(ctx, outId), mode: "ah_reference", grossPrice: m.ahLowestBin!, netPrice: ahBinNet(m.ahLowestBin!, ctx.profile.quadTaxes), flowH: (m.ahSales24h ?? 0) / 24, share: null, undercutsH: null,
+            priceBasis: `lowest BIN on the auction house, minus ${ahBinFeeText(m.ahLowestBin!, ctx.profile.quadTaxes)}` };
         routes.push({
           kind: "forge", key: `forge:${outId}`, title: nameOf(ctx, outId), outputId: outId,
           buys: mergeLegs(parts.flatMap(x => x.legs)),
           steps: [...parts.flatMap(x => x.steps), { type: "forge", label: `Forge ${nameOf(ctx, outId)} (${(seconds / 3600).toFixed(2)} h after reductions)`, opsPerUnit: 1 / r.outputCount, forgeSeconds: seconds, outputPerOp: r.outputCount, requirements: r.requirements }],
           sell, requirements: [{ type: "forge", text: "Forge access (HotM 2)" }, ...parts.flatMap(x => x.reqs), ...r.requirements],
-          flags: [...(onBazaar ? m.flags : ["sold on the auction house: lowest BIN shown, AH fees not included"]),
+          flags: [...(onBazaar ? m.flags : ["sold on the auction house: lowest BIN shown, minus the AH fees"]),
             ...parts.flatMap(x => x.legs.flatMap(l => ctx.market.get(l.item)?.flags.map(f => `${l.name}: ${f}`) ?? []))].filter(f => !f.endsWith("low_history")),
           notes: [`base time ${(r.durationS! / 3600).toFixed(2)} h`],
         });

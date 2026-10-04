@@ -42,6 +42,8 @@ export interface ItemMarket {
   holdAsk?: HoldStats | null;
   /** coins an NPC shop pays for one (Hypixel's items resource); null if NPCs do not buy it */
   npcSellPrice?: number | null;
+  /** one order holds at most 256 (Hypixel's items list says unstackable, or an enchanted book) instead of 71,680 */
+  unstackable?: boolean;
   ahLowestBin?: number | null;
   ahMedianSale24h?: number | null;
   ahSales24h?: number;

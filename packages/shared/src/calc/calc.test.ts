@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import {
   BAZAAR, DEFAULT_PROFILE, DEFAULT_SETTINGS, actionSeconds, bazaarFlips, bookFlips, booksNeeded, canCombineInto, computeFlags,
-  blendFlow, bookCeiling, craftFlips, enchantRules, evaluate, sellLeg, typicalPrice, forgeDurationSeconds, forgeFlips, forgeSlots, limitContribution, orderSlots, parseBookId, parseCraftText,
+  blendFlow, bookCeiling, craftFlips, enchantRules, evaluate, sellLeg, typicalPrice, forgeDurationSeconds, forgeFlips, forgeSlots, fusionFlips, fusionWays, katFlips, isMet, limitContribution, orderSlots, parseBookId, parseCraftText,
   parseNeuItem, plan, prettyName, quickForgeReduction, sbFormat, taxRate, termStart, type Ctx, type ItemMarket, type Recipe,
 } from "../index.js";
 
@@ -84,6 +84,14 @@ describe("NEU parsing", () => {
   it("forge recipe with duration", () => {
     const r = parseNeuItem({ internalname: "UMBER_PLATE", recipes: [{ type: "forge", inputs: ["REFINED_UMBER:4.0", "GLACITE_AMALGAMATION:1.0"], count: 1, duration: 10800 }] });
     expect(r[0]).toMatchObject({ kind: "forge", durationS: 10800, inputs: [{ id: "REFINED_UMBER", qty: 4 }, { id: "GLACITE_AMALGAMATION", qty: 1 }] });
+  });
+  it("Kat upgrade: pets keyed as on the auction house, coins as an input", () => {
+    // NotEnoughUpdates-REPO items/GRIFFIN;3.json
+    const r = parseNeuItem({ internalname: "GRIFFIN;3", recipes: [{ type: "katgrade", coins: 250000, time: 86400, input: "GRIFFIN;2", output: "GRIFFIN;3", items: ["GRIFFIN_UPGRADE_STONE_EPIC:1"] }] });
+    expect(r[0]).toMatchObject({ outputId: "PET_GRIFFIN_EPIC", kind: "kat", durationS: 86400, outputCount: 1,
+      inputs: [{ id: "PET_GRIFFIN_RARE", qty: 1 }, { id: "GRIFFIN_UPGRADE_STONE_EPIC", qty: 1 }, { id: "SKYBLOCK_COIN", qty: 250000 }] });
+    const bee = parseNeuItem({ internalname: "BEE;2", recipes: [{ type: "katgrade", coins: 0, time: 3600, input: "BEE;1", output: "BEE;2", items: ["MEDIUM_HONEY_DIPPER:1"] }] });
+    expect(bee[0]!.inputs).toEqual([{ id: "PET_BEE_UNCOMMON", qty: 1 }, { id: "MEDIUM_HONEY_DIPPER", qty: 1 }]);
   });
   it("requirement text forms", () => {
     expect(parseCraftText("Requires: Gemstone X & HotM 5").map(r => r.type)).toEqual(["collection", "hotm"]);
@@ -182,6 +190,54 @@ describe("calculators on real market data", () => {
     expect(six.capitalUsed).toBeLessThanOrEqual(7 * 1 + 1 + 1e-6);
   });
 
+  it("Kat flips: pet bought and sold at the lowest BIN, AH fees and Kat's fee counted, one pet at a time", () => {
+    const c = ctx();
+    const pet = (id: string, bin: number, sales: number) => ({ id, name: id, ts: 0, ask: null, bid: null, askVolume: 0, bidVolume: 0, askOrders: 0, bidOrders: 0,
+      ibuyWeek: 0, isellWeek: 0, undercutBuyH: null, undercutSellH: null, liveHours: 0, flags: [], flagWhy: {}, ahLowestBin: bin, ahSales24h: sales }) as unknown as ItemMarket;
+    c.market.set("PET_T_RARE", pet("PET_T_RARE", 1e6, 48));
+    c.market.set("PET_T_EPIC", pet("PET_T_EPIC", 5e6, 24));
+    c.recipes.set("PET_T_EPIC", [{ outputId: "PET_T_EPIC", kind: "kat", inputs: [{ id: "PET_T_RARE", qty: 1 }, { id: "SKYBLOCK_COIN", qty: 250_000 }], outputCount: 1, durationS: 86400, requirements: [] }]);
+    const o = katFlips(c).find(x => x.key.startsWith("kat:PET_T_EPIC"))!;
+    expect(o).toBeTruthy();
+    // 5M BIN: 1% listing fee (under 10M) and 1% claim tax (sales above 1M) -> 5M x (1 - 0.01 - 0.01) = 4.9M kept
+    expect(o.sell.netPrice).toBeCloseTo(4.9e6, 0);
+    expect(o.profitPerUnit).toBeCloseTo(4.9e6 - 1e6 - 250_000, 0);
+    // one 24 h upgrade at a time, 4 h of play: one a day
+    const kat = o.caps.find(x => x.name.startsWith("Kat"))!;
+    expect(kat.unitsH * DEFAULT_SETTINGS.hoursPerDay).toBeCloseTo(1, 6);
+  });
+
+  it("Kat routes need the Taming level for the new rarity (wiki: Kat)", () => {
+    const c = ctx();
+    const pet = (id: string, bin: number) => ({ id, name: id, ts: 0, ask: null, bid: null, askVolume: 0, bidVolume: 0, askOrders: 0, bidOrders: 0,
+      ibuyWeek: 0, isellWeek: 0, undercutBuyH: null, undercutSellH: null, liveHours: 0, flags: [], flagWhy: {}, ahLowestBin: bin, ahSales24h: 24 }) as unknown as ItemMarket;
+    c.market.set("PET_T_LEGENDARY", pet("PET_T_LEGENDARY", 1e6)); c.market.set("PET_T_MYTHIC", pet("PET_T_MYTHIC", 9e6));
+    c.recipes.set("PET_T_MYTHIC", [{ outputId: "PET_T_MYTHIC", kind: "kat", inputs: [{ id: "PET_T_LEGENDARY", qty: 1 }], outputCount: 1, durationS: 3600, requirements: [] }]);
+    const o = katFlips(c).find(x => x.key === "kat:PET_T_MYTHIC")!;
+    const req = o.requirements.find(r => r.type === "skill")!;
+    expect(req).toMatchObject({ name: "Taming", level: 25 });
+    expect(isMet(req, { ...DEFAULT_PROFILE, skills: { Taming: 24 } })).toBe(false);
+    expect(isMet(req, { ...DEFAULT_PROFILE, skills: { Taming: 25 } })).toBe(true);
+  });
+
+  it("fusion flips: the cheapest pair the machine offers, wiki amounts, Foraging 12 for Galatea", () => {
+    const c = ctx();
+    const way = fusionWays().get("WILD_HOG")!.find(w => [w.a, w.b].sort().join() === "GROUNDHOG,HONEYHOG")!;
+    expect(way).toMatchObject({ count: 2, type: "special" });
+    const shard = (id: string, ask: number, bid: number) => ({ id, name: id, ts: 0, ask, bid, askVolume: 1e5, bidVolume: 1e5, askOrders: 50, bidOrders: 50,
+      ibuyWeek: 1e5, isellWeek: 1e5, undercutBuyH: 1, undercutSellH: 1, liveHours: 100, flags: [], flagWhy: {},
+      topAsk: [{ price: ask, amount: 1e5, orders: 50 }], topBid: [{ price: bid, amount: 1e5, orders: 50 }] }) as unknown as ItemMarket;
+    c.market = new Map([["SHARD_HONEYHOG", shard("SHARD_HONEYHOG", 100_000, 90_000)], ["SHARD_GROUNDHOG", shard("SHARD_GROUNDHOG", 20_000, 15_000)], ["SHARD_WILD_HOG", shard("SHARD_WILD_HOG", 500_000, 400_000)]]);
+    const list = fusionFlips(c);
+    const inst = list.find(o => o.key === "fusion:SHARD_WILD_HOG" && o.buys.every(b => b.mode === "instant") && o.sell.mode === "instant")
+      ?? list.find(o => o.key.startsWith("fusion:SHARD_WILD_HOG"))!;
+    // 5 Honeyhog + 5 Groundhog make 2 Wild Hog: 2.5 of each per shard made
+    expect(inst.buys.map(b => [b.item, b.qty]).sort()).toEqual([["SHARD_GROUNDHOG", 2.5], ["SHARD_HONEYHOG", 2.5]]);
+    expect(inst.requirements).toContainEqual(expect.objectContaining({ type: "skill", name: "Foraging", level: 12 }));
+    const cost = inst.buys.reduce((a, b) => a + b.qty * b.price, 0);
+    expect(inst.profitPerUnit).toBeCloseTo(inst.sell.netPrice - cost, 6);
+  });
+
   it("flags a pumped price as likely manipulated and never prices a sale above the typical level", () => {
     const base = {
       id: "X", name: "X", ts: 0, ask: 250, bid: 90, askVolume: 40, bidVolume: 5000, askOrders: 4, bidOrders: 20, ibuyWeek: 1680, isellWeek: 1680,
@@ -230,5 +286,14 @@ describe("calculators on real market data", () => {
     expect(m.flags).not.toContain("likely_manipulated"); // alone it is only information
     const pumped = { ...base, ask: 150 } as ItemMarket; computeFlags(pumped);
     expect(pumped.flags).toContain("likely_manipulated"); // price 50% above typical + delists = two signals
+  });
+  it("times a flip as one trade (buy, then sell) unless you keep buying while selling", () => {
+    const one = bazaarFlips(ctx()), both = bazaarFlips(ctx({ overlapOrders: true }));
+    const pairs = one.filter(o => o.orderPlan.some(l => l.side === "buy") && o.orderPlan.some(l => l.side === "sell") && o.unitsH > 0)
+      .map(o => [o, both.find(b => b.key === o.key)!] as const).filter(([, b]) => b);
+    expect(pairs.length).toBeGreaterThan(10);
+    // one trade at a time holds only one side's coins, so when coins are the limit it can even be a little faster
+    for (const [a, b] of pairs) { expect(a.oneAtATime).toBe(true); if (b.limitedBy !== "your coins") expect(a.unitsH).toBeLessThanOrEqual(b.unitsH * 1.006); } // batches are picked within 0.5% of the best rate
+    expect(pairs.some(([a, b]) => a.unitsH < b.unitsH * 0.9)).toBe(true);
   });
 });

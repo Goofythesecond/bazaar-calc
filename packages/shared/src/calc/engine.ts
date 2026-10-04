@@ -15,11 +15,14 @@ export interface Settings extends TimingSettings {
   unknownCompetitionShare: number; // time-on-top assumed when we have no undercut data
   minUnitsPerHour: number;
   includeFlagged: boolean;
+  /** false (default): a route with a buy order and a sell offer runs one trade at a time (buy the batch, then sell it),
+   *  as a single trade really does; true: you keep buying the next batch while the last one is on sale */
+  overlapOrders: boolean;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   coins: 100_000_000, bazaarFlipperLevel: 0, checkIntervalMin: 5, hoursPerDay: 4, dailyLimit: BAZAAR.dailyLimitDefault,
-  attention: 0.8, craftsPerHourMax: 1000, unknownCompetitionShare: 0.5, minUnitsPerHour: 0, includeFlagged: false,
+  attention: 0.8, craftsPerHourMax: 1000, unknownCompetitionShare: 0.5, minUnitsPerHour: 0, includeFlagged: false, overlapOrders: false,
   pingMs: 80, clickDelayMs: 350, typingMs: 1500,
 };
 
@@ -30,7 +33,8 @@ export interface BuyLeg {
   item: string;
   name: string;
   qty: number;             // per output unit
-  mode: BuyMode | "npc";   // npc: bought from an NPC shop at a fixed price (not the bazaar: no limit, no slots)
+  mode: BuyMode | "npc" | "ah" | "fee"; // npc: an NPC shop's fixed price; ah: the lowest BIN on the auction house; fee: coins paid for a
+                           // service (Kat); none of them uses the bazaar (no daily limit, no order slots)
   source?: string;         // npc: who sells it
   price: number;           // coins per input unit
   flowH: number;           // units/h you can obtain (instant: sellers' flow; order: your share of instant sells)
@@ -38,13 +42,14 @@ export interface BuyLeg {
   undercutsH: number | null; // how often the best price is beaten (order legs)
   fill?: FillModel;        // order legs: measured time-on-top samples
   maxQty?: number;         // order legs: largest single order
+  rateScale?: number;      // order legs: fill rate correction from paper trading (1 = the model as measured)
 }
 
 export interface ProcessStep {
-  type: "craft" | "combine" | "forge";
+  type: "craft" | "combine" | "forge" | "kat" | "fuse"; // kat: Kat raises a pet one rarity (one pet at a time); fuse: Fusion Machine
   label: string;
   opsPerUnit: number;      // operations per output unit
-  forgeSeconds?: number;   // per operation, passive (forge)
+  forgeSeconds?: number;   // per operation, passive (forge, Kat)
   outputPerOp: number;
   requirements: Requirement[];
 }
@@ -62,10 +67,11 @@ export interface SellLeg {
   undercutsH: number | null;
   fill?: FillModel;
   maxQty?: number;
+  rateScale?: number;     // fill rate correction from paper trading (1 = the model as measured)
 }
 
 export interface Route {
-  kind: "bazaar" | "craft" | "book" | "forge" | "npc";
+  kind: "bazaar" | "craft" | "book" | "forge" | "npc" | "kat" | "fusion";
   key: string;
   title: string;
   outputId: string;
@@ -122,6 +128,8 @@ export interface Opportunity extends Route {
   batch: number;
   /** coins cover one batch only: buy, then sell, then buy again (slower than keeping a buy order up while selling) */
   oneAtATime: boolean;
+  /** order routes: the fill model's hours to fill one batch on each side, before the paper-trading correction */
+  batchHours?: { buy: number; sell: number } | null;
   batchOptions: { batch: number; unitsH: number; coinsH: number; limitCoinsH: number; capital: number; clickMinH: number; limitedBy: string; oneAtATime: boolean }[];
   instantLimitCoinsH: number; // daily-limit coins per hour from instant buys / sells
   npcSellCoinsH: number;      // coins/h earned selling to NPC shops (they pay at most 500M coins per profile per day)
@@ -150,18 +158,21 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   const costPerUnit = route.buys.reduce((a, b) => a + b.qty * b.price, 0);
   const profitPerUnit = route.sell.netPrice - costPerUnit;
   for (const b of route.buys)
-    explain.push(`Per ${route.sell.name} sold: ${b.mode === "order" ? "buy order" : b.mode === "npc" ? `NPC shop (${b.source ?? "NPC"})` : "instant buy"} ${fmt(b.qty, 3)}x ${b.name} at ${fmt(b.price)} = ${fmt(b.qty * b.price)}`);
+    explain.push(b.mode === "fee" ? `Per ${route.sell.name}: ${b.name} ${fmt(b.qty * b.price)}`
+      : `Per ${route.sell.name} sold: ${b.mode === "order" ? "buy order" : b.mode === "npc" ? `NPC shop (${b.source ?? "NPC"})` : b.mode === "ah" ? "auction house (lowest BIN)" : "instant buy"} ${fmt(b.qty, 3)}x ${b.name} at ${fmt(b.price)} = ${fmt(b.qty * b.price)}`);
   for (const st of route.steps) explain.push(`${st.label}: ${fmt(st.opsPerUnit, 3)} operation(s) per unit`);
   if (route.sell.mode === "npc") explain.push(`Sell ${route.sell.name} to an NPC shop at ${fmt(route.sell.grossPrice)} (no bazaar tax)`);
+  else if (route.sell.mode === "ah_reference") explain.push(`Sell ${route.sell.name} on the auction house as a BIN at ${fmt(route.sell.grossPrice)} (the ${route.sell.priceBasis ?? "lowest BIN"}) = ${fmt(route.sell.netPrice)} kept`);
   else explain.push(`${route.sell.mode === "offer" ? "Sell offer" : route.sell.mode === "instant" ? "Instant sell" : "AH reference price"} ${route.sell.name} at ${fmt(route.sell.grossPrice)} - ${(tax * 100).toFixed(3)}% tax = ${fmt(route.sell.netPrice)}`);
   if (route.sell.currentPrice != null)
     explain.push(`Sale priced at the ${route.sell.priceBasis}: right now it is listed at ${fmt(route.sell.currentPrice)} (${((route.sell.currentPrice / route.sell.grossPrice - 1) * 100).toFixed(0)}% higher), which buyers are unlikely to pay by the time you sell`);
   explain.push(`Profit per unit = ${fmt(route.sell.netPrice)} - ${fmt(costPerUnit)} = ${fmt(profitPerUnit)}`);
 
   const caps: Cap[] = [];
-  for (const b of route.buys)
+  for (const b of route.buys) if (b.mode !== "fee")
     caps.push({ name: `${b.name} supply`, unitsH: b.flowH / b.qty,
-      why: b.mode === "order" ? `your buy orders fill ~${fmt(b.flowH)}/h (${b.share == null ? "competition unknown" : `on top ${(b.share * 100).toFixed(0)}%`})`
+      why: b.mode === "ah" ? `~${fmt(b.flowH, 2)}/h sold on the auction house (last 24 h): about as many as you can expect to find listed`
+        : b.mode === "order" ? `your buy orders fill ~${fmt(b.flowH)}/h (${b.share == null ? "competition unknown" : `on top ${(b.share * 100).toFixed(0)}%`})`
         : b.mode === "npc" ? `NPC shops sell at most ${npcBuyLimit(p.npcShoppingSpree)}/day per item = ${fmt(b.flowH)}/h over your ${s.hoursPerDay} h` : `sellers list ~${fmt(b.flowH)}/h` });
   caps.push({ name: `${route.sell.name} demand`, unitsH: route.sell.flowH,
     why: route.sell.mode === "offer" ? `your sell offers fill ~${fmt(route.sell.flowH)}/h (${route.sell.share == null ? "competition unknown" : `on top ${(route.sell.share * 100).toFixed(0)}%`})` : `buyers take ~${fmt(route.sell.flowH)}/h` });
@@ -177,13 +188,19 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   const craftOps = route.steps.filter(x => x.type === "craft").reduce((a, x) => a + x.opsPerUnit, 0);
   if (craftOps > 0) caps.push({ name: "your crafting speed", unitsH: s.craftsPerHourMax / craftOps, why: `${s.craftsPerHourMax} crafts/h max` });
 
-  // forge slots: a slot keeps forging while you are offline, but only the process you started before logging off.
-  // Per slot per day: the runs that fit in your playing hours, plus that one, and never more than 24 h allows.
+  // forge slots (and Kat, who cares for one pet at a time): a slot keeps working while you are offline, but only on the
+  // process you started before logging off. Per slot per day: the runs that fit in your playing hours, plus that one,
+  // and never more than 24 h allows.
   let forgeSlotsUsed = 0;
   const hoursPlayed = Math.max(0.1, s.hoursPerDay);
   // whole runs only: you start a run when you log in and each time one finishes while you play; the last one you start
   // finishes while you are away. (Counting fractions of a run overstated a 10 h forge by 40%.)
   const runsPerSlot = (dH: number) => Math.min(Math.floor(24 / dH + 1e-9), Math.floor(hoursPlayed / dH + 1e-9) + 1);
+  for (const st of route.steps.filter(x => x.type === "kat")) {
+    const dH = Math.max(1 / 3600, (st.forgeSeconds ?? 1) / 3600), runs = runsPerSlot(dH);
+    caps.push({ name: "Kat (one pet at a time)", unitsH: runs / Math.max(1e-9, st.opsPerUnit) / hoursPlayed,
+      why: `${fmt(runs, 1)} upgrades/day (${fmt(dH, 2)} h each: what fits in your ${hoursPlayed} h of play, plus one started before you log off)` });
+  }
   for (const st of route.steps.filter(x => x.type === "forge")) {
     // your forge slots from your HotM tier; if you have not set it, the minimum that unlocks the Forge (and it says so)
     const own = forgeSlots(p.hotmTier), slots = limits?.forgeSlots ?? (own || forgeSlots(FORGE.minHotm));
@@ -200,9 +217,9 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   // with U; coins grow with B.
   const hours = Math.max(0.1, s.hoursPerDay);
   const checkMin = s.checkIntervalMin;
-  const forgeHoldH = route.steps.filter(x => x.type === "forge").reduce((a, x) => a + (x.forgeSeconds ?? 0) / 3600, 0);
+  const forgeHoldH = route.steps.filter(x => x.type === "forge" || x.type === "kat").reduce((a, x) => a + (x.forgeSeconds ?? 0) / 3600, 0);
   const stepSec = route.steps.reduce((a, st) => a + st.opsPerUnit * (st.type === "craft" ? actionSeconds("craft", s) : st.type === "combine" ? actionSeconds("anvil_combine", s)
-    : actionSeconds("forge_start", s) + actionSeconds("forge_claim", s)), 0);
+    : st.type === "kat" ? actionSeconds("kat_start", s) + actionSeconds("kat_claim", s) : st.type === "fuse" ? actionSeconds("shard_fuse", s) : actionSeconds("forge_start", s) + actionSeconds("forge_claim", s)), 0);
   const ordersUsed = route.buys.filter(b => b.mode === "order").length + (route.sell.mode === "offer" ? 1 : 0);
 
   const valid = caps.filter(c => Number.isFinite(c.unitsH));
@@ -211,12 +228,16 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   const nonOrder = valid.filter(c => !route.buys.some(b => b.mode === "order" && c.name === `${b.name} supply`) && !(route.sell.mode === "offer" && c.name === `${route.sell.name} demand`));
   const market = nonOrder.reduce((a, c) => (c.unitsH < a.unitsH ? c : a), { name: "none", unitsH: Infinity, why: "" } as Cap);
 
-  interface OL { side: "buy" | "sell"; item: string; name: string; price: number; perUnit: number; lock: number; fill: FillModel; maxQty: number; c: ReturnType<typeof curve> }
+  interface OL { side: "buy" | "sell"; item: string; name: string; price: number; perUnit: number; lock: number; fill: FillModel; maxQty: number; c: ReturnType<typeof curve>; raw: ReturnType<typeof curve>; scale: number }
+  // fills at the model's rate, corrected by what paper trades of the item measured (rateScale, from fill/calibration.ts)
+  const scaled = (c: ReturnType<typeof curve>, k: number) => (k === 1 ? c : c.map(p => ({ ...p, unitsH: p.unitsH * k })));
   const legsOL: OL[] = [];
   for (const b of route.buys) if (b.mode === "order" && b.fill)
-    legsOL.push({ side: "buy", item: b.item, name: b.name, price: b.price, perUnit: b.qty, lock: b.price, fill: b.fill, maxQty: b.maxQty ?? BAZAAR.maxUnitsPerOrder, c: curve(b.fill, checkMin) });
+    legsOL.push({ side: "buy", item: b.item, name: b.name, price: b.price, perUnit: b.qty, lock: b.price, fill: b.fill, maxQty: b.maxQty ?? BAZAAR.maxUnitsPerOrder,
+      raw: curve(b.fill, checkMin), c: scaled(curve(b.fill, checkMin), b.rateScale ?? 1), scale: b.rateScale ?? 1 });
   if (route.sell.mode === "offer" && route.sell.fill)
-    legsOL.push({ side: "sell", item: route.sell.item, name: route.sell.name, price: route.sell.grossPrice, perUnit: 1, lock: costPerUnit, fill: route.sell.fill, maxQty: route.sell.maxQty ?? BAZAAR.maxUnitsPerOrder, c: curve(route.sell.fill, checkMin) });
+    legsOL.push({ side: "sell", item: route.sell.item, name: route.sell.name, price: route.sell.grossPrice, perUnit: 1, lock: costPerUnit, fill: route.sell.fill, maxQty: route.sell.maxQty ?? BAZAAR.maxUnitsPerOrder,
+      raw: curve(route.sell.fill, checkMin), c: scaled(curve(route.sell.fill, checkMin), route.sell.rateScale ?? 1), scale: route.sell.rateScale ?? 1 });
   const bMax = legsOL.length ? Math.max(1, Math.floor(Math.min(...legsOL.map(l => l.maxQty / l.perUnit)))) : 1;
 
   /** Coins sitting in the forge: the inputs of the runs in progress. At most every slot is busy at once, each holding
@@ -224,9 +245,9 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
    *  per day / runs one slot does per day. */
   const forgeCapital = (U: number) => {
     let c = 0;
-    for (const st of route.steps) if (st.type === "forge" && U > 0) {
+    for (const st of route.steps) if ((st.type === "forge" || st.type === "kat") && U > 0) {
       const dH = Math.max(1 / 3600, (st.forgeSeconds ?? 1) / 3600);
-      const busy = Math.min(forgeSlotsUsed || 1, (U * hoursPlayed * st.opsPerUnit) / runsPerSlot(dH));
+      const busy = Math.min(st.type === "kat" ? 1 : forgeSlotsUsed || 1, (U * hoursPlayed * st.opsPerUnit) / runsPerSlot(dH));
       c += busy * (costPerUnit / Math.max(1e-9, st.opsPerUnit));
     }
     return c;
@@ -259,12 +280,15 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
     for (const b of route.buys) {
       if (b.mode === "order" && b.fill) continue;
       if (b.mode === "npc") clickS += ((U * b.qty) / 64) * actionSeconds("npc_buy", s); // NPC purchases do not count toward the bazaar limit
+      else if (b.mode === "ah") clickS += U * b.qty * actionSeconds("ah_buy", s); // auction-house purchases do not count toward it either
+      else if (b.mode === "fee") continue;
       else {
         instantLimitH += U * b.qty * b.price;
         clickS += ((U * b.qty) / BAZAAR.maxInstantBuyUnits) * actionSeconds("instant_buy", s);
       }
     }
     if (route.sell.mode === "npc") clickS += (U / 64) * actionSeconds("npc_sell", s); // NPC sales do not count toward the bazaar limit
+    if (route.sell.mode === "ah_reference") clickS += U * actionSeconds("ah_sell", s); // one BIN listing per item
     if (route.sell.mode === "instant") {
       instantLimitH += U * route.sell.grossPrice; // pre-tax value counts
       clickS += (U / BAZAAR.maxInstantBuyUnits) * actionSeconds("instant_sell", s);
@@ -281,7 +305,12 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   /** Best rate for one batch size: the slowest order leg or other cap, then the limit, clicking and coin budgets. */
   type By = { name: string; why: () => string };
   const hasBuyOrder = legsOL.some(l => l.side === "buy"), hasSellOffer = legsOL.some(l => l.side === "sell");
-  const run = (B: number, seq = false): { B: number; U: number; by: By; seq: boolean } => {
+  // a trade buys its batch, then sells it: unless you keep buying while selling (overlapOrders), the rate is one trade
+  // at a time (paper trading 2026-10-04: trades took 3.6x the predicted time when the buy and sell legs were assumed to
+  // run side by side)
+  const oneTrade = !s.overlapOrders && hasBuyOrder && hasSellOffer;
+  const run = (B: number, seqIn = false): { B: number; U: number; by: By; seq: boolean } => {
+    const seq = seqIn || oneTrade;
     let U = Number.isFinite(market.unitsH) ? Math.max(0, market.unitsH) : Infinity;
     let by: By = { name: market.name, why: () => market.why };
     let buyRate = Infinity, sellRate = Infinity;
@@ -294,7 +323,7 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
     // one batch at a time: fill the buy orders, then sell the batch, then buy again (BazaarNotifier's sequential model)
     if (seq && Number.isFinite(buyRate) && Number.isFinite(sellRate) && buyRate > 0 && sellRate > 0) {
       const r = 1 / (1 / buyRate + 1 / sellRate);
-      if (r < U) { U = r; by = { name: "one batch at a time", why: () => `your coins cover one batch, not a buy order and unsold stock together: buy ${fmt(B, 0)} (~${fmt(B / buyRate * 60, 0)} min), then sell them (~${fmt(B / sellRate * 60, 0)} min), then buy again` }; }
+      if (r < U) { U = r; by = { name: "one batch at a time", why: () => `${seqIn ? "your coins cover one batch, not a buy order and unsold stock together" : "one trade at a time (setting: keep buying while selling is off)"}: buy ${fmt(B, 0)} (~${fmt(B / buyRate * 60, 0)} min), then sell them (~${fmt(B / sellRate * 60, 0)} min), then buy again` }; }
     }
     if (!Number.isFinite(U)) U = 0;
     // with a fixed batch, relists, clicks and limit use all grow in proportion to the rate
@@ -355,6 +384,18 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   if (legsOL.length) explain.push(`Runs in batches of ${fmt(chosen.B, 0)}${chosen.seq ? ", one batch at a time" : ""}: ${use.legs.map(l => `${l.side === "buy" ? "buy order" : "sell offer"} ${l.parallel > 1 ? `${l.parallel} x ` : ""}${fmt(l.qty, 0)}x ${l.name}`).join(", ")}`);
   for (const l of use.legs)
     explain.push(`${l.side === "buy" ? "Buy order" : "Sell offer"} ${l.name}: ${fmt(l.qty, 0)} per order, ~${fmt(l.ordersH, 1)} orders/h, ~${fmt(l.perOrder, 1)} filled per order, on top ${(l.onTop * 100).toFixed(0)}% of the time (${l.basis === "measured" ? `measured from ${l.hold?.n ?? 0} top-of-book episodes` : "estimated: not enough live data yet"})`);
+  // the model's own time for one batch, before the paper-trading correction: what paper trades are compared with
+  const rawLegH = (side: "buy" | "sell") => {
+    let h = 0;
+    for (const l of legsOL) if (l.side === side) {
+      const r = at(l.raw, Math.max(1, Math.round(chosen.B * l.perUnit))).unitsH / l.perUnit;
+      if (r > 0) h = Math.max(h, chosen.B / r);
+    }
+    return h;
+  };
+  const batchHours = legsOL.length ? { buy: rawLegH("buy"), sell: rawLegH("sell") } : null;
+  const corrected = legsOL.filter(l => l.scale !== 1);
+  if (corrected.length) explain.push(`Fill speed corrected by paper trading: ${corrected.map(l => `${l.side === "buy" ? "buy orders" : "sell offers"} of ${l.name} fill at ${Math.round(l.scale * 100)}% of the model's speed`).join(", ")}`);
   explain.push(`Units per hour played = ${fmt(unitsH, 2)} (limited by ${best.name}: ${best.why}); ${fmt(unitsH * hours, 1)} units/day over ${hours} h`);
   explain.push(`Coins/h = ${fmt(unitsH, 2)} x ${fmt(profitPerUnit)} = ${fmt(coinsH, 0)}${profitPerUnit <= 0 ? " (this route loses money at current prices)" : ""}`);
   const limitCoinsH = use.limitH;
@@ -362,7 +403,7 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   return {
     ...route, requirements: reqs, costPerUnit, profitPerUnit, marginPct: costPerUnit > 0 ? profitPerUnit / costPerUnit : 0,
     unitsH, coinsH, limitedBy: best.name, caps: caps.filter(c => Number.isFinite(c.unitsH)).sort((a, b) => a.unitsH - b.unitsH),
-    capitalAllocated: capital, capitalUsed: use.capital, ordersUsed: ordersUsed + use.legs.reduce((a, l) => a + l.parallel - 1, 0), oneAtATime: chosen.seq,
+    capitalAllocated: capital, capitalUsed: use.capital, ordersUsed: ordersUsed + use.legs.reduce((a, l) => a + l.parallel - 1, 0), oneAtATime: chosen.seq, batchHours,
     // slots actually busy at this rate: runs needed per day / runs one slot does per day
     forgeSlotsUsed: unitsH > 0 && forgeSlotsUsed > 0 ? Math.min(forgeSlotsUsed, Math.ceil(Math.max(...route.steps.filter(x => x.type === "forge").map(x => {
       const dH = Math.max(1 / 3600, (x.forgeSeconds ?? 1) / 3600);

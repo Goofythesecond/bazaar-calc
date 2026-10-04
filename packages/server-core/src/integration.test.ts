@@ -33,7 +33,7 @@ describe("Postgres schema + ingestion (PGlite)", () => {
   it("migrates, ingests live Hypixel data, loads the export, computes stats, and feeds the calculators", async () => {
     const { db, close } = await pglite();
     try {
-      expect(await migrate(db)).toEqual(["001_init.sql", "002_kv.sql", "003_flow.sql", "004_top_episodes.sql", "005_npc_shop.sql", "006_utc_partitions.sql", "007_trades.sql"]);
+      expect(await migrate(db)).toEqual(["001_init.sql", "002_kv.sql", "003_flow.sql", "004_top_episodes.sql", "005_npc_shop.sql", "006_utc_partitions.sql", "007_trades.sql", "008_unstackable.sql", "009_kat.sql"]);
 
       if (EXPORT && existsSync(join(EXPORT, "manifest.json"))) {
         const read = (name: string) => zlib.zstdDecompressSync(readFileSync(join(EXPORT, `${name}.ndjson.zst`))).toString().split("\n").filter(Boolean).map(l => JSON.parse(l));

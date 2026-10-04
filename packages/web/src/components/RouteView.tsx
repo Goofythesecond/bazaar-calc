@@ -9,7 +9,7 @@ import { useApp } from "../state";
 import { Icon } from "./Icon";
 import { OrderPlan } from "./OrderPlan";
 
-const STEP_ICON = { craft: "craft", combine: "anvil", forge: "flame" } as const;
+const STEP_ICON = { craft: "craft", combine: "anvil", forge: "flame", kat: "paw", fuse: "merge" } as const;
 
 /** The route as a left-to-right flow: what you buy, what you make, what you sell, with the amounts to use. */
 export function Flow({ o }: { o: Opportunity }) {
@@ -22,11 +22,11 @@ export function Flow({ o }: { o: Opportunity }) {
       const l = b.mode === "order" ? plan.get(`buy|${b.item}`) : undefined;
       return (
         <div key={`b${b.item}${b.mode}`} className="node buy">
-          <span className="ic"><Icon name={b.mode === "order" ? "order" : b.mode === "npc" ? "box" : "bolt"} /></span>
+          <span className="ic"><Icon name={b.mode === "order" ? "order" : b.mode === "npc" ? "box" : b.mode === "ah" ? "trend" : b.mode === "fee" ? "paw" : "bolt"} /></span>
           <span>
-            <span className="v">{b.mode === "order" ? "Buy order" : b.mode === "npc" ? "NPC shop" : "Instant buy"}</span>{" "}
-            <b>{l ? `${l.parallel > 1 ? `${l.parallel} orders of ` : ""}${num(l.qty)}×` : `${num(day(o.unitsH * b.qty))}/day`}</b> <Link className="itemname" to={`/item/${b.item}`}>{b.name}</Link> <span className="v">@</span> <span className="num">{coins(b.price)}</span>
-            <span className="sub">{l ? <>per order · ~{num(l.ordersH, 1)} orders/h · {num(day(l.unitsH))}/day</> : b.mode === "npc" ? <>{b.source ?? "NPC"} · not the bazaar</> : <>in batches of up to 2,240</>}{perOut(b.qty)}</span>
+            <span className="v">{b.mode === "order" ? "Buy order" : b.mode === "npc" ? "NPC shop" : b.mode === "ah" ? "Auction BIN" : b.mode === "fee" ? "Pay" : "Instant buy"}</span>{" "}
+            <b>{l ? `${l.parallel > 1 ? `${l.parallel} orders of ` : ""}${num(l.qty)}×` : `${num(day(o.unitsH * b.qty))}/day`}</b> {b.mode === "fee" ? <span className="itemname">{b.name}</span> : <Link className="itemname" to={`/item/${b.item}`}>{b.name}</Link>} <span className="v">@</span> <span className="num">{coins(b.price)}</span>
+            <span className="sub">{l ? <>per order · ~{num(l.ordersH, 1)} orders/h · {num(day(l.unitsH))}/day</> : b.mode === "npc" ? <>{b.source ?? "NPC"} · not the bazaar</> : b.mode === "ah" ? <>lowest BIN of that rarity, any level · {num(b.flowH * 24)} sold/day</> : b.mode === "fee" ? <>coins, at level 1</> : <>in batches of up to 2,240</>}{perOut(b.qty)}</span>
           </span>
         </div>
       );

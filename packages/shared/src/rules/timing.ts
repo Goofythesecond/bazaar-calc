@@ -84,6 +84,32 @@ export const ACTIONS: Record<string, ActionDef> = {
     steps: ["click", "click", "click", "click"],
     menus: ["book 1 into anvil", "book 2 into anvil", "Combine", "take result"],
   },
+  ah_buy: {
+    label: "Buy the lowest BIN on the auction house",
+    steps: ["command", "click", "sign", "click", "click", "click"],
+    menus: ["/ah", "Auctions Browser", "search (item name)", "cheapest BIN", "Buy Item Right Now", "Confirm"],
+  },
+  ah_sell: {
+    label: "List a BIN on the auction house",
+    steps: ["command", "click", "click", "click", "sign", "click", "click"],
+    menus: ["/ah", "Create Auction", "item from your inventory", "BIN", "price (sign)", "Create BIN Auction", "Confirm"],
+  },
+  kat_start: {
+    label: "Leave a pet with Kat",
+    steps: ["click", "click", "click"],
+    menus: ["Kat (Hub)", "pet from your inventory", "Confirm (pays the coins and items)"],
+  },
+  kat_claim: {
+    label: "Collect a pet from Kat",
+    steps: ["click", "click"],
+    menus: ["Kat (Hub)", "finished pet"],
+  },
+  shard_fuse: {
+    label: "Fuse two kinds of shards",
+    // the menu as the wiki describes it (Attribute Fusion/UI): pick a shard, pick the other, choose a result, confirm
+    steps: ["click", "click", "click", "click", "click"],
+    menus: ["Fusion Machine (Fusion House, Galatea) or Kysha's Abiphone contact", "first shard from your Hunting Box", "second shard", "result to make", "Confirm"],
+  },
   forge_start: {
     label: "Start a forge process",
     steps: ["command", "click", "click", "click"],

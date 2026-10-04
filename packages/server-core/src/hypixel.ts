@@ -56,7 +56,7 @@ export const fetchAuctionsPage = (page: number) => getJson<AuctionsPage>(`${HYPI
 export const fetchAuctionsEnded = () => getJson<EndedAuctions>(`${HYPIXEL}/skyblock/auctions_ended`);
 export const fetchAuctionsEndedIfChanged = () => getJsonIfChanged<EndedAuctions>(`${HYPIXEL}/skyblock/auctions_ended`);
 export const fetchAuctionsPage0IfChanged = () => getJsonIfChanged<AuctionsPage>(`${HYPIXEL}/skyblock/auctions?page=0`);
-export const fetchItems = () => getJson<{ success: boolean; items: { id: string; name?: string; category?: string; tier?: string; material?: string; npc_sell_price?: number }[] }>(`${HYPIXEL}/resources/skyblock/items`);
+export const fetchItems = () => getJson<{ success: boolean; items: { id: string; name?: string; category?: string; tier?: string; material?: string; npc_sell_price?: number; unstackable?: boolean }[] }>(`${HYPIXEL}/resources/skyblock/items`);
 export const fetchElection = () => getJson<ElectionResponse>(`${HYPIXEL}/resources/skyblock/election`);
 export const fetchCollections = () => getJson<{ success: boolean; collections: Record<string, { name: string; items: Record<string, { name: string; maxTiers: number; tiers: { tier: number; amountRequired: number }[] }> }> }>(`${HYPIXEL}/resources/skyblock/collections`);
 

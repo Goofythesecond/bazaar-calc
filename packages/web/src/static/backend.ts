@@ -5,7 +5,7 @@
 import {
   type BazaarResponse, BAZAAR, BAZAAR_SOURCES, CALC_KINDS, type CalcKind, ENCHANT_SOURCE, FORGE, FORGE_SOURCES, type EventImpact, type GameEvent, HYPIXEL,
   type HoldStats, type ItemMarket, type ItemStats, type MayorTerm, NOTICE, type Opportunity, type RankedOpportunity, type Profile, type Recipe, type Settings, type TopEpisode,
-  type PaperState, type PerkEffects, ProfileSchema, SettingsSchema, alertCheckResponse, assembleMarket, booksResponse, ordersCheckResponse, paperResponse, perksResponse, buildOpportunities, dipsResponse, paperCandidates, paperStep, currentTerm, describePerks, perkEffects, calcResponse, calendarEvents, enchantRules, fillReport, forgeSlots, mayorEvents, orderSlots, outlookResponse, parseBookId,
+  type FillCalibration, type PaperState, type PerkEffects, calibrate, ProfileSchema, SettingsSchema, alertCheckResponse, assembleMarket, booksResponse, ordersCheckResponse, paperResponse, perksResponse, buildOpportunities, dipsResponse, paperCandidates, paperStep, currentTerm, describePerks, perkEffects, calcResponse, calendarEvents, enchantRules, fillReport, forgeSlots, mayorEvents, orderSlots, outlookResponse, parseBookId,
   planResponse, prettyName, quickForgeReduction, quotesFromBazaar, realtimeEvents, requirementsCatalog, siteFileId, taxRate, timingTable,
 } from "@bc/shared";
 
@@ -16,7 +16,7 @@ const MAX_STATS_AGE = 7 * 86400_000;
 export class HttpError extends Error { constructor(public status: number, message: string) { super(message); } }
 
 interface RecipeRow { output_id: string; kind: string; inputs: { id: string; qty: number }[]; output_count: number; duration_s: number | null; requirements: Recipe["requirements"]; requirement_text: string | null }
-interface ItemRow { id: string; name: string; category: string | null; tier: string | null; on_bazaar: boolean; npc_sell_price: number | null }
+interface ItemRow { id: string; name: string; category: string | null; tier: string | null; on_bazaar: boolean; npc_sell_price: number | null; unstackable?: boolean }
 interface AhLatest { ts: number; lowestBin: number | null; secondBin: number | null; bins: number; auctions: number; sales24h: number; medianSale24h: number | null }
 export interface Manifest {
   format: string; builtAt: number; asOf: number; recipesVersion: string | null;
@@ -32,6 +32,7 @@ interface Base {
   stats: Map<string, ItemStats>; hold: Map<string, { bid?: HoldStats; ask?: HoldStats }>; ah: Map<string, AhLatest>; names: Map<string, string | null>;
   recipeRows: RecipeRow[]; recipes: Map<string, Recipe[]>; items: ItemRow[];
   terms: (MayorTerm & { votes: number | null; candidates: unknown })[]; election: { year: number; candidates: { key?: string; name: string; votes?: number; perks: { name: string; minister?: boolean }[] }[] } | null;
+  calibration: FillCalibration;
 }
 
 const getJson = async <T>(url: string, what: string): Promise<T> => {
@@ -56,9 +57,12 @@ function base(): Promise<Base> {
         requirements: r.requirements, ...(r.kind === "npc" ? { source: r.requirement_text ?? undefined } : {}) } as Recipe;
       recipes.set(rec.outputId, [...(recipes.get(rec.outputId) ?? []), rec]);
     }
+    // fill speeds follow what the project scanner's paper trades measured (fill/calibration.ts); none published: the model
+    const paperRec = manifest.paper?.length ? await getJson<{ records: { state: { trades: PaperState["trades"] } }[] }>(`${DATA}paper.json`, "paper record").catch(() => null) : null;
+    const calibration = calibrate(paperRec?.records.flatMap(r => r.state.trades) ?? []);
     return {
       manifest, asOf: market.asOf, stats: new Map(Object.entries(market.stats)), hold: new Map(Object.entries(market.hold)), ah: new Map(Object.entries(market.ah)),
-      names: new Map(Object.entries(market.names)), recipeRows, recipes, items, terms: mayors.terms, election: mayors.election,
+      names: new Map(Object.entries(market.names)), recipeRows, recipes, items, terms: mayors.terms, election: mayors.election, calibration,
     };
   })().catch(e => { basePromise = null; throw e; }));
 }
@@ -161,7 +165,7 @@ async function checkHistory() {
 }
 
 // ---- the market the calculators use (rebuilt when Hypixel publishes new prices)
-interface Market { key: number; market: Map<string, ItemMarket>; events: GameEvent[]; perks: PerkEffects; marketAt: number; dataAt: number; statsAt: number; statsUsed: boolean }
+interface Market { key: number; market: Map<string, ItemMarket>; events: GameEvent[]; perks: PerkEffects; marketAt: number; dataAt: number; statsAt: number; statsUsed: boolean; calibration: FillCalibration }
 let cur: Market | null = null;
 async function market(): Promise<Market> {
   const [b, d] = await Promise.all([base(), liveBazaar()]);
@@ -175,12 +179,13 @@ async function market(): Promise<Market> {
   const ah = new Map([...b.ah].filter(([, a]) => use && a.ts > b.asOf - 2 * 3600_000)
     .map(([k, a]) => [k, { lowestBin: a.lowestBin, sales24h: a.sales24h, medianSale24h: a.medianSale24h }]));
   const m = assembleMarket({ quotes: quotesFromBazaar(d), stats, hold: use ? b.hold : new Map(), ah, names: b.names, now,
-    npcSell: new Map(b.items.filter(i => i.npc_sell_price != null).map(i => [i.id, Number(i.npc_sell_price)])) });
+    npcSell: new Map(b.items.filter(i => i.npc_sell_price != null).map(i => [i.id, Number(i.npc_sell_price)])),
+    unstackable: new Set(b.items.filter(i => i.unstackable).map(i => i.id)) });
   const events = [...calendarEvents(now - 400 * 86400_000, now + 14 * 86400_000), ...realtimeEvents(now - 400 * 86400_000, now + 14 * 86400_000), ...mayorEvents(b.terms)]
     .filter(e => e.end > now - 400 * 86400_000 && e.start < now + 14 * 86400_000).sort((x, y) => x.start - y.start);
   const perks = perkEffects(currentTerm(b.terms, now));
   cache.clear();
-  return (cur = { key: d.lastUpdated, market: m, events, perks, marketAt: now, dataAt: d.lastUpdated, statsAt: b.asOf, statsUsed: use });
+  return (cur = { key: d.lastUpdated, market: m, events, perks, marketAt: now, dataAt: d.lastUpdated, statsAt: b.asOf, statsUsed: use, calibration: b.calibration });
 }
 
 const cache = new Map<string, { list: RankedOpportunity[]; skipped: NonNullable<ReturnType<typeof buildOpportunities>["skipped"]> }>();
@@ -188,7 +193,7 @@ const builder = (m: Market, recipes: Map<string, Recipe[]>) => (kind: CalcKind, 
   const k = JSON.stringify([kind, settings, profile, includeAhForge, listAll]);
   let hit = cache.get(k);
   if (!hit) {
-    hit = buildOpportunities({ market: m.market, recipes, perks: m.perks, statsAgeH: m.statsUsed ? Math.max(0, (m.dataAt - m.statsAt) / 3.6e6) : 0 }, kind, settings, profile, includeAhForge, listAll);
+    hit = buildOpportunities({ market: m.market, recipes, perks: m.perks, statsAgeH: m.statsUsed ? Math.max(0, (m.dataAt - m.statsAt) / 3.6e6) : 0, calibration: m.calibration }, kind, settings, profile, includeAhForge, listAll);
     cache.set(k, hit);
     if (cache.size > 40) cache.delete(cache.keys().next().value!);
   }

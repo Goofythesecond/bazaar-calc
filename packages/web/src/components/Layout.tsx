@@ -14,7 +14,7 @@ import { Toasts } from "./Toasts";
 
 const GROUPS: { label: string; links: [string, string, string][] }[] = [
   { label: "Plan", links: [["/", "Best route", "route"]] },
-  { label: "Flips", links: [["/flips/bazaar", "Bazaar", "swap"], ["/flips/craft", "Craft", "craft"], ["/flips/book", "Books", "book"], ["/flips/forge", "Forge", "flame"], ["/flips/npc", "NPC", "sell"]] },
+  { label: "Flips", links: [["/flips/bazaar", "Bazaar", "swap"], ["/flips/craft", "Craft", "craft"], ["/flips/book", "Books", "book"], ["/flips/forge", "Forge", "flame"], ["/flips/npc", "NPC", "sell"], ["/flips/kat", "Kat", "paw"], ["/flips/fusion", "Fusion", "merge"]] },
   { label: "Trading", links: [["/orders", "My orders", "order"], ["/alerts", "Alerts", "bolt"], ["/record", "Track record", "check"]] },
   { label: "Market", links: [["/outlook", "Outlook", "trend"], ["/dips", "Dips", "trend"], ["/items", "Items", "box"], ["/events", "Events & mayors", "calendar"]] },
   { label: "Reference", links: [["/timing", "Timing & limits", "clock"], ["/api-docs", STATIC ? "Data files" : "API", "code"], ["/contribute", "Contribute", "upload"], ["/status", "Data status", "pulse"], ["/about", "Sources", "info"]] },

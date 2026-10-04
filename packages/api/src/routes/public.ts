@@ -58,7 +58,8 @@ export function registerPublic(app: FastifyInstance, db: Db, state: State) {
   app.get<{ Querystring: { ids?: string } }>("/api/v1/market", async req => {
     const ids = (req.query.ids ?? "").split(",").filter(Boolean).slice(0, 5000);
     const pick = (m: ItemMarket) => ({ ts: m.ts, bid: m.bid, ask: m.ask, ibuyWeek: m.ibuyWeek, isellWeek: m.isellWeek, observedBuyFlowH: m.observedBuyFlowH ?? null,
-      observedSellFlowH: m.observedSellFlowH ?? null, liveHours: m.liveHours, flowBasis: m.flowBasis ?? null, npcSellPrice: m.npcSellPrice ?? null, flags: m.flags, flagWhy: m.flagWhy, ref: m.ref ?? null });
+      observedSellFlowH: m.observedSellFlowH ?? null, liveHours: m.liveHours, flowBasis: m.flowBasis ?? null, npcSellPrice: m.npcSellPrice ?? null,
+      ahLowestBin: m.ahLowestBin ?? null, ahSales24h: m.ahSales24h ?? null, flags: m.flags, flagWhy: m.flagWhy, ref: m.ref ?? null });
     const items = ids.length ? Object.fromEntries(ids.map(id => [id, state.market.get(id)]).filter(([, m]) => m).map(([id, m]) => [id, pick(m as ItemMarket)]))
       : Object.fromEntries([...state.market].map(([id, m]) => [id, pick(m)]));
     return { marketAt: state.loadedAt, dataAt: state.dataAt, items };

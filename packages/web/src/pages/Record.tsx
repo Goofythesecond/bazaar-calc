@@ -5,16 +5,25 @@
 //  - your decision journal: routes you chose with "Track this route", what was predicted then, and what your tracked
 //    orders actually did.
 import { useQuery } from "@tanstack/react-query";
-import { type PaperState, paperSummary, taxRate } from "@bc/shared";
+import { type PaperState, calibrate, paperSummary, taxRate } from "@bc/shared";
 import { Icon } from "../components/Icon";
 import { STATIC, api, ago, coins, dur, num, pct } from "../lib";
 import { journal, paperRecord, trackedOrders } from "../prefs";
 import { useApp } from "../state";
 
+/** How far real (paper) trades are from the fill model, per side: the flip tables divide fill speeds by these. */
+function Calibration({ st }: { st: PaperState }) {
+  const c = calibrate(st.trades);
+  if (!c.trades) return <p className="small muted">Fill-speed correction: none yet. Trades opened since 2026-10-04 record the model's buy and sell times; once they close, the flip numbers follow what they measured.</p>;
+  const x = (f: number) => (f >= 1 ? `${f.toFixed(2)}x as long as the model` : `${(1 / f).toFixed(2)}x faster than the model`);
+  return <p className="small" style={{ margin: "0 0 10px" }}><b>Fill-speed correction from {c.trades} closed trades:</b> buy orders take {x(c.buy.factor)}, sell offers {x(c.sell.factor)} (pulled toward the model while trades are few). Every flip's fill speed is divided by these, and by an item's own factor when it has trades.</p>;
+}
+
 function PaperTable({ st }: { st: PaperState }) {
   const s = paperSummary(st);
   return (
     <>
+      <Calibration st={st} />
       {st.lastTs > 0 && <p className="small muted" style={{ marginTop: 0 }}>Last market snapshot processed {ago(st.lastTs)}: open trades fill only from real trades while their virtual order is the best price, and an outbid order is relisted at the next look (every check interval).</p>}
       <div className="grid cols-3">
         <div className="card tile"><div className="label">Realized / expected</div><div className="value">{s.capture != null ? pct(s.capture, 0) : "–"}</div><div className="sub">{coins(s.realized)} of {coins(s.expected)} over {s.closed} closed trades</div></div>
@@ -23,7 +32,7 @@ function PaperTable({ st }: { st: PaperState }) {
       </div>
       {st.trades.length === 0 ? <div className="card empty" style={{ marginTop: 12 }}>No paper trades yet: the first one opens within a few minutes.</div> : (
         <div className="tablewrap" style={{ marginTop: 12 }}><table>
-          <thead><tr><th className="l">Flip</th><th className="l">State</th><th>Bought</th><th>Sold</th><th>Expected</th><th>Realized</th><th>Relists</th><th>Opened</th></tr></thead>
+          <thead><tr><th className="l">Flip</th><th className="l">State</th><th>Bought</th><th>Sold</th><th>Expected</th><th>Realized</th><th>Buy / sell time</th><th>Relists</th><th>Opened</th></tr></thead>
           <tbody>{[...st.trades].reverse().slice(0, 100).map(t => (
             <tr key={t.id}>
               <td className="l">{t.title}</td>
@@ -32,6 +41,8 @@ function PaperTable({ st }: { st: PaperState }) {
                   {!t.onTop && st.lastTs > 0 && <span className="small muted"> relists {t.nextLook > st.lastTs ? `in ${dur((t.nextLook - st.lastTs) / 3.6e6)}` : "now"}</span>}</>}</td>
               <td className="n">{num(t.bought)} / {num(t.qty)}</td><td className="n">{num(t.sold)}</td>
               <td className="n">{coins(t.expected.profit)}</td><td className={`n ${t.realized != null && t.realized < 0 ? "down" : ""}`}>{t.realized != null ? coins(t.realized) : "–"}</td>
+              <td className="n small">{t.boughtAt ? dur((t.boughtAt - t.openedAt) / 3.6e6) : "–"} / {t.boughtAt && t.closedAt ? dur((t.closedAt - t.boughtAt) / 3.6e6) : "–"}
+                {t.expected.buyH != null && <div className="muted">model {dur(t.expected.buyH)} / {dur(t.expected.sellH ?? 0)}</div>}</td>
               <td className="n">{t.relists}</td><td className="n small muted">{ago(t.openedAt)}</td>
             </tr>))}</tbody>
         </table></div>

@@ -15,6 +15,7 @@ Commands run from the repository root with `node scripts/...`. Each file starts 
 | `scripts/data/import.mjs` | Contribution files to a self-hosted database (hours it already has are kept) |
 | `scripts/data/check-pr.mjs` | The pull-request data check (used by .github/workflows/check-data.yml) |
 | `scripts/data/build-site.mjs` | All contribution files to the website's data (used by .github/workflows/publish.yml) |
+| `scripts/data/fusion-from-wiki.mjs` | The wiki's attribute-fusion data page to packages/shared/src/rules/fusion.json (rerun when shards change) |
 | `scripts/data/file-inbox.mjs` | Moves merged files from data/inbox to data/contrib/<login>/<yyyy-mm>/ |
 | `scripts/site/build-pages.mjs` | Packages the static website for GitHub Pages |
 | `scripts/legacy/migrate-from-sbdb.mjs` | One-off: moved the history of the older sbdb database into this one |

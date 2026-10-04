@@ -146,7 +146,7 @@ export function ApiDocsStatic() {
     ["manifest.json", "what the data covers: newest poll, contributors, every file used or skipped, polls per day"],
     ["market.json", "per bazaar item: 24 h / 7-day / 14-day medians, competition and flow, mass-delist evidence, event impact; time-on-top summaries per side; auction lowest BINs and sales"],
     ["items.json", "every SkyBlock item (Hypixel), with whether it is on the bazaar"],
-    ["recipes.json", "crafting, forge and NPC-shop recipes with unlock requirements (NotEnoughUpdates-REPO, MIT)"],
+    ["recipes.json", "crafting, forge, Kat and NPC-shop recipes with unlock requirements (NotEnoughUpdates-REPO, MIT)"],
     ["mayors.json", "mayor terms and the current election"],
     ["item/<ID>.json", "hourly price history (older than 30 days: every 6 h) and the last day of time-on-top episodes; characters other than letters, digits, _ and - are written as ~hex"],
     ["ah/<KEY>.json", "hourly lowest BIN (90 days) and the last week's anonymous sale prices"],

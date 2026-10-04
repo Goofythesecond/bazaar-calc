@@ -86,7 +86,8 @@ const ah = Object.fromEntries((await q(`SELECT item_key, extract(epoch from ts) 
 const marketIds = new Set([...Object.keys(stats), ...Object.keys(ah)]);
 write("market.json", { asOf, stats, hold: holdStats, ah, names: Object.fromEntries([...marketIds].map(id => [id, names.get(id) ?? null])) });
 
-write("items.json", (await q("SELECT id, name, category, tier, on_bazaar, npc_sell_price FROM items ORDER BY on_bazaar DESC, length(id)")).map(r => ({ ...r, name: prettyName(r.id, r.name) })));
+write("items.json", (await q("SELECT id, name, category, tier, on_bazaar, npc_sell_price, unstackable FROM items ORDER BY on_bazaar DESC, length(id)"))
+  .map(({ unstackable, ...r }) => ({ ...r, name: prettyName(r.id, r.name), ...(unstackable ? { unstackable: true } : {}) })));
 write("recipes.json", await q("SELECT output_id, kind, inputs, output_count, duration_s, requirements, requirement_text FROM recipes ORDER BY output_id, kind"));
 const election = (await q("SELECT data FROM election_snapshots ORDER BY ts DESC LIMIT 1"))[0]?.data ?? null;
 write("mayors.json", { terms: (await loadMayors(db, 0, asOf + 400 * 86400_000)).reverse(), election: election?.current ?? null });
@@ -166,7 +167,8 @@ if (!OFFLINE) {
     const statsMap = new Map(Object.entries(stats).map(([k, s]) => [k, age > 3 * H ? { ...s, hourAgo: null } : s]));
     const ahMap = new Map(Object.entries(ah).filter(([, a]) => a.ts > asOf - 2 * H).map(([k, a]) => [k, { lowestBin: a.lowestBin, sales24h: a.sales24h, medianSale24h: a.medianSale24h }]));
     const npcSell = new Map((await q("SELECT id, npc_sell_price FROM items WHERE npc_sell_price IS NOT NULL")).map(r => [r.id, Number(r.npc_sell_price)]));
-    const market = assembleMarket({ quotes: quotesFromBazaar(live), stats: statsMap, hold: new Map(Object.entries(holdStats)), ah: ahMap, names, now, npcSell });
+    const unstackable = new Set((await q("SELECT id FROM items WHERE unstackable")).map(r => r.id));
+    const market = assembleMarket({ quotes: quotesFromBazaar(live), stats: statsMap, hold: new Map(Object.entries(holdStats)), ah: ahMap, names, now, npcSell, unstackable });
     const perks = perkEffects(currentTerm(await loadMayors(db, 0, now + 400 * 86400_000), now));
     const { list } = buildOpportunities({ market, recipes: new Map(), perks, statsAgeH: Math.max(0, age / H) }, "bazaar", DEFAULT_SETTINGS, DEFAULT_PROFILE);
     const candidates = paperCandidates(list).slice(0, 20);

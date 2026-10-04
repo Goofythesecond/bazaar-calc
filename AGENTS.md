@@ -6,7 +6,7 @@ this repository. Humans: see [README.md](README.md), [CONTRIBUTING.md](CONTRIBUT
 
 ## What this project is
 
-A Hypixel SkyBlock market calculator that lists bazaar, craft, book, forge and NPC flips and plans the best mix of them. It
+A Hypixel SkyBlock market calculator that lists bazaar, craft, book, forge, NPC, Kat and shard-fusion flips and plans the best mix of them. It
 runs two ways:
 - **Website (GitHub Pages, no server):** the calculator runs in the visitor's browser on live Hypixel prices. History
   comes from community data in `data/contrib/`.
@@ -53,7 +53,7 @@ starts with a comment saying what it is for.
 
 | Path | Contents |
 |---|---|
-| `packages/shared/src/rules/` | game rules: bazaar, Forge, enchants, calendar, timing, requirements |
+| `packages/shared/src/rules/` | game rules: bazaar, auction house, Forge, enchants, shard fusion, calendar, timing, requirements |
 | `packages/shared/src/market/` | market types, signals and flags, names, `assembleMarket`, event impact |
 | `packages/shared/src/recipes/` | `Recipe` and the NotEnoughUpdates-REPO parser |
 | `packages/shared/src/fill/` | time-on-top episodes and the order-size / fill model |
@@ -97,7 +97,7 @@ pnpm install                         # pnpm 12 (see packageManager); Node 24 in 
 pnpm check                           # architecture rules, build every package, run every test
 node scripts/checks/architecture.mjs # just the structure rules (no install needed)
 pnpm -r build                        # type checks every package and builds them
-pnpm -r test                         # 46 calculator / rule tests, 4 ingestion tests (PGlite), 3 GitHub-client tests
+pnpm -r test                         # 68 calculator / rule tests, 4 ingestion tests (PGlite), 3 GitHub-client tests
 ```
 
 After changing `package.json`, run `pnpm install` and commit `pnpm-lock.yaml`. CI installs with
@@ -118,7 +118,7 @@ Pick the checks that fit what you changed.
 | The website | Build with `scripts/site/build-pages.mjs`, serve it, then `node scripts/checks/screenshot.mjs <dir> <url> 1440` and `... 390`. No PROBLEM lines, and look at the screenshots |
 | Live behaviour of the website (prices, search, orders, paper trading) | `node scripts/checks/live-test.mjs <site url> <out dir> [paper minutes]`, against a local build and, after a deploy, the real site: `ALL PASSED`, and read report.json |
 | The scanner | `bazaar-calc-scanner.mjs --dry-run` with `"everyMin": 1` for a few minutes: files in `out/pending`, a paper trade within a minute, memory in the log; `pnpm --filter @bc/collector test` |
-| Performance | Time `buildOpportunities` for `"all"` on real data: about 0.5 s in Node today. It runs in visitors' browsers |
+| Performance | Time `buildOpportunities` for `"all"` on real data: about 1.8 s in Node (2,944 routes incl. 322 shard fusions, one trade at a time), 2026-10-05; the first call also builds the fusion pair table (~0.7 s, once). It runs in visitors' browsers (a Web Worker) |
 
 Lessons from this repository's history:
 - `Number#toLocaleString(locale, options)` in hot loops was 90% of the calculation time. Reuse an `Intl.NumberFormat`.

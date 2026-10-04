@@ -150,7 +150,7 @@ result("paper trading (around the clock): the scanner's published record is show
 
 // ---- 5. flip pages
 const flips = {};
-for (const k of ["bazaar", "craft", "book", "forge", "npc"]) {
+for (const k of ["bazaar", "craft", "book", "forge", "npc", "kat", "fusion"]) {
   // the calculation runs in the visitor's browser: wait up to 40 s and record how long it took
   await send("Page.navigate", { url: `${SITE}flips/${k}` }, page);
   const start = Date.now();

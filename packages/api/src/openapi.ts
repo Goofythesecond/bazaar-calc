@@ -28,7 +28,7 @@ export const OPENAPI = {
         pingMs: { type: "number" }, clickDelayMs: { type: "number" }, typingMs: { type: "number" } } },
       Profile: { type: "object", properties: {
         hotmTier: { type: "integer" }, quickForgeLevel: { type: "integer" }, enchantingLevel: { type: "integer" }, xpLevels: { type: "integer" },
-        collections: { type: "object", additionalProperties: { type: "integer" } }, slayers: { type: "object", additionalProperties: { type: "integer" } },
+        collections: { type: "object", additionalProperties: { type: "integer" } }, slayers: { type: "object", additionalProperties: { type: "integer" } }, skills: { type: "object", additionalProperties: { type: "integer" }, description: "Taming (Kat upgrades), Foraging (Galatea: shard fusion)" },
         reputation: { type: "object", additionalProperties: { type: "number" } }, coleMoltenForge: { type: "boolean" }, ignoreRequirements: { type: "boolean" } } },
       Filters: { type: "object", properties: {
         q: { type: "string" }, minCoinsH: { type: "number" }, minProfit: { type: "number" }, minMargin: { type: "number" }, maxCapital: { type: "number" },
@@ -67,7 +67,7 @@ export const OPENAPI = {
     "/api/v1/rules/requirements": { get: { summary: "Every collection / HotM / slayer / reputation requirement used by recipes, with the highest tier needed", responses: ok("requirements") } },
     "/api/v1/rules/enchants": { get: { summary: "Enchanted book combining rules with sources", responses: ok("rules") } },
     "/api/v1/rules/timing": { get: { summary: "Action timing model for your ping, plus contributor-measured timings", parameters: [{ name: "ping", in: "query" }, { name: "click", in: "query" }, { name: "typing", in: "query" }], responses: ok("timing") } },
-    ...Object.fromEntries(["bazaar", "craft", "book", "forge", "npc", "all"].map(k => [`/api/v1/calc/${k}`, {
+    ...Object.fromEntries(["bazaar", "craft", "book", "forge", "npc", "kat", "fusion", "all"].map(k => [`/api/v1/calc/${k}`, {
       post: { summary: `${k} flips for your settings (every route, losing ones too; each row has orderPlan: per order leg the size per order, orders/h, limit coins/h and the measured basis)`, requestBody: { content: { "application/json": { schema: calcBody } } }, responses: ok("opportunities") },
       get: { summary: `${k} flips with default settings`, responses: ok("opportunities") },
     }])),

@@ -8,8 +8,8 @@ Every rule the calculator uses is listed here with where it came from. "Confirme
 |---|---|---|
 | Hypixel Public API (`/v2/skyblock/bazaar`, `/auctions`, `/auctions_ended`, `/resources/skyblock/items`, `/resources/skyblock/election`) | [API policy](https://developer.hypixel.net/policies/) (updated 2026-09-30): endpoints without a key "exist to allow more continuous polling of that data"; must state the site is not affiliated with or endorsed by Hypixel; no Hypixel branding; monetising needs a Production app (we are free, no ads). Do not build histories of *player* data. | All market data. Auction seller/buyer UUIDs are dropped at ingestion. |
 | Internet Archive copies of the same Hypixel endpoints | Archive access is "for scholarship and research purposes only"; content stays Hypixel's. | Migrated as historical Hypixel data (owner's choice); labelled `origin = wayback`. |
-| NotEnoughUpdates-REPO | **MIT** (© 2020 Moulberry). Keep the copyright notice. | Crafting recipes, forge recipes + durations, recipe requirements (`crafttext`), Quick Forge formula. |
-| hypixelskyblock.minecraft.wiki | **CC BY-NC-SA 3.0**. Non-commercial, attribution, share-alike. | Enchantment combining caps, enchanting requirements, apply/combine XP costs, Forge and Bazaar rules. Facts only, attributed in NOTICE. |
+| NotEnoughUpdates-REPO | **MIT** (© 2020 Moulberry). Keep the copyright notice. | Crafting recipes, forge recipes + durations, Kat upgrades (`katgrade`: coins, items, time), recipe requirements (`crafttext`), Quick Forge formula. |
+| hypixelskyblock.minecraft.wiki | **CC BY-NC-SA 3.0**. Non-commercial, attribution, share-alike. | Enchantment combining caps, enchanting requirements, apply/combine XP costs, Forge and Bazaar rules, Kat, shard fusion (`rules/fusion.json`). Facts only, attributed in NOTICE. |
 | Coflnet, skykings, skyblock.bz | Not usable for publishing (Coflnet: personal use only; others: no terms / gated). | **Not used.** The migration script skips them. |
 
 ## Bazaar (confirmed, [wiki: Bazaar](https://hypixelskyblock.minecraft.wiki/w/Bazaar))
@@ -151,3 +151,48 @@ Known limits: holds shorter than one poll (~20 s, the API refresh rate) cannot b
   comparison, auction items are decoded once per listing (remembered by auction id), the scan fetches one page at a time
   with a pause sized to keep it near 10% of a core, files are compressed at level 6.
 - Node's heap settings did not change CPU (40.5 ms per poll by default, 41.1 ms with `--max-old-space-size=192`).
+
+## Predicted vs real fill time (2026-10-04)
+- The scanner's 9 closed paper trades: 84% of the predicted profit, but 3.6x the predicted time (mean 2.7 h vs 0.74 h).
+  The prediction assumed the buy and the sell legs run side by side; a trade buys its batch, then sells it.
+- Re-predicting those 9 trades with one trade at a time (buy time + sell time from the same fill model): actual /
+  predicted geometric mean 3.14x -> 1.37x; most trades within 1.2-1.4x. The outlier is Essence Crimson (8.7x), whose
+  instant sells come in bursts (counters flat for minutes, see "Dips" and the paper-trading replay above).
+- From then on paper trades record the model's buy and sell time and when the buy side completed; `fill/calibration.ts`
+  turns their ratios into a correction per side and per item (geometric mean, 5 pseudo-trades toward the model per
+  side, 3 toward the side for an item). Expired trades count at their 6 hours (a lower bound).
+- Confidence: order sides measured from fewer than 30 time-on-top episodes now count 0.75-1 (the fill backtest's
+  biggest misses came from sides with 6-17 episodes).
+- Not measured from snapshots yet: burstiness within the hour (the data files keep hourly sums only).
+
+## Kat upgrades (2026-10-05, [wiki: Kat](https://hypixelskyblock.minecraft.wiki/w/Kat), NEU `katgrade`)
+- Recipes: NotEnoughUpdates-REPO items `<PET>;<rarity>.json`, `type: "katgrade"` with `coins`, `time` (seconds),
+  `input` / `output` ("BEE;1" -> "BEE;2", rarity 0 = common ... 5 = mythic) and `items`. Bee upgrades cost 0 coins
+  (Honey Dippers instead); Griffin Rare -> Epic 250,000 coins + an Epic Griffin Upgrade Stone, 24 h.
+- Kat: one pet at a time; cost falls 0.3% per pet level (the routes use the level-1 cost, an upper bound); the pet keeps
+  its experience and its level is recalculated; she refuses a pet holding a Tier Boost.
+- Taming needed for the rarity Kat raises a pet to: Uncommon 1, Rare 5, Epic 10, Legendary 20, Mythic 25.
+- Pets on the auction house (measured, 43 pages, 5,235 pet BINs): `petInfo.tier` is the pet's own rarity; all 23
+  tier-boosted pets showed the boosted rarity only in the auction's `tier` field. 52% of listed pets are level 1, 29%
+  level 100. Lowest BINs of six pet rarities matched a fresh scan exactly (Griffin Epic had a newer cheaper listing).
+
+## Shard fusion (2026-10-05)
+- Rules: [wiki: Attribute Fusion](https://hypixelskyblock.minecraft.wiki/w/Attribute_Fusion) and the data page
+  [User:Wiki_Editor_33/AttributeFusion](https://hypixelskyblock.minecraft.wiki/w/User:Wiki_Editor_33/AttributeFusion)
+  ("Full Info table", revision 844164): 324 shards, 99 special recipes. `scripts/data/fusion-from-wiki.mjs` builds
+  `rules/fusion.json`; `rules/fusion.ts` implements the machine (amounts, result order, the 3-result cut).
+- Fusing costs nothing and is instant (Kysha: "Fusions are infinite!"); the machine is in Galatea, which opens at
+  Foraging 12 ([wiki: Galatea](https://hypixelskyblock.minecraft.wiki/w/Galatea)); Kysha's Abiphone contact reaches it
+  from anywhere afterwards. All 321 shard products are on the bazaar as `SHARD_<internal name>` (measured).
+- Checks: our ID-fusion result equals the wiki's column for all 324 shards, our Chameleon results for all of them.
+- Compared (as a check only) with SkyShards' published pair table (MIT, github.com/Campionnn/SkyShards, 2026-09-06):
+  the sources differ in (1) the order among results of one rarity (wiki: highest ID first; SkyShards behaves as lowest
+  first), (2) ID fusion of two shards of one rarity and category (wiki data page: the lower ID's result; the
+  pseudocode: the second-selected shard's; SkyShards: the higher ID's), (3) Termite (wiki: Bug + a "Mining" family no
+  shard has) and Apex Dragon (Power Dragon + blank), which SkyShards resolves. So routes use only results that are
+  offered under any order within a rarity, never case (2), never Termite or Apex Dragon, and count those two as
+  possible rivals for a slot. Every pair we then use is also in SkyShards' table (except for Folf and Packrat, which
+  are not on the bazaar); output counts agree on all 123,930 shared pairs.
+- Not counted: Pure Reptile (Crocodile shard's attribute, 2-20% to double a reptile fusion's output). Not known: the
+  clicks to move bought shards into the Hunting Box and fused ones out (the timing counts the fusion menu only).
+

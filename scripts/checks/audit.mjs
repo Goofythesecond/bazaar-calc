@@ -7,6 +7,10 @@
 //  5. books: every combinable enchant level on the bazaar has a route or a stated reason; caps; 2^(t-s) books
 //  6. recipes: a sample of stored recipes equals NotEnoughUpdates-REPO's raw item files
 //  7. comparison with skyblock.bz (independent site): coverage, profitable/not agreement, their formula
+//  9. order caps: 71,680 per order, 256 for unstackable items; AH-sold outputs keep the lowest BIN minus the AH fees
+// 10. Kat: pets at the snapshot's lowest BIN, Kat's coins / items / pets equal NEU's katgrade, Taming by rarity (wiki: Kat)
+// 11. fusion: input amounts by the wiki's rule (Chameleon 1, reptile / elemental / amphibian / eel families 2, else 5), every
+//     pair in SkyShards' independent pair table with the same output count (github.com/Campionnn/SkyShards, MIT; a check only)
 //  8. NPC flips: NPC sale = the item's npc_sell_price in Hypixel's items resource, with no tax, 500M coins a day; merchant price = the stored NEU shop
 //     price; at most 640 a day (6,400 in a Shopping Spree) bought from a merchant
 const BASE = process.argv[2] ?? "http://127.0.0.1:8787";
@@ -24,7 +28,7 @@ let hx, ours, snap, strict = false;
 for (let attempt = 0; attempt < 6 && !strict; attempt++) {
   hx = await get("https://api.hypixel.net/v2/skyblock/bazaar");
   ours = {}; const at = new Set();
-  for (const kind of ["bazaar", "craft", "book", "forge", "npc"]) {
+  for (const kind of ["bazaar", "craft", "book", "forge", "npc", "kat", "fusion"]) {
     const rows = []; let off = 0, total = 1, skipped = [];
     while (off < total) { const d = await post(`/api/v1/calc/${kind}`, { filters: { limit: 500, offset: off } }); rows.push(...d.rows); total = d.total; off += 500; skipped = d.skipped; at.add(d.marketAt); }
     ours[kind] = { rows, skipped: skipped.filter(s => s.kind === kind) };
@@ -33,7 +37,14 @@ for (let attempt = 0; attempt < 6 && !strict; attempt++) {
   strict = at.size === 1 && at.has(snap.marketAt);
 }
 const P = hx.products, S = snap.items;
-const NPC_SELL = new Map((await get("https://api.hypixel.net/v2/resources/skyblock/items")).items.filter(i => i.npc_sell_price != null).map(i => [i.id, i.npc_sell_price]));
+const ITEMS = (await get("https://api.hypixel.net/v2/resources/skyblock/items")).items;
+const NPC_SELL = new Map(ITEMS.filter(i => i.npc_sell_price != null).map(i => [i.id, i.npc_sell_price]));
+// one order holds 71,680 units, or 256 of an unstackable item (wiki: Bazaar); enchanted books are never in the items list
+const UNSTACKABLE = new Set(ITEMS.filter(i => i.unstackable).map(i => i.id));
+const orderCap = id => (UNSTACKABLE.has(id) || /^ENCHANTMENT_.+_\d+$/.test(id) ? 256 : 71680);
+// what a BIN sale keeps (wiki: Auction House): 1% / 2% / 2.5% listing fee by price, 1% claim tax above 1M (x4 under Derpy), payout never below 1M
+const AH_QUAD = (bzRules.activePerks ?? []).some(p => /quad taxes/i.test(p));
+const ahNet = p => p - p * (p < 10e6 ? 0.01 : p < 100e6 ? 0.02 : 0.025) - (p > 1e6 ? Math.min(p * (AH_QUAD ? 0.04 : 0.01), p - 1e6) : 0);
 // prices are checked against the snapshot the calculator used; Hypixel itself is used for the 7-day volumes
 const best = (id, side) => (side === "ask" ? S[id]?.ask : S[id]?.bid) ?? null;
 console.log(`snapshot: calculator market ${new Date(snap.marketAt).toISOString()} | Hypixel ${new Date(hx.lastUpdated).toISOString()} | ${strict ? "every route from this one snapshot: prices checked exactly" : "WARNING: routes span several market refreshes"}`);
@@ -47,7 +58,8 @@ for (const [kind, { rows }] of Object.entries(ours)) for (const o of rows) {
   const cost = o.buys.reduce((a, b) => a + b.qty * b.price, 0);
   if (!near(cost, o.costPerUnit)) flag("cost != sum of ingredients", k);
   if (o.sell.mode === "npc") { if (!near(o.sell.netPrice, o.sell.grossPrice)) flag("tax charged on an NPC sale", k); }
-  else if (o.sell.mode !== "ah_reference" && !near(o.sell.netPrice, o.sell.grossPrice * (1 - TAX))) flag(`tax not ${TAX * 100}%`, k);
+  else if (o.sell.mode === "ah_reference") { if (!near(o.sell.netPrice, ahNet(o.sell.grossPrice))) flag("AH sale: net price != lowest BIN minus listing fee and claim tax", [k, o.sell.grossPrice, o.sell.netPrice, ahNet(o.sell.grossPrice)]); }
+  else if (!near(o.sell.netPrice, o.sell.grossPrice * (1 - TAX))) flag(`tax not ${TAX * 100}%`, k);
   if (!near(o.profitPerUnit, o.sell.netPrice - cost)) flag("profit != net - cost", k);
   if (!near(o.coinsH, o.unitsH * o.profitPerUnit, 1e-4)) flag("coins/h != units/h x profit", k);
   const tol = p => (strict ? 0.051 : Math.max(0.11, 0.03 * p));
@@ -81,11 +93,58 @@ for (const [kind, { rows }] of Object.entries(ours)) for (const o of rows) {
     const per = l.side === "sell" ? 1 : o.buys.find(b => b.item === l.item && b.mode === "order").qty;
     const total = Math.max(1, Math.round(o.batch * per));
     if (l.parallel !== Math.ceil(total / l.maxQty) || l.qty !== Math.ceil(total / l.parallel)) flag("order size != batch x recipe amount", [k, l.item, l.qty, l.parallel, o.batch, per]);
-    if (l.qty > 71680) flag("order above 71,680", [k, l.item]);
+    if (l.qty > orderCap(l.item)) flag("order above the per-order cap (71,680, or 256 for unstackable items)", [k, l.item, l.qty]);
     if (l.side === "sell" && l.qty * l.price > 1e9 * 1.0001) flag("sell offer above 1B", k);
   }
   if (o.unitsH > 0 && o.capitalUsed > o.capitalAllocated * 1.0001) flag("uses more coins than you have", k);
   if (o.unitsH > 0 && o.limitCoinsH * 4 > 15e9 * 1.0001) flag("above the daily limit", k);
+}
+
+// ---- 10: Kat upgrades vs the auction snapshot and NEU
+const RAR = ["COMMON", "UNCOMMON", "RARE", "EPIC", "LEGENDARY", "MYTHIC"], TAMING = { UNCOMMON: 1, RARE: 5, EPIC: 10, LEGENDARY: 20, MYTHIC: 25 };
+let katChecked = 0;
+const katNeu = new Map();
+for (const o of ours.kat.rows) {
+  const k = o.key;
+  for (const b of o.buys.filter(b => b.mode === "ah")) if (!near(b.price, S[b.item]?.ahLowestBin ?? NaN)) flag("Kat: auction buy != lowest BIN in the snapshot", [k, b.item, b.price, S[b.item]?.ahLowestBin]);
+  if (!near(o.sell.grossPrice, S[o.outputId]?.ahLowestBin ?? NaN)) flag("Kat: sale != lowest BIN in the snapshot", [k, o.sell.grossPrice, S[o.outputId]?.ahLowestBin]);
+  const m = /^PET_(.+)_([A-Z]+)$/.exec(o.outputId);
+  const tam = o.requirements.find(r => r.type === "skill" && r.name === "Taming");
+  if (!m || tam?.level !== TAMING[m[2]]) flag("Kat: Taming requirement != wiki level for the rarity", [k, tam?.level]);
+  if (!m || katNeu.size >= 40 || katNeu.has(o.outputId)) continue;
+  let neu; try { neu = await get(`https://raw.githubusercontent.com/NotEnoughUpdates/NotEnoughUpdates-REPO/master/items/${encodeURIComponent(`${m[1]};${RAR.indexOf(m[2])}`)}.json`); } catch { flag("Kat: NEU file not found", k); continue; }
+  const r = (neu.recipes ?? []).find(x => x.type === "katgrade");
+  katNeu.set(o.outputId, r);
+  const petIn = r && /^(.+);(\d)$/.exec(r.input);
+  if (!r || !petIn || o.buys.find(b => b.mode === "ah")?.item !== `PET_${petIn[1]}_${RAR[Number(petIn[2])]}`) { flag("Kat: starting pet != NEU input", [k, r?.input]); continue; }
+  const fee = o.buys.find(b => b.mode === "fee")?.price ?? 0;
+  if (fee !== (r.coins ?? 0)) flag("Kat: fee != NEU coins", [k, fee, r.coins]);
+  // the items NEU lists are each acquired (bought or crafted): the route says how much of each step it needs
+  katChecked++;
+}
+
+// ---- 11: fusion vs the wiki's amounts and SkyShards' independent pair table
+const fusionRules = (await import("../../packages/shared/src/rules/fusion.json", { with: { type: "json" } })).default.shards;
+const TWO = new Set(["ELEMENTAL", "AMPHIBIAN", "EEL", "CROCO", "REPTILE", "LIZARD", "SCALED", "SERPENT", "TURTLE"]);
+const amount = id => (id === "CHAMELEON" ? 1 : fusionRules[id].families.some(f => TWO.has(f)) ? 2 : 5);
+const sky = await get("https://raw.githubusercontent.com/Campionnn/SkyShards/HEAD/public/fusion-data.json");
+const skyId = c => sky.shards[c].internal_id;
+const skyPairs = new Map(); // "SHARD_T|SHARD_A+SHARD_B" -> output count
+for (const [t, byCount] of Object.entries(sky.recipes)) for (const [cnt, pairs] of Object.entries(byCount)) for (const [a, b] of pairs) skyPairs.set(`${skyId(t)}|${[skyId(a), skyId(b)].sort().join("+")}`, Number(cnt));
+let fusionChecked = 0;
+for (const o of ours.fusion.rows) {
+  const k = o.key, ids = o.buys.map(b => b.item.replace(/^SHARD_/, ""));
+  const pair = ids.length === 1 ? [ids[0], ids[0]] : ids;
+  const count = Number(/makes (\d)/.exec(o.steps[0].label)?.[1]);
+  for (const b of o.buys) {
+    const per = (ids.length === 1 ? 2 : 1) * amount(b.item.replace(/^SHARD_/, "")) / count;
+    if (!near(b.qty, per)) flag("fusion: shards per output != wiki amount / output count", [k, b.item, b.qty, per]);
+  }
+  const sk = skyPairs.get(`${o.outputId}|${pair.map(x => `SHARD_${x}`).sort().join("+")}`);
+  if (sk == null) flag("fusion: pair not in SkyShards' table", [k, pair.join("+")]);
+  else if (sk !== count) flag("fusion: output count differs from SkyShards", [k, count, sk]);
+  if (!o.requirements.some(r => r.type === "skill" && r.name === "Foraging" && r.level === 12)) flag("fusion: missing Foraging 12 (Galatea)", k);
+  fusionChecked++;
 }
 
 // ---- 5: books, enumerated independently from the raw bazaar + rules
@@ -155,7 +214,7 @@ try {
 } catch (e) { sbz = { error: String(e) }; }
 
 for (const [kind, { rows, skipped }] of Object.entries(ours)) console.log(`${kind}: ${rows.length} routes listed (${rows.filter(o => o.coinsH > 0).length} profitable), ${skipped.length} not listed with a reason`);
-console.log(`checked ${n} routes; books: ${combinable} combinable enchants, ${levelsChecked} target levels on the bazaar; recipes: ${recipesChecked} compared with NEU; NPC merchant prices: ${npcChecked} compared`);
+console.log(`checked ${n} routes; books: ${combinable} combinable enchants, ${levelsChecked} target levels on the bazaar; recipes: ${recipesChecked} compared with NEU; NPC merchant prices: ${npcChecked} compared; Kat: ${katChecked} compared with NEU; fusion: ${fusionChecked} pairs compared with SkyShards`);
 console.log("skyblock.bz:", JSON.stringify(sbz));
 if (!problems.size) console.log("NO PROBLEMS FOUND");
 for (const [name, xs] of [...problems].sort((a, b) => b[1].length - a[1].length)) console.log(`  ${String(xs.length).padStart(5)}  ${name}: ${JSON.stringify(xs.slice(0, 4))}`);

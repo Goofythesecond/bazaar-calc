@@ -5,7 +5,7 @@
 //    first check only records what already qualifies, so a restart does not repeat old alerts.
 import { readFileSync } from "node:fs";
 import type { Db } from "@bc/server-core";
-import { AlertRulesSchema, DEFAULT_PROFILE, DEFAULT_SETTINGS, type PaperState, ProfileSchema, SettingsSchema, alertMatches, newPaperState, paperCandidates, paperStep } from "@bc/shared";
+import { AlertRulesSchema, DEFAULT_PROFILE, DEFAULT_SETTINGS, type PaperState, ProfileSchema, SettingsSchema, alertMatches, calibrate, newPaperState, paperCandidates, paperStep } from "@bc/shared";
 import type { State } from "./state.js";
 
 interface AlertsFile {
@@ -26,7 +26,7 @@ export async function startServerJobs(state: State, db: Db): Promise<{ stop: () 
   let paper: PaperState = newPaperState(), since: number | null = null;
   try {
     const r = (await db.query("SELECT value, extract(epoch from updated_at) * 1000 AS t FROM kv WHERE key = 'paper'")).rows[0];
-    if (r) { paper = r.value as PaperState; since = paper.trades[0]?.openedAt ?? Number(r.t); }
+    if (r) { paper = r.value as PaperState; since = paper.trades[0]?.openedAt ?? Number(r.t); state.calibration = calibrate(paper.trades); }
   } catch { /* first run */ }
 
   let seen: Set<string> | null = null, lastData = 0;
@@ -44,6 +44,7 @@ export async function startServerJobs(state: State, db: Db): Promise<{ stop: () 
     // paper trading on this snapshot
     paper = paperStep(paper, state.dataAt, state.market, () => paperCandidates(state.opportunities("bazaar", settings, profile).list),
       { checkMin: settings.checkIntervalMin, flipperLevel: settings.bazaarFlipperLevel, quadTaxes: state.perks.quadTaxes });
+    state.calibration = calibrate(paper.trades); // the flip tables' fill speeds follow what these trades measured
     since ??= paper.trades[0]?.openedAt ?? null;
     await db.query("INSERT INTO kv (key, value, source, updated_at) VALUES ('paper', $1, 'server paper trading', now()) ON CONFLICT (key) DO UPDATE SET value = excluded.value, updated_at = now()", [JSON.stringify(paper)]);
     // Discord alerts

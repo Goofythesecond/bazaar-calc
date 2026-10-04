@@ -7,6 +7,7 @@ export type Requirement =
   | { type: "slayer"; name: string; level: number; text: string }
   | { type: "reputation"; faction: string; amount: number; text: string }
   | { type: "enchanting"; level: number; text: string }
+  | { type: "skill"; name: string; level: number; text: string } // Taming for Kat, Foraging for Galatea (wiki)
   | { type: "xp_levels"; levels: number; text: string }
   | { type: "forge"; text: string }
   | { type: "unverified"; text: string };
@@ -17,6 +18,7 @@ export interface Profile {
   enchantingLevel: number;
   collections: Record<string, number>;   // collection name (e.g. "Diamond") -> unlocked tier
   slayers: Record<string, number>;       // "Zombie" / "Wolf" / ... -> level
+  skills: Record<string, number>;        // "Taming" / "Foraging" -> level
   reputation: Record<string, number>;    // "Barbarian" -> reputation
   xpLevels: number;
   coleMoltenForge: boolean;              // auto-set from the current mayor when known
@@ -26,7 +28,7 @@ export interface Profile {
 }
 
 export const DEFAULT_PROFILE: Profile = {
-  hotmTier: 0, quickForgeLevel: 0, enchantingLevel: 0, collections: {}, slayers: {}, reputation: {},
+  hotmTier: 0, quickForgeLevel: 0, enchantingLevel: 0, collections: {}, slayers: {}, skills: {}, reputation: {},
   xpLevels: 0, coleMoltenForge: false, quadTaxes: false, npcShoppingSpree: false, ignoreRequirements: true,
 };
 
@@ -84,6 +86,7 @@ export function isMet(r: Requirement, p: Profile): boolean | null {
       return have == null ? false : have >= r.tier;
     }
     case "slayer": return (p.slayers[r.name] ?? 0) >= r.level;
+    case "skill": return (p.skills?.[r.name] ?? 0) >= r.level;
     case "reputation": return (p.reputation[r.faction] ?? 0) >= r.amount;
     case "enchanting": return p.enchantingLevel >= r.level;
     case "xp_levels": return p.xpLevels >= r.levels;
@@ -100,7 +103,7 @@ export function unmet(reqs: Requirement[], p: Profile): Requirement[] {
 export function dedupeRequirements(reqs: Requirement[]): Requirement[] {
   const seen = new Map<string, Requirement>();
   for (const r of reqs) {
-    const key = r.type === "collection" ? `c:${r.name}` : r.type === "hotm" ? "hotm" : r.type === "slayer" ? `s:${r.name}`
+    const key = r.type === "collection" ? `c:${r.name}` : r.type === "hotm" ? "hotm" : r.type === "slayer" ? `s:${r.name}` : r.type === "skill" ? `k:${r.name}`
       : r.type === "enchanting" ? "ench" : r.type === "xp_levels" ? "xp" : r.text;
     const prev = seen.get(key);
     const rank = (x: Requirement) => ("tier" in x ? x.tier : "level" in x ? x.level : "levels" in x ? x.levels : "amount" in x ? x.amount : 0);

@@ -7,7 +7,7 @@ export const BAZAAR = {
   baseTax: 0.0125,
   taxReductionPerFlipperLevel: 0.00125,
   maxUnitsPerOrder: 71_680,
-  maxUnitsPerOrderUnstackable: 256,
+  maxUnitsPerOrderUnstackable: 256, // "up to 71,680 of that item in a single offer, or 256 for unstackable items" (wiki: Bazaar)
   maxInstantBuyUnits: 2_240, // most items (inventory limit)
   maxSellOfferValue: 1_000_000_000,
   instantBuyQuoteMarkup: 0.04,
@@ -63,3 +63,6 @@ export function msUntilLimitReset(now = Date.now()): number {
   const next = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate() + 1, BAZAAR.dailyLimitResetUtcHour);
   return next - now;
 }
+
+/** Units one order can hold: 71,680, or 256 for unstackable items (enchanted books, Booster Cookies, flawless gems...). */
+export const maxUnitsPerOrder = (unstackable = false) => (unstackable ? BAZAAR.maxUnitsPerOrderUnstackable : BAZAAR.maxUnitsPerOrder);

@@ -1,0 +1,8073 @@
+{
+ "source": "https://hypixelskyblock.minecraft.wiki/w/User:Wiki_Editor_33/AttributeFusion (revision undefined), CC BY-NC-SA 3.0",
+ "shards": {
+  "GROVE": {
+   "name": "Grove Shard",
+   "rarity": "COMMON",
+   "num": 1,
+   "category": "FOREST",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "COMMON",
+       "up": false
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PHANPYRE",
+    "chameleon": [
+     "MIST",
+     "FLASH",
+     "PHANPYRE"
+    ]
+   }
+  },
+  "MIST": {
+   "name": "Mist Shard",
+   "rarity": "COMMON",
+   "num": 2,
+   "category": "WATER",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "COMMON",
+       "up": false
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "COD",
+    "chameleon": [
+     "FLASH",
+     "PHANPYRE",
+     "COD"
+    ]
+   }
+  },
+  "FLASH": {
+   "name": "Flash Shard",
+   "rarity": "COMMON",
+   "num": 3,
+   "category": "COMBAT",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "COMMON",
+       "up": false
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HOWLING_SPIRIT",
+    "chameleon": [
+     "PHANPYRE",
+     "COD",
+     "HOWLING_SPIRIT"
+    ]
+   }
+  },
+  "PHANPYRE": {
+   "name": "Phanpyre Shard",
+   "rarity": "COMMON",
+   "num": 4,
+   "category": "FOREST",
+   "families": [
+    "PHANTOM"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PHANFLARE",
+    "chameleon": [
+     "COD",
+     "HOWLING_SPIRIT",
+     "PHANFLARE"
+    ]
+   }
+  },
+  "COD": {
+   "name": "Cod Shard",
+   "rarity": "COMMON",
+   "num": 5,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DUMPSTER_DIVER",
+    "chameleon": [
+     "HOWLING_SPIRIT",
+     "PHANFLARE",
+     "DUMPSTER_DIVER"
+    ]
+   }
+  },
+  "HOWLING_SPIRIT": {
+   "name": "Howling Spirit Shard",
+   "rarity": "COMMON",
+   "num": 6,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LAPIS_ZOMBIE",
+    "chameleon": [
+     "PHANFLARE",
+     "DUMPSTER_DIVER",
+     "LAPIS_ZOMBIE"
+    ]
+   }
+  },
+  "PHANFLARE": {
+   "name": "Phanflare Shard",
+   "rarity": "COMMON",
+   "num": 7,
+   "category": "FOREST",
+   "families": [
+    "PHANTOM"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HIDEONLEAF",
+    "chameleon": [
+     "DUMPSTER_DIVER",
+     "LAPIS_ZOMBIE",
+     "HIDEONLEAF"
+    ]
+   }
+  },
+  "DUMPSTER_DIVER": {
+   "name": "Dumpster Diver Shard",
+   "rarity": "COMMON",
+   "num": 8,
+   "category": "WATER",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "VERDANT",
+    "chameleon": [
+     "LAPIS_ZOMBIE",
+     "HIDEONLEAF",
+     "VERDANT"
+    ]
+   }
+  },
+  "LAPIS_ZOMBIE": {
+   "name": "Lapis Zombie Shard",
+   "rarity": "COMMON",
+   "num": 9,
+   "category": "COMBAT",
+   "families": [
+    "LAPIS"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CHILL",
+    "chameleon": [
+     "HIDEONLEAF",
+     "VERDANT",
+     "CHILL"
+    ]
+   }
+  },
+  "HIDEONLEAF": {
+   "name": "Hideonleaf Shard",
+   "rarity": "COMMON",
+   "num": 10,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FLY",
+    "chameleon": [
+     "VERDANT",
+     "CHILL",
+     "FLY"
+    ]
+   }
+  },
+  "VERDANT": {
+   "name": "Verdant Shard",
+   "rarity": "COMMON",
+   "num": 11,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEA_ARCHER",
+    "chameleon": [
+     "CHILL",
+     "FLY",
+     "SEA_ARCHER"
+    ]
+   }
+  },
+  "CHILL": {
+   "name": "Chill Shard",
+   "rarity": "COMMON",
+   "num": 12,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "VORACIOUS_SPIDER",
+    "chameleon": [
+     "FLY",
+     "SEA_ARCHER",
+     "VORACIOUS_SPIDER"
+    ]
+   }
+  },
+  "FLY": {
+   "name": "Fly Shard",
+   "rarity": "COMMON",
+   "num": 13,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MUDWORM",
+    "chameleon": [
+     "SEA_ARCHER",
+     "VORACIOUS_SPIDER",
+     "HIDEONGIFT"
+    ]
+   }
+  },
+  "SEA_ARCHER": {
+   "name": "Bogged Shard",
+   "rarity": "COMMON",
+   "num": 14,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BIRRIES",
+    "chameleon": [
+     "VORACIOUS_SPIDER",
+     "HIDEONGIFT",
+     "BIRRIES"
+    ]
+   }
+  },
+  "VORACIOUS_SPIDER": {
+   "name": "Voracious Spider Shard",
+   "rarity": "COMMON",
+   "num": 15,
+   "category": "COMBAT",
+   "families": [
+    "SPIDER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TANK_ZOMBIE",
+    "chameleon": [
+     "HIDEONGIFT",
+     "BIRRIES",
+     "TANK_ZOMBIE"
+    ]
+   }
+  },
+  "HIDEONGIFT": {
+   "name": "Hideongift Shard",
+   "rarity": "COMMON",
+   "num": 16,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "COMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MUDWORM",
+    "chameleon": [
+     "BIRRIES",
+     "TANK_ZOMBIE",
+     "CROW"
+    ]
+   }
+  },
+  "BIRRIES": {
+   "name": "Birries Shard",
+   "rarity": "COMMON",
+   "num": 17,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TADGANG",
+    "chameleon": [
+     "TANK_ZOMBIE",
+     "CROW",
+     "TADGANG"
+    ]
+   }
+  },
+  "TANK_ZOMBIE": {
+   "name": "Tank Zombie Shard",
+   "rarity": "COMMON",
+   "num": 18,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ZEALOT",
+    "chameleon": [
+     "CROW",
+     "TADGANG",
+     "ZEALOT"
+    ]
+   }
+  },
+  "CROW": {
+   "name": "Crow Shard",
+   "rarity": "COMMON",
+   "num": 19,
+   "category": "FOREST",
+   "families": [
+    "BIRD",
+    "TRASH_LOVER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MUDWORM",
+    "chameleon": [
+     "TADGANG",
+     "ZEALOT",
+     "RABBIT_MAFIOSO"
+    ]
+   }
+  },
+  "TADGANG": {
+   "name": "Tadgang Shard",
+   "rarity": "COMMON",
+   "num": 20,
+   "category": "WATER",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CORALOT",
+    "chameleon": [
+     "ZEALOT",
+     "RABBIT_MAFIOSO",
+     "CORALOT"
+    ]
+   }
+  },
+  "ZEALOT": {
+   "name": "Zealot Shard",
+   "rarity": "COMMON",
+   "num": 21,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GOLDEN_GHOUL",
+    "chameleon": [
+     "RABBIT_MAFIOSO",
+     "CORALOT",
+     "HARPY"
+    ]
+   }
+  },
+  "RABBIT_MAFIOSO": {
+   "name": "Rabbit Mafioso Shard",
+   "rarity": "COMMON",
+   "num": 22,
+   "category": "FOREST",
+   "families": [
+    "CRIME"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MUDWORM",
+    "chameleon": [
+     "CORALOT",
+     "HARPY",
+     "MUDWORM"
+    ]
+   }
+  },
+  "CORALOT": {
+   "name": "Coralot Shard",
+   "rarity": "COMMON",
+   "num": 23,
+   "category": "WATER",
+   "families": [
+    "AXOLOTL",
+    "AMPHIBIAN"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LOTUS_FISH",
+    "chameleon": [
+     "HARPY",
+     "MUDWORM",
+     "LOTUS_FISH"
+    ]
+   }
+  },
+  "HARPY": {
+   "name": "Harpy Shard",
+   "rarity": "COMMON",
+   "num": 24,
+   "category": "COMBAT",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GOLDEN_GHOUL",
+    "chameleon": [
+     "MUDWORM",
+     "LOTUS_FISH",
+     "GOLDEN_GHOUL"
+    ]
+   }
+  },
+  "MUDWORM": {
+   "name": "Mudworm Shard",
+   "rarity": "COMMON",
+   "num": 25,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LOCUST",
+    "chameleon": [
+     "LOTUS_FISH",
+     "GOLDEN_GHOUL",
+     "LOCUST"
+    ]
+   }
+  },
+  "LOTUS_FISH": {
+   "name": "Lotusfish Shard",
+   "rarity": "COMMON",
+   "num": 26,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "AZURE",
+    "chameleon": [
+     "GOLDEN_GHOUL",
+     "LOCUST",
+     "AZURE"
+    ]
+   }
+  },
+  "GOLDEN_GHOUL": {
+   "name": "Golden Ghoul Shard",
+   "rarity": "COMMON",
+   "num": 27,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BEZAL",
+    "chameleon": [
+     "LOCUST",
+     "AZURE",
+     "BEZAL"
+    ]
+   }
+  },
+  "LOCUST": {
+   "name": "Locust Shard",
+   "rarity": "COMMON",
+   "num": 28,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STAG_BEETLE",
+    "chameleon": [
+     "AZURE",
+     "BEZAL",
+     "STAG_BEETLE"
+    ]
+   }
+  },
+  "AZURE": {
+   "name": "Azure Shard",
+   "rarity": "COMMON",
+   "num": 29,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "NIGHT_SQUID",
+    "chameleon": [
+     "BEZAL",
+     "STAG_BEETLE",
+     "NIGHT_SQUID"
+    ]
+   }
+  },
+  "BEZAL": {
+   "name": "Bezal Shard",
+   "rarity": "COMMON",
+   "num": 30,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "YOG",
+    "chameleon": [
+     "STAG_BEETLE",
+     "NIGHT_SQUID",
+     "YOG"
+    ]
+   }
+  },
+  "STAG_BEETLE": {
+   "name": "Stag Beetle Shard",
+   "rarity": "COMMON",
+   "num": 31,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ANT",
+    "chameleon": [
+     "NIGHT_SQUID",
+     "YOG",
+     "BOREAL_OWL"
+    ]
+   }
+  },
+  "NIGHT_SQUID": {
+   "name": "Inkling Shard",
+   "rarity": "COMMON",
+   "num": 32,
+   "category": "WATER",
+   "families": [
+    "SQUID"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HAGGARD",
+    "chameleon": [
+     "YOG",
+     "BOREAL_OWL",
+     "NEWT"
+    ]
+   }
+  },
+  "YOG": {
+   "name": "Yog Shard",
+   "rarity": "COMMON",
+   "num": 33,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINER_ZOMBIE",
+    "chameleon": [
+     "BOREAL_OWL",
+     "NEWT",
+     "MINER_ZOMBIE"
+    ]
+   }
+  },
+  "BOREAL_OWL": {
+   "name": "Boreal Owl Shard",
+   "rarity": "COMMON",
+   "num": 34,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "COMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ANT",
+    "chameleon": [
+     "NEWT",
+     "MINER_ZOMBIE",
+     "FLITTER"
+    ]
+   }
+  },
+  "NEWT": {
+   "name": "Newt Shard",
+   "rarity": "COMMON",
+   "num": 35,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "LIZARD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "AXOLOTL"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HAGGARD",
+    "chameleon": [
+     "MINER_ZOMBIE",
+     "FLITTER",
+     "TEPID"
+    ]
+   }
+  },
+  "MINER_ZOMBIE": {
+   "name": "Miner Zombie Shard",
+   "rarity": "COMMON",
+   "num": 36,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CRETAN_BULL",
+    "chameleon": [
+     "FLITTER",
+     "TEPID",
+     "CRETAN_BULL"
+    ]
+   }
+  },
+  "FLITTER": {
+   "name": "Flitter Shard",
+   "rarity": "COMMON",
+   "num": 37,
+   "category": "FOREST",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ANT",
+    "chameleon": [
+     "TEPID",
+     "CRETAN_BULL",
+     "ANT"
+    ]
+   }
+  },
+  "TEPID": {
+   "name": "Tepid Shard",
+   "rarity": "COMMON",
+   "num": 38,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HAGGARD",
+    "chameleon": [
+     "CRETAN_BULL",
+     "ANT",
+     "CAVERNFISH"
+    ]
+   }
+  },
+  "CRETAN_BULL": {
+   "name": "Cretan Bull Shard",
+   "rarity": "COMMON",
+   "num": 39,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HONEYHOG",
+    "chameleon": [
+     "ANT",
+     "CAVERNFISH",
+     "STRONGARM"
+    ]
+   }
+  },
+  "ANT": {
+   "name": "Ant Shard",
+   "rarity": "COMMON",
+   "num": 40,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HIDEONSUN",
+    "chameleon": [
+     "CAVERNFISH",
+     "STRONGARM",
+     "HIDEONSUN"
+    ]
+   }
+  },
+  "CAVERNFISH": {
+   "name": "Cavernfish Shard",
+   "rarity": "COMMON",
+   "num": 41,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH",
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HAGGARD",
+    "chameleon": [
+     "STRONGARM",
+     "HIDEONSUN",
+     "HAGGARD"
+    ]
+   }
+  },
+  "STRONGARM": {
+   "name": "Strongarm Shard",
+   "rarity": "COMMON",
+   "num": 42,
+   "category": "COMBAT",
+   "families": [
+    "ARCTIC"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HONEYHOG",
+    "chameleon": [
+     "HIDEONSUN",
+     "HAGGARD",
+     "HONEYHOG"
+    ]
+   }
+  },
+  "HIDEONSUN": {
+   "name": "Hideonsun Shard",
+   "rarity": "COMMON",
+   "num": 43,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FIREFOX",
+    "chameleon": [
+     "HAGGARD",
+     "HONEYHOG",
+     "SHYWORM"
+    ]
+   }
+  },
+  "HAGGARD": {
+   "name": "Haggard Shard",
+   "rarity": "COMMON",
+   "num": 44,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BRINELING",
+    "chameleon": [
+     "HONEYHOG",
+     "SHYWORM",
+     "BRINELING"
+    ]
+   }
+  },
+  "HONEYHOG": {
+   "name": "Honeyhog Shard",
+   "rarity": "COMMON",
+   "num": 45,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "SHYWORM",
+     "BRINELING",
+     "CHOCOBUN"
+    ]
+   }
+  },
+  "SHYWORM": {
+   "name": "Shyworm Shard",
+   "rarity": "COMMON",
+   "num": 46,
+   "category": "FOREST",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FIREFOX",
+    "chameleon": [
+     "BRINELING",
+     "CHOCOBUN",
+     "FOXTROT"
+    ]
+   }
+  },
+  "BRINELING": {
+   "name": "Brineling Shard",
+   "rarity": "COMMON",
+   "num": 47,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TIMIL",
+    "chameleon": [
+     "CHOCOBUN",
+     "FOXTROT",
+     "BRAMBLE"
+    ]
+   }
+  },
+  "CHOCOBUN": {
+   "name": "Chocobun Shard",
+   "rarity": "COMMON",
+   "num": 48,
+   "category": "FOREST",
+   "families": [
+    "CRIME"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "BUNBUN"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "CRIME"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "FOXTROT",
+     "BRAMBLE",
+     "TIDE"
+    ]
+   }
+  },
+  "FOXTROT": {
+   "name": "Foxtrot Shard",
+   "rarity": "COMMON",
+   "num": 49,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FIREFOX",
+    "chameleon": [
+     "BRAMBLE",
+     "TIDE",
+     "FIREFOX"
+    ]
+   }
+  },
+  "FIREFOX": {
+   "name": "Firefox Shard",
+   "rarity": "COMMON",
+   "num": 52,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GROUNDHOG",
+    "chameleon": [
+     "BRAMBLE",
+     "TIDE",
+     "GROUNDHOG"
+    ]
+   }
+  },
+  "GROUNDHOG": {
+   "name": "Groundhog Shard",
+   "rarity": "COMMON",
+   "num": 55,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BLUE_JAY",
+    "chameleon": [
+     "TIMIL",
+     "BRAMBLE",
+     "BLUE_JAY"
+    ]
+   }
+  },
+  "TIMIL": {
+   "name": "Timil Shard",
+   "rarity": "COMMON",
+   "num": 56,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "BRAMBLE",
+     "BLUE_JAY",
+     "TIDE"
+    ]
+   }
+  },
+  "BLUE_JAY": {
+   "name": "Blue Jay Shard",
+   "rarity": "COMMON",
+   "num": 58,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BUNBUN",
+    "chameleon": [
+     "BRAMBLE",
+     "TIDE",
+     "BUNBUN"
+    ]
+   }
+  },
+  "BUNBUN": {
+   "name": "Bunbun Shard",
+   "rarity": "COMMON",
+   "num": 61,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HONEYBUZZ",
+    "chameleon": [
+     "BRAMBLE",
+     "TIDE",
+     "HONEYBUZZ"
+    ]
+   }
+  },
+  "HONEYBUZZ": {
+   "name": "Honeybuzz Shard",
+   "rarity": "COMMON",
+   "num": 64,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "POLLENDART",
+    "chameleon": [
+     "BRAMBLE",
+     "TIDE",
+     "POLLENDART"
+    ]
+   }
+  },
+  "POLLENDART": {
+   "name": "Pollendart Shard",
+   "rarity": "COMMON",
+   "num": 67,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "BRAMBLE",
+     "TIDE",
+     "QUAKE"
+    ]
+   }
+  },
+  "BRAMBLE": {
+   "name": "Bramble Shard",
+   "rarity": "UNCOMMON",
+   "num": 1,
+   "category": "FOREST",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": false
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PEST",
+    "chameleon": [
+     "TIDE",
+     "QUAKE",
+     "SPARROW"
+    ]
+   }
+  },
+  "TIDE": {
+   "name": "Tide Shard",
+   "rarity": "UNCOMMON",
+   "num": 2,
+   "category": "WATER",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": false
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOSSYBIT",
+    "chameleon": [
+     "QUAKE",
+     "SPARROW",
+     "GOLDFIN"
+    ]
+   }
+  },
+  "QUAKE": {
+   "name": "Quake Shard",
+   "rarity": "UNCOMMON",
+   "num": 3,
+   "category": "COMBAT",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": false
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAIN_SLIME",
+    "chameleon": [
+     "SPARROW",
+     "GOLDFIN",
+     "TROGLOBYTE"
+    ]
+   }
+  },
+  "SPARROW": {
+   "name": "Sparrow Shard",
+   "rarity": "UNCOMMON",
+   "num": 4,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PEST",
+    "chameleon": [
+     "GOLDFIN",
+     "TROGLOBYTE",
+     "HIDEONCAVE"
+    ]
+   }
+  },
+  "GOLDFIN": {
+   "name": "Goldfin Shard",
+   "rarity": "UNCOMMON",
+   "num": 5,
+   "category": "WATER",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "GOLDEN_GHOUL"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOSSYBIT",
+    "chameleon": [
+     "TROGLOBYTE",
+     "HIDEONCAVE",
+     "SALAMANDER"
+    ]
+   }
+  },
+  "TROGLOBYTE": {
+   "name": "Troglobyte Shard",
+   "rarity": "UNCOMMON",
+   "num": 6,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAIN_SLIME",
+    "chameleon": [
+     "HIDEONCAVE",
+     "SALAMANDER",
+     "CUBOA"
+    ]
+   }
+  },
+  "HIDEONCAVE": {
+   "name": "Hideoncave Shard",
+   "rarity": "UNCOMMON",
+   "num": 7,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PEST",
+    "chameleon": [
+     "SALAMANDER",
+     "CUBOA",
+     "PEST"
+    ]
+   }
+  },
+  "SALAMANDER": {
+   "name": "Salamander Shard",
+   "rarity": "UNCOMMON",
+   "num": 8,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "LIZARD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "NEWT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOSSYBIT",
+    "chameleon": [
+     "CUBOA",
+     "PEST",
+     "MOSSYBIT"
+    ]
+   }
+  },
+  "CUBOA": {
+   "name": "Cuboa Shard",
+   "rarity": "UNCOMMON",
+   "num": 9,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "SERPENT"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "REPTILE"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAIN_SLIME",
+    "chameleon": [
+     "PEST",
+     "MOSSYBIT",
+     "RAIN_SLIME"
+    ]
+   }
+  },
+  "PEST": {
+   "name": "Field Mouse Shard",
+   "rarity": "UNCOMMON",
+   "num": 10,
+   "category": "FOREST",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CRICKET",
+    "chameleon": [
+     "MOSSYBIT",
+     "RAIN_SLIME",
+     "SYLVAN"
+    ]
+   }
+  },
+  "MOSSYBIT": {
+   "name": "Mossybit Shard",
+   "rarity": "UNCOMMON",
+   "num": 11,
+   "category": "WATER",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "TADGANG"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "genericPlus": true,
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WETWING",
+    "chameleon": [
+     "RAIN_SLIME",
+     "SYLVAN",
+     "WETWING"
+    ]
+   }
+  },
+  "RAIN_SLIME": {
+   "name": "Rain Slime Shard",
+   "rarity": "UNCOMMON",
+   "num": 12,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEER",
+    "chameleon": [
+     "SYLVAN",
+     "WETWING",
+     "SEER"
+    ]
+   }
+  },
+  "WETWING": {
+   "name": "Wetwing Shard",
+   "rarity": "UNCOMMON",
+   "num": 14,
+   "category": "WATER",
+   "families": [
+    "DROWNED"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEA_WITCH",
+    "chameleon": [
+     "SEER",
+     "HERON",
+     "SEA_WITCH"
+    ]
+   }
+  },
+  "SEER": {
+   "name": "Seer Shard",
+   "rarity": "UNCOMMON",
+   "num": 15,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "OBSIDIAN_DEFENDER",
+    "chameleon": [
+     "HERON",
+     "SEA_WITCH",
+     "OBSIDIAN_DEFENDER"
+    ]
+   }
+  },
+  "HERON": {
+   "name": "Heron Shard",
+   "rarity": "UNCOMMON",
+   "num": 16,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CRICKET",
+    "chameleon": [
+     "SEA_WITCH",
+     "OBSIDIAN_DEFENDER",
+     "CRICKET"
+    ]
+   }
+  },
+  "SEA_WITCH": {
+   "name": "Sea Witch Shard",
+   "rarity": "UNCOMMON",
+   "num": 17,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SALMON",
+    "chameleon": [
+     "OBSIDIAN_DEFENDER",
+     "CRICKET",
+     "SALMON"
+    ]
+   }
+  },
+  "OBSIDIAN_DEFENDER": {
+   "name": "Obsidian Defender Shard",
+   "rarity": "UNCOMMON",
+   "num": 18,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ZOMBIE_SOLDIER",
+    "chameleon": [
+     "CRICKET",
+     "SALMON",
+     "VIPER"
+    ]
+   }
+  },
+  "CRICKET": {
+   "name": "Cricket Shard",
+   "rarity": "UNCOMMON",
+   "num": 19,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PRAYING_MANTIS",
+    "chameleon": [
+     "SALMON",
+     "VIPER",
+     "PRAYING_MANTIS"
+    ]
+   }
+  },
+  "SALMON": {
+   "name": "Salmon Shard",
+   "rarity": "UNCOMMON",
+   "num": 20,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LOTUM",
+    "chameleon": [
+     "VIPER",
+     "PRAYING_MANTIS",
+     "LOTUM"
+    ]
+   }
+  },
+  "VIPER": {
+   "name": "Viper Shard",
+   "rarity": "UNCOMMON",
+   "num": 21,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "SERPENT"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "CUBOA"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ZOMBIE_SOLDIER",
+    "chameleon": [
+     "PRAYING_MANTIS",
+     "LOTUM",
+     "ZOMBIE_SOLDIER"
+    ]
+   }
+  },
+  "PRAYING_MANTIS": {
+   "name": "Praying Mantis Shard",
+   "rarity": "UNCOMMON",
+   "num": 22,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BAMBULEAF",
+    "chameleon": [
+     "LOTUM",
+     "ZOMBIE_SOLDIER",
+     "BAMBULEAF"
+    ]
+   }
+  },
+  "LOTUM": {
+   "name": "Lotum Shard",
+   "rarity": "UNCOMMON",
+   "num": 23,
+   "category": "WATER",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TREASURE_HOARDER",
+    "chameleon": [
+     "ZOMBIE_SOLDIER",
+     "BAMBULEAF",
+     "TREASURE_HOARDER"
+    ]
+   }
+  },
+  "ZOMBIE_SOLDIER": {
+   "name": "Zombie Soldier Shard",
+   "rarity": "UNCOMMON",
+   "num": 24,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SYCOPHANT",
+    "chameleon": [
+     "BAMBULEAF",
+     "TREASURE_HOARDER",
+     "SYCOPHANT"
+    ]
+   }
+  },
+  "BAMBULEAF": {
+   "name": "Bambuleaf Shard",
+   "rarity": "UNCOMMON",
+   "num": 25,
+   "category": "FOREST",
+   "families": [
+    "PANDA"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOCHIBEAR",
+    "chameleon": [
+     "TREASURE_HOARDER",
+     "SYCOPHANT",
+     "SEAGULL"
+    ]
+   }
+  },
+  "TREASURE_HOARDER": {
+   "name": "Treasure Hoarder Shard",
+   "rarity": "UNCOMMON",
+   "num": 26,
+   "category": "WATER",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ENT",
+    "chameleon": [
+     "SYCOPHANT",
+     "SEAGULL",
+     "ENT"
+    ]
+   }
+  },
+  "SYCOPHANT": {
+   "name": "Sycophant Shard",
+   "rarity": "UNCOMMON",
+   "num": 27,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SOUL_OF_THE_ALPHA",
+    "chameleon": [
+     "SEAGULL",
+     "ENT",
+     "SOUL_OF_THE_ALPHA"
+    ]
+   }
+  },
+  "SEAGULL": {
+   "name": "Seagull Shard",
+   "rarity": "UNCOMMON",
+   "num": 28,
+   "category": "FOREST",
+   "families": [
+    "BIRD",
+    "TRASH_LOVER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOCHIBEAR",
+    "chameleon": [
+     "ENT",
+     "SOUL_OF_THE_ALPHA",
+     "MOCHIBEAR"
+    ]
+   }
+  },
+  "ENT": {
+   "name": "Ent Shard",
+   "rarity": "UNCOMMON",
+   "num": 29,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MAGMA_SLUG",
+    "chameleon": [
+     "SOUL_OF_THE_ALPHA",
+     "MOCHIBEAR",
+     "MAGMA_SLUG"
+    ]
+   }
+  },
+  "SOUL_OF_THE_ALPHA": {
+   "name": "Soul of the Alpha Shard",
+   "rarity": "UNCOMMON",
+   "num": 30,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FLAMING_SPIDER",
+    "chameleon": [
+     "MOCHIBEAR",
+     "MAGMA_SLUG",
+     "FLAMING_SPIDER"
+    ]
+   }
+  },
+  "MOCHIBEAR": {
+   "name": "Mochibear Shard",
+   "rarity": "UNCOMMON",
+   "num": 31,
+   "category": "FOREST",
+   "families": [
+    "PANDA"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "MAGMA_SLUG",
+     "FLAMING_SPIDER",
+     "KIWI"
+    ]
+   }
+  },
+  "MAGMA_SLUG": {
+   "name": "Magma Slug Shard",
+   "rarity": "UNCOMMON",
+   "num": 32,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STRIDER_SURFER",
+    "chameleon": [
+     "FLAMING_SPIDER",
+     "KIWI",
+     "SYLVAN"
+    ]
+   }
+  },
+  "FLAMING_SPIDER": {
+   "name": "Flaming Spider Shard",
+   "rarity": "UNCOMMON",
+   "num": 33,
+   "category": "COMBAT",
+   "families": [
+    "SPIDER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BRUISER",
+    "chameleon": [
+     "KIWI",
+     "SYLVAN",
+     "BRUISER"
+    ]
+   }
+  },
+  "KIWI": {
+   "name": "Kiwi Shard",
+   "rarity": "UNCOMMON",
+   "num": 34,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "SYLVAN",
+     "BRUISER",
+     "CASCADE"
+    ]
+   }
+  },
+  "BRUISER": {
+   "name": "Zealot Bruiser Shard",
+   "rarity": "UNCOMMON",
+   "num": 36,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "SYLVAN",
+     "STRIDER_SURFER",
+     "RANA"
+    ]
+   }
+  },
+  "STRIDER_SURFER": {
+   "name": "Stridersurfer Shard",
+   "rarity": "UNCOMMON",
+   "num": 38,
+   "category": "WATER",
+   "families": [
+    "DROWNED"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FLIP_FLOPPER",
+    "chameleon": [
+     "RANA",
+     "TERMITE",
+     "FLIP_FLOPPER"
+    ]
+   }
+  },
+  "RANA": {
+   "name": "Rana Shard",
+   "rarity": "UNCOMMON",
+   "num": 39,
+   "category": "COMBAT",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "FROG"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "TERMITE",
+     "FLIP_FLOPPER",
+     "POLARIS"
+    ]
+   }
+  },
+  "TERMITE": {
+   "name": "Earthworm Shard",
+   "rarity": "UNCOMMON",
+   "num": 40,
+   "category": "FOREST",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BUG"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "MINING"
+      }
+     ],
+     "unknown": true
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "FLIP_FLOPPER",
+     "POLARIS",
+     "TREEFROG"
+    ]
+   }
+  },
+  "FLIP_FLOPPER": {
+   "name": "Flipflopper Shard",
+   "rarity": "UNCOMMON",
+   "num": 41,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BAYOU_SLUDGE",
+    "chameleon": [
+     "POLARIS",
+     "TREEFROG",
+     "BAYOU_SLUDGE"
+    ]
+   }
+  },
+  "POLARIS": {
+   "name": "Polaris Shard",
+   "rarity": "UNCOMMON",
+   "num": 42,
+   "category": "COMBAT",
+   "families": [
+    "ARCTIC"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "TREEFROG",
+     "BAYOU_SLUDGE",
+     "AREITA"
+    ]
+   }
+  },
+  "TREEFROG": {
+   "name": "Treefrog Shard",
+   "rarity": "UNCOMMON",
+   "num": 43,
+   "category": "FOREST",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "BAYOU_SLUDGE",
+     "AREITA",
+     "BLUEBIRD"
+    ]
+   }
+  },
+  "BAYOU_SLUDGE": {
+   "name": "Bayou Sludge Shard",
+   "rarity": "UNCOMMON",
+   "num": 44,
+   "category": "WATER",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WATER_SNAKE",
+    "chameleon": [
+     "AREITA",
+     "BLUEBIRD",
+     "OSEDAX"
+    ]
+   }
+  },
+  "AREITA": {
+   "name": "Areita Shard",
+   "rarity": "UNCOMMON",
+   "num": 45,
+   "category": "COMBAT",
+   "families": [
+    "SPIDER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "BLUEBIRD",
+     "OSEDAX",
+     "DUPLICO"
+    ]
+   }
+  },
+  "BLUEBIRD": {
+   "name": "Bluebird Shard",
+   "rarity": "UNCOMMON",
+   "num": 46,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "OSEDAX",
+     "DUPLICO",
+     "LITTERBUG"
+    ]
+   }
+  },
+  "OSEDAX": {
+   "name": "Osedax Shard",
+   "rarity": "UNCOMMON",
+   "num": 47,
+   "category": "WATER",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WATER_SNAKE",
+    "chameleon": [
+     "DUPLICO",
+     "LITTERBUG",
+     "WATER_SNAKE"
+    ]
+   }
+  },
+  "DUPLICO": {
+   "name": "Duplico Shard",
+   "rarity": "UNCOMMON",
+   "num": 48,
+   "category": "COMBAT",
+   "families": [
+    "POLTERGEIST"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "LITTERBUG",
+     "WATER_SNAKE",
+     "GAZER"
+    ]
+   }
+  },
+  "LITTERBUG": {
+   "name": "Litterbug Shard",
+   "rarity": "UNCOMMON",
+   "num": 49,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "WATER_SNAKE",
+     "GAZER",
+     "HONEYBUG"
+    ]
+   }
+  },
+  "WATER_SNAKE": {
+   "name": "Water Snake Shard",
+   "rarity": "UNCOMMON",
+   "num": 50,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "SCALED",
+    "SERPENT"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEPIALOT",
+    "chameleon": [
+     "GAZER",
+     "HONEYBUG",
+     "SHUDDERSQUID"
+    ]
+   }
+  },
+  "GAZER": {
+   "name": "Gazer Shard",
+   "rarity": "UNCOMMON",
+   "num": 51,
+   "category": "COMBAT",
+   "families": [
+    "DEMON"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "HONEYBUG",
+     "SHUDDERSQUID",
+     "SYLVAN"
+    ]
+   }
+  },
+  "HONEYBUG": {
+   "name": "Honeybug Shard",
+   "rarity": "UNCOMMON",
+   "num": 52,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "SHUDDERSQUID",
+     "SYLVAN",
+     "SOLSNATCHER"
+    ]
+   }
+  },
+  "SHUDDERSQUID": {
+   "name": "Shuddersquid Shard",
+   "rarity": "UNCOMMON",
+   "num": 53,
+   "category": "WATER",
+   "families": [
+    "SQUID"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEPIALOT",
+    "chameleon": [
+     "SYLVAN",
+     "SOLSNATCHER",
+     "SEPIALOT"
+    ]
+   }
+  },
+  "SOLSNATCHER": {
+   "name": "Solsnatcher Shard",
+   "rarity": "UNCOMMON",
+   "num": 55,
+   "category": "FOREST",
+   "families": [
+    "PHANTOM"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "SEPIALOT",
+     "HONEY_BADGER",
+     "DRIFTLING"
+    ]
+   }
+  },
+  "SEPIALOT": {
+   "name": "Sepialot Shard",
+   "rarity": "UNCOMMON",
+   "num": 56,
+   "category": "WATER",
+   "families": [
+    "AMPHIBIAN",
+    "AXOLOTL"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TEWTIL",
+    "chameleon": [
+     "HONEY_BADGER",
+     "DRIFTLING",
+     "TEWTIL"
+    ]
+   }
+  },
+  "HONEY_BADGER": {
+   "name": "Honey Badger Shard",
+   "rarity": "UNCOMMON",
+   "num": 57,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOS_HUNTER",
+    "chameleon": [
+     "DRIFTLING",
+     "TEWTIL",
+     "MINOS_HUNTER"
+    ]
+   }
+  },
+  "DRIFTLING": {
+   "name": "Driftling Shard",
+   "rarity": "UNCOMMON",
+   "num": 58,
+   "category": "FOREST",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "TEWTIL",
+     "MINOS_HUNTER",
+     "WOODCHUCKER"
+    ]
+   }
+  },
+  "TEWTIL": {
+   "name": "Tewtil Shard",
+   "rarity": "UNCOMMON",
+   "num": 59,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "TURTLE"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SOLAR",
+    "chameleon": [
+     "MINOS_HUNTER",
+     "WOODCHUCKER",
+     "SOLAR"
+    ]
+   }
+  },
+  "MINOS_HUNTER": {
+   "name": "Minos Hunter Shard",
+   "rarity": "UNCOMMON",
+   "num": 60,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PARCHED",
+    "chameleon": [
+     "WOODCHUCKER",
+     "SOLAR",
+     "PARCHED"
+    ]
+   }
+  },
+  "WOODCHUCKER": {
+   "name": "Woodchucker Shard",
+   "rarity": "UNCOMMON",
+   "num": 61,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "SOLAR",
+     "PARCHED",
+     "BLOODBAT"
+    ]
+   }
+  },
+  "SOLAR": {
+   "name": "Solar Shard",
+   "rarity": "UNCOMMON",
+   "num": 62,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DUSTYBIT",
+    "chameleon": [
+     "PARCHED",
+     "BLOODBAT",
+     "DUSTYBIT"
+    ]
+   }
+  },
+  "PARCHED": {
+   "name": "Parched Shard",
+   "rarity": "UNCOMMON",
+   "num": 63,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CHEEKY_TIKI",
+    "chameleon": [
+     "BLOODBAT",
+     "DUSTYBIT",
+     "SYLVAN"
+    ]
+   }
+  },
+  "BLOODBAT": {
+   "name": "Bloodbat Shard",
+   "rarity": "UNCOMMON",
+   "num": 64,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WOODLOUSE",
+    "chameleon": [
+     "DUSTYBIT",
+     "SYLVAN",
+     "WOODLOUSE"
+    ]
+   }
+  },
+  "DUSTYBIT": {
+   "name": "Dustybit Shard",
+   "rarity": "UNCOMMON",
+   "num": 65,
+   "category": "WATER",
+   "families": [
+    "FROG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "TADGANG"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "genericPlus": true,
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "EMBER",
+    "chameleon": [
+     "SYLVAN",
+     "WOODLOUSE",
+     "EMBER"
+    ]
+   }
+  },
+  "WOODLOUSE": {
+   "name": "Woodlouse Shard",
+   "rarity": "UNCOMMON",
+   "num": 67,
+   "category": "FOREST",
+   "families": [
+    "CRUSTACEAN",
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "EMBER",
+     "CHEEKY_TIKI",
+     "RED_PANDA"
+    ]
+   }
+  },
+  "EMBER": {
+   "name": "Ember Shard",
+   "rarity": "UNCOMMON",
+   "num": 68,
+   "category": "WATER",
+   "families": [
+    "TROPICAL_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPRAWL",
+    "chameleon": [
+     "CHEEKY_TIKI",
+     "RED_PANDA",
+     "SPRAWL"
+    ]
+   }
+  },
+  "CHEEKY_TIKI": {
+   "name": "Cheeky Tiki Shard",
+   "rarity": "UNCOMMON",
+   "num": 69,
+   "category": "COMBAT",
+   "families": [
+    "CREATION"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SNEAKY_TIKI",
+    "chameleon": [
+     "RED_PANDA",
+     "SPRAWL",
+     "SNEAKY_TIKI"
+    ]
+   }
+  },
+  "RED_PANDA": {
+   "name": "Red Panda Shard",
+   "rarity": "UNCOMMON",
+   "num": 70,
+   "category": "FOREST",
+   "families": [
+    "PANDA"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "SPRAWL",
+     "SNEAKY_TIKI",
+     "PACKRAT_SKULL"
+    ]
+   }
+  },
+  "SPRAWL": {
+   "name": "Sprawl Shard",
+   "rarity": "UNCOMMON",
+   "num": 71,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "SNEAKY_TIKI",
+     "PACKRAT_SKULL",
+     "SYLVAN"
+    ]
+   }
+  },
+  "SNEAKY_TIKI": {
+   "name": "Sneaky Tiki Shard",
+   "rarity": "UNCOMMON",
+   "num": 72,
+   "category": "COMBAT",
+   "families": [
+    "CREATION"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SHRIEKY_TIKI",
+    "chameleon": [
+     "PACKRAT_SKULL",
+     "SYLVAN",
+     "SHRIEKY_TIKI"
+    ]
+   }
+  },
+  "PACKRAT_SKULL": {
+   "name": "Packrat Shard",
+   "rarity": "UNCOMMON",
+   "num": 73,
+   "category": "MINING",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "SYLVAN",
+     "SHRIEKY_TIKI",
+     "WOODPECKER"
+    ]
+   }
+  },
+  "SHRIEKY_TIKI": {
+   "name": "Shrieky Tiki Shard",
+   "rarity": "UNCOMMON",
+   "num": 75,
+   "category": "COMBAT",
+   "families": [
+    "CREATION"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HONEYMITE",
+    "chameleon": [
+     "WOODPECKER",
+     "SYLVAN",
+     "HONEYMITE"
+    ]
+   }
+  },
+  "WOODPECKER": {
+   "name": "Woodpecker Shard",
+   "rarity": "UNCOMMON",
+   "num": 76,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "SYLVAN",
+     "HONEYMITE",
+     "QUEEN_ANT"
+    ]
+   }
+  },
+  "HONEYMITE": {
+   "name": "Honeymite Shard",
+   "rarity": "UNCOMMON",
+   "num": 78,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "QUEEN_ANT",
+     "SYLVAN",
+     "CASCADE"
+    ]
+   }
+  },
+  "QUEEN_ANT": {
+   "name": "Queen Ant Shard",
+   "rarity": "UNCOMMON",
+   "num": 79,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "ANT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "QUEEN_BEE"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "HAWK"
+    ]
+   }
+  },
+  "HAWK": {
+   "name": "Hawk Shard",
+   "rarity": "UNCOMMON",
+   "num": 82,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "JUNE_BUG"
+    ]
+   }
+  },
+  "JUNE_BUG": {
+   "name": "June Bug Shard",
+   "rarity": "UNCOMMON",
+   "num": 85,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "DUNG_BEETLE"
+    ]
+   }
+  },
+  "DUNG_BEETLE": {
+   "name": "Dung Beetle Shard",
+   "rarity": "UNCOMMON",
+   "num": 88,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "RAT",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "RAT"
+    ]
+   }
+  },
+  "RAT": {
+   "name": "Rat Shard",
+   "rarity": "UNCOMMON",
+   "num": 91,
+   "category": "FOREST",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "KEELED_SLUG",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "KEELED_SLUG"
+    ]
+   }
+  },
+  "KEELED_SLUG": {
+   "name": "Keeled Slug Shard",
+   "rarity": "UNCOMMON",
+   "num": 94,
+   "category": "FOREST",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MITE",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "MITE"
+    ]
+   }
+  },
+  "MITE": {
+   "name": "Mite Shard",
+   "rarity": "UNCOMMON",
+   "num": 97,
+   "category": "FOREST",
+   "families": [
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOTH",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "MOTH"
+    ]
+   }
+  },
+  "MOTH": {
+   "name": "Moth Shard",
+   "rarity": "UNCOMMON",
+   "num": 100,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOSQUITO",
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "MOSQUITO"
+    ]
+   }
+  },
+  "MOSQUITO": {
+   "name": "Mosquito Shard",
+   "rarity": "UNCOMMON",
+   "num": 103,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "RABBIT_CAT"
+    ]
+   }
+  },
+  "RABBIT_CAT": {
+   "name": "Rabbit Cat Shard",
+   "rarity": "UNCOMMON",
+   "num": 106,
+   "category": "FOREST",
+   "families": [
+    "CRIME"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "SYLVAN",
+     "CASCADE",
+     "BOLT"
+    ]
+   }
+  },
+  "SYLVAN": {
+   "name": "Sylvan Shard",
+   "rarity": "RARE",
+   "num": 1,
+   "category": "FOREST",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": false
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BEACONMITE",
+    "chameleon": [
+     "CASCADE",
+     "BOLT",
+     "BAMBLOOM"
+    ]
+   }
+  },
+  "CASCADE": {
+   "name": "Cascade Shard",
+   "rarity": "RARE",
+   "num": 2,
+   "category": "WATER",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": false
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PIRANHA",
+    "chameleon": [
+     "BOLT",
+     "BAMBLOOM",
+     "TOAD"
+    ]
+   }
+  },
+  "BOLT": {
+   "name": "Bolt Shard",
+   "rarity": "RARE",
+   "num": 3,
+   "category": "COMBAT",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": false
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GLACITE_WALKER",
+    "chameleon": [
+     "BAMBLOOM",
+     "TOAD",
+     "GLACITE_WALKER"
+    ]
+   }
+  },
+  "BAMBLOOM": {
+   "name": "Bambloom Shard",
+   "rarity": "RARE",
+   "num": 4,
+   "category": "FOREST",
+   "families": [
+    "PANDA"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "PANDA"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BEACONMITE",
+    "chameleon": [
+     "TOAD",
+     "GLACITE_WALKER",
+     "BEACONMITE"
+    ]
+   }
+  },
+  "TOAD": {
+   "name": "Toad Shard",
+   "rarity": "RARE",
+   "num": 5,
+   "category": "WATER",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "FROG"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PIRANHA",
+    "chameleon": [
+     "GLACITE_WALKER",
+     "BEACONMITE",
+     "LIZARD_KING"
+    ]
+   }
+  },
+  "GLACITE_WALKER": {
+   "name": "Glacite Walker Shard",
+   "rarity": "RARE",
+   "num": 6,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DROWNED",
+    "chameleon": [
+     "BEACONMITE",
+     "LIZARD_KING",
+     "PYTHON"
+    ]
+   }
+  },
+  "BEACONMITE": {
+   "name": "Beaconmite Shard",
+   "rarity": "RARE",
+   "num": 7,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "INVISIBUG",
+    "chameleon": [
+     "LIZARD_KING",
+     "PYTHON",
+     "INVISIBUG"
+    ]
+   }
+  },
+  "LIZARD_KING": {
+   "name": "Lizard King Shard",
+   "rarity": "RARE",
+   "num": 8,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "LIZARD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "LIZARD"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PIRANHA",
+    "chameleon": [
+     "PYTHON",
+     "INVISIBUG",
+     "PIRANHA"
+    ]
+   }
+  },
+  "PYTHON": {
+   "name": "Python Shard",
+   "rarity": "RARE",
+   "num": 9,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "SERPENT"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "VIPER"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DROWNED",
+    "chameleon": [
+     "INVISIBUG",
+     "PIRANHA",
+     "TERRA"
+    ]
+   }
+  },
+  "INVISIBUG": {
+   "name": "Invisibug Shard",
+   "rarity": "RARE",
+   "num": 10,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CROPEETLE",
+    "chameleon": [
+     "PIRANHA",
+     "TERRA",
+     "HIDEONGEON"
+    ]
+   }
+  },
+  "PIRANHA": {
+   "name": "Piranha Shard",
+   "rarity": "RARE",
+   "num": 11,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ABYSSAL_LANTERN",
+    "chameleon": [
+     "TERRA",
+     "HIDEONGEON",
+     "CRYO"
+    ]
+   }
+  },
+  "HIDEONGEON": {
+   "name": "Hideongeon Shard",
+   "rarity": "RARE",
+   "num": 13,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "WITHER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CROPEETLE",
+    "chameleon": [
+     "TERRA",
+     "LAPIS_SKELETON",
+     "CROPEETLE"
+    ]
+   }
+  },
+  "LAPIS_SKELETON": {
+   "name": "Lapis Skeleton Shard",
+   "rarity": "RARE",
+   "num": 15,
+   "category": "COMBAT",
+   "families": [
+    "LAPIS"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LAPIS_ZOMBIE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DROWNED",
+    "chameleon": [
+     "CROPEETLE",
+     "TERRA",
+     "DROWNED"
+    ]
+   }
+  },
+  "CROPEETLE": {
+   "name": "Beetle Shard",
+   "rarity": "RARE",
+   "num": 16,
+   "category": "FOREST",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "THYST",
+    "chameleon": [
+     "TERRA",
+     "DROWNED",
+     "VULTURE"
+    ]
+   }
+  },
+  "DROWNED": {
+   "name": "Drowned Shard",
+   "rarity": "RARE",
+   "num": 18,
+   "category": "COMBAT",
+   "families": [
+    "DROWNED"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STAR_SENTRY",
+    "chameleon": [
+     "VULTURE",
+     "TERRA",
+     "STAR_SENTRY"
+    ]
+   }
+  },
+  "VULTURE": {
+   "name": "Vulture Shard",
+   "rarity": "RARE",
+   "num": 19,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "THYST",
+    "chameleon": [
+     "TERRA",
+     "STAR_SENTRY",
+     "HIDEONDRA"
+    ]
+   }
+  },
+  "STAR_SENTRY": {
+   "name": "Star Sentry Shard",
+   "rarity": "RARE",
+   "num": 21,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ARACHNE",
+    "chameleon": [
+     "HIDEONDRA",
+     "ABYSSAL_LANTERN",
+     "ARACHNE"
+    ]
+   }
+  },
+  "HIDEONDRA": {
+   "name": "Hideondra Shard",
+   "rarity": "RARE",
+   "num": 22,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "DEMON"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "THYST",
+    "chameleon": [
+     "ABYSSAL_LANTERN",
+     "ARACHNE"
+    ]
+   }
+  },
+  "ABYSSAL_LANTERN": {
+   "name": "Abyssal Lanternfish Shard",
+   "rarity": "RARE",
+   "num": 23,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LAVA_LEECH",
+    "chameleon": [
+     "ARACHNE",
+     "LAVA_LEECH"
+    ]
+   }
+  },
+  "ARACHNE": {
+   "name": "Arachne Shard",
+   "rarity": "RARE",
+   "num": 24,
+   "category": "COMBAT",
+   "families": [
+    "SPIDER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "REVENANT",
+    "chameleon": [
+     "LAVA_LEECH",
+     "REVENANT"
+    ]
+   }
+  },
+  "BITBUG": {
+   "name": "Bitbug Shard",
+   "rarity": "RARE",
+   "num": 25,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": "THYST",
+    "chameleon": [
+     "LAVA_LEECH",
+     "REVENANT",
+     "FOLF"
+    ]
+   }
+  },
+  "LAVA_LEECH": {
+   "name": "Lava Leech Shard",
+   "rarity": "RARE",
+   "num": 26,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SILENTDEPTH",
+    "chameleon": [
+     "REVENANT",
+     "FOLF",
+     "SILENTDEPTH"
+    ]
+   }
+  },
+  "REVENANT": {
+   "name": "Revenant Shard",
+   "rarity": "RARE",
+   "num": 27,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SKELETOR",
+    "chameleon": [
+     "FOLF",
+     "SILENTDEPTH",
+     "SKELETOR"
+    ]
+   }
+  },
+  "FOLF": {
+   "name": "Folf Shard",
+   "rarity": "RARE",
+   "num": 28,
+   "category": "COMBAT",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SOUL_OF_THE_ALPHA"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "genericPlus": true,
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "SILENTDEPTH",
+     "SKELETOR",
+     "THYST"
+    ]
+   }
+  },
+  "SILENTDEPTH": {
+   "name": "Silentdepth Shard",
+   "rarity": "RARE",
+   "num": 29,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEA_SHINE",
+    "chameleon": [
+     "SKELETOR",
+     "THYST",
+     "SEA_SHINE"
+    ]
+   }
+  },
+  "SKELETOR": {
+   "name": "Skeletor Shard",
+   "rarity": "RARE",
+   "num": 30,
+   "category": "COMBAT",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LAPIS_SKELETON"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "genericPlus": true,
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "KADA_KNIGHT",
+    "chameleon": [
+     "THYST",
+     "SEA_SHINE",
+     "QUARTZFANG"
+    ]
+   }
+  },
+  "THYST": {
+   "name": "Thyst Shard",
+   "rarity": "RARE",
+   "num": 31,
+   "category": "FOREST",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DREADWING",
+    "chameleon": [
+     "SEA_SHINE",
+     "QUARTZFANG",
+     "HIDEONRING"
+    ]
+   }
+  },
+  "SEA_SHINE": {
+   "name": "Seashine Shard",
+   "rarity": "RARE",
+   "num": 32,
+   "category": "WATER",
+   "families": [
+    "SQUID"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SNOWFIN",
+    "chameleon": [
+     "QUARTZFANG",
+     "HIDEONRING",
+     "SNOWFIN"
+    ]
+   }
+  },
+  "QUARTZFANG": {
+   "name": "Quartzfang Shard",
+   "rarity": "RARE",
+   "num": 33,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "TROGLOBYTE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "ABYSSAL_LANTERN"
+      },
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "KADA_KNIGHT",
+    "chameleon": [
+     "HIDEONRING",
+     "SNOWFIN",
+     "KADA_KNIGHT"
+    ]
+   }
+  },
+  "HIDEONRING": {
+   "name": "Hideonring Shard",
+   "rarity": "RARE",
+   "num": 34,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DREADWING",
+    "chameleon": [
+     "SNOWFIN",
+     "KADA_KNIGHT",
+     "HUMMINGBIRD"
+    ]
+   }
+  },
+  "SNOWFIN": {
+   "name": "Snowfin Shard",
+   "rarity": "RARE",
+   "num": 35,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CARROT_KING",
+    "chameleon": [
+     "KADA_KNIGHT",
+     "HUMMINGBIRD",
+     "CARROT_KING"
+    ]
+   }
+  },
+  "KADA_KNIGHT": {
+   "name": "Kada Knight Shard",
+   "rarity": "RARE",
+   "num": 36,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WITHER_SPECTER",
+    "chameleon": [
+     "HUMMINGBIRD",
+     "CARROT_KING",
+     "WITHER_SPECTER"
+    ]
+   }
+  },
+  "HUMMINGBIRD": {
+   "name": "Hummingbird Shard",
+   "rarity": "RARE",
+   "num": 37,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DREADWING",
+    "chameleon": [
+     "CARROT_KING",
+     "WITHER_SPECTER",
+     "BADGER"
+    ]
+   }
+  },
+  "CARROT_KING": {
+   "name": "Carrot King Shard",
+   "rarity": "RARE",
+   "num": 38,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LUMISQUID",
+    "chameleon": [
+     "WITHER_SPECTER",
+     "BADGER",
+     "TERRA"
+    ]
+   }
+  },
+  "WITHER_SPECTER": {
+   "name": "Wither Spectre Shard",
+   "rarity": "RARE",
+   "num": 39,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MATCHO",
+    "chameleon": [
+     "BADGER",
+     "TERRA",
+     "MATCHO"
+    ]
+   }
+  },
+  "BADGER": {
+   "name": "Badger Shard",
+   "rarity": "RARE",
+   "num": 40,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DREADWING",
+    "chameleon": [
+     "TERRA",
+     "MATCHO",
+     "LADYBUG"
+    ]
+   }
+  },
+  "MATCHO": {
+   "name": "Matcho Shard",
+   "rarity": "RARE",
+   "num": 42,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CROCODILE",
+    "chameleon": [
+     "LADYBUG",
+     "LUMISQUID",
+     "CROCODILE"
+    ]
+   }
+  },
+  "LADYBUG": {
+   "name": "Ladybug Shard",
+   "rarity": "RARE",
+   "num": 43,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "TERMITE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "INVISIBUG"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DREADWING",
+    "chameleon": [
+     "LUMISQUID",
+     "CROCODILE",
+     "WILD_HOG"
+    ]
+   }
+  },
+  "LUMISQUID": {
+   "name": "Lumisquid Shard",
+   "rarity": "RARE",
+   "num": 44,
+   "category": "WATER",
+   "families": [
+    "SQUID"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "JOYDIVE",
+    "chameleon": [
+     "CROCODILE",
+     "WILD_HOG",
+     "BULLFROG"
+    ]
+   }
+  },
+  "CROCODILE": {
+   "name": "Crocodile Shard",
+   "rarity": "RARE",
+   "num": 45,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "CROCO"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DRACONIC",
+    "chameleon": [
+     "WILD_HOG",
+     "BULLFROG",
+     "TERRA"
+    ]
+   }
+  },
+  "WILD_HOG": {
+   "name": "Wild Hog Shard",
+   "rarity": "RARE",
+   "num": 46,
+   "category": "FOREST",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "GROUNDHOG"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "HONEYHOG"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DREADWING",
+    "chameleon": [
+     "BULLFROG",
+     "TERRA",
+     "DREADWING"
+    ]
+   }
+  },
+  "BULLFROG": {
+   "name": "Bullfrog Shard",
+   "rarity": "RARE",
+   "num": 47,
+   "category": "WATER",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "FROG"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "JOYDIVE",
+    "chameleon": [
+     "TERRA",
+     "DREADWING",
+     "JOYDIVE"
+    ]
+   }
+  },
+  "DREADWING": {
+   "name": "Dreadwing Shard",
+   "rarity": "RARE",
+   "num": 49,
+   "category": "FOREST",
+   "families": [
+    "PHANTOM"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "PHANPYRE"
+      },
+      {
+       "shard": "PHANFLARE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "genericPlus": true,
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FUNGLOOM",
+    "chameleon": [
+     "JOYDIVE",
+     "STALAGMIGHT",
+     "FUNGLOOM"
+    ]
+   }
+  },
+  "JOYDIVE": {
+   "name": "Joydive Shard",
+   "rarity": "RARE",
+   "num": 50,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "EEL",
+    "chameleon": [
+     "STALAGMIGHT",
+     "FUNGLOOM",
+     "EEL"
+    ]
+   }
+  },
+  "STALAGMIGHT": {
+   "name": "Stalagmight Shard",
+   "rarity": "RARE",
+   "num": 51,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "QUARTZFANG"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SILENTDEPTH"
+      },
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DRACONIC",
+    "chameleon": [
+     "FUNGLOOM",
+     "EEL",
+     "KING_COBRA"
+    ]
+   }
+  },
+  "FUNGLOOM": {
+   "name": "Fungloom Shard",
+   "rarity": "RARE",
+   "num": 52,
+   "category": "FOREST",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "genericPlus": true,
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HEWVER",
+    "chameleon": [
+     "EEL",
+     "KING_COBRA",
+     "HEWVER"
+    ]
+   }
+  },
+  "EEL": {
+   "name": "Eel Shard",
+   "rarity": "RARE",
+   "num": 53,
+   "category": "WATER",
+   "families": [
+    "EEL",
+    "AMPHIBIAN"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LAVA_FLAME",
+    "chameleon": [
+     "KING_COBRA",
+     "HEWVER",
+     "LAVA_FLAME"
+    ]
+   }
+  },
+  "KING_COBRA": {
+   "name": "King Cobra Shard",
+   "rarity": "RARE",
+   "num": 54,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "SERPENT"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "PYTHON"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DRACONIC",
+    "chameleon": [
+     "HEWVER",
+     "LAVA_FLAME",
+     "DRACONIC"
+    ]
+   }
+  },
+  "HEWVER": {
+   "name": "Hewver Shard",
+   "rarity": "RARE",
+   "num": 55,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HIVETHIEF",
+    "chameleon": [
+     "LAVA_FLAME",
+     "DRACONIC",
+     "FALCON"
+    ]
+   }
+  },
+  "LAVA_FLAME": {
+   "name": "Lava Flame Shard",
+   "rarity": "RARE",
+   "num": 56,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "INFERNO_KOI",
+    "chameleon": [
+     "DRACONIC",
+     "FALCON",
+     "INFERNO_KOI"
+    ]
+   }
+  },
+  "DRACONIC": {
+   "name": "Draconic Shard",
+   "rarity": "RARE",
+   "num": 57,
+   "category": "COMBAT",
+   "families": [
+    "DRAGON"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WITHER",
+    "chameleon": [
+     "FALCON",
+     "INFERNO_KOI",
+     "WITHER"
+    ]
+   }
+  },
+  "FALCON": {
+   "name": "Falcon Shard",
+   "rarity": "RARE",
+   "num": 58,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HIVETHIEF",
+    "chameleon": [
+     "INFERNO_KOI",
+     "WITHER",
+     "GECKO"
+    ]
+   }
+  },
+  "INFERNO_KOI": {
+   "name": "Inferno Koi Shard",
+   "rarity": "RARE",
+   "num": 59,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "THUNDER",
+    "chameleon": [
+     "WITHER",
+     "GECKO",
+     "WIKI_TIKI"
+    ]
+   }
+  },
+  "WITHER": {
+   "name": "Wither Shard",
+   "rarity": "RARE",
+   "num": 60,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MINOTAUR",
+    "chameleon": [
+     "GECKO",
+     "WIKI_TIKI",
+     "MINOTAUR"
+    ]
+   }
+  },
+  "GECKO": {
+   "name": "Gecko Shard",
+   "rarity": "RARE",
+   "num": 61,
+   "category": "FOREST",
+   "families": [
+    "REPTILE",
+    "SCALED"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HIVETHIEF",
+    "chameleon": [
+     "WIKI_TIKI",
+     "MINOTAUR",
+     "HIVETHIEF"
+    ]
+   }
+  },
+  "WIKI_TIKI": {
+   "name": "Wiki Tiki Shard",
+   "rarity": "RARE",
+   "num": 62,
+   "category": "WATER",
+   "families": [
+    "CREATION"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "family": "CREATION"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SNEAKY_TIKI"
+      },
+      {
+       "shard": "SHRIEKY_TIKI"
+      },
+      {
+       "shard": "CHEEKY_TIKI"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "THUNDER",
+    "chameleon": [
+     "MINOTAUR",
+     "HIVETHIEF",
+     "MAGGOT"
+    ]
+   }
+  },
+  "MINOTAUR": {
+   "name": "Minotaur Shard",
+   "rarity": "RARE",
+   "num": 63,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STONEWORM",
+    "chameleon": [
+     "HIVETHIEF",
+     "MAGGOT",
+     "SNOOZLE"
+    ]
+   }
+  },
+  "HIVETHIEF": {
+   "name": "Hivethief Shard",
+   "rarity": "RARE",
+   "num": 64,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "MAGGOT",
+     "SNOOZLE",
+     "PARAKEET"
+    ]
+   }
+  },
+  "MAGGOT": {
+   "name": "Maggot Shard",
+   "rarity": "RARE",
+   "num": 65,
+   "category": "WATER",
+   "families": [
+    "BUG",
+    "TRASH_LOVER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "TRASH_LOVER"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "UNCOMMON",
+       "up": true
+      },
+      {
+       "family": "BUG"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "THUNDER",
+    "chameleon": [
+     "SNOOZLE",
+     "PARAKEET",
+     "THUNDER"
+    ]
+   }
+  },
+  "SNOOZLE": {
+   "name": "Snoozle Shard",
+   "rarity": "RARE",
+   "num": 66,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STONEWORM",
+    "chameleon": [
+     "PARAKEET",
+     "THUNDER",
+     "ROCKMITE"
+    ]
+   }
+  },
+  "PARAKEET": {
+   "name": "Parakeet Shard",
+   "rarity": "RARE",
+   "num": 67,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "THUNDER",
+     "ROCKMITE",
+     "ANTEATER"
+    ]
+   }
+  },
+  "THUNDER": {
+   "name": "Thunder Shard",
+   "rarity": "RARE",
+   "num": 68,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STINGRAY",
+    "chameleon": [
+     "ROCKMITE",
+     "ANTEATER",
+     "TERRA"
+    ]
+   }
+  },
+  "ROCKMITE": {
+   "name": "Rockmite Shard",
+   "rarity": "RARE",
+   "num": 69,
+   "category": "COMBAT",
+   "families": [
+    "BUG",
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STONEWORM",
+    "chameleon": [
+     "ANTEATER",
+     "TERRA",
+     "SCRAPPY"
+    ]
+   }
+  },
+  "ANTEATER": {
+   "name": "Anteater Shard",
+   "rarity": "RARE",
+   "num": 70,
+   "category": "FOREST",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "QUEEN_ANT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KING_COBRA"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "TERRA",
+     "SCRAPPY",
+     "HIDEYHO"
+    ]
+   }
+  },
+  "SCRAPPY": {
+   "name": "Scrappy Shard",
+   "rarity": "RARE",
+   "num": 72,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STONEWORM",
+    "chameleon": [
+     "HIDEYHO",
+     "MANTIS_SHRIMP",
+     "CHUCKWALLA"
+    ]
+   }
+  },
+  "HIDEYHO": {
+   "name": "Hideyho Shard",
+   "rarity": "RARE",
+   "num": 73,
+   "category": "FOREST",
+   "families": [
+    "POLTERGEIST"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "MANTIS_SHRIMP",
+     "CHUCKWALLA",
+     "HIDEONFLOOR"
+    ]
+   }
+  },
+  "MANTIS_SHRIMP": {
+   "name": "Mantis Shrimp Shard",
+   "rarity": "RARE",
+   "num": 74,
+   "category": "WATER",
+   "families": [
+    "CRUSTACEAN"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STINGRAY",
+    "chameleon": [
+     "CHUCKWALLA",
+     "HIDEONFLOOR",
+     "GIMMIEGOLD"
+    ]
+   }
+  },
+  "CHUCKWALLA": {
+   "name": "Chuckwalla Shard",
+   "rarity": "RARE",
+   "num": 75,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "LIZARD"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STONEWORM",
+    "chameleon": [
+     "HIDEONFLOOR",
+     "GIMMIEGOLD",
+     "BILLYGOAT"
+    ]
+   }
+  },
+  "HIDEONFLOOR": {
+   "name": "Hideonfloor Shard",
+   "rarity": "RARE",
+   "num": 76,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "GIMMIEGOLD",
+     "BILLYGOAT",
+     "HIDEONWALL"
+    ]
+   }
+  },
+  "GIMMIEGOLD": {
+   "name": "Gimmiegold Shard",
+   "rarity": "RARE",
+   "num": 77,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STINGRAY",
+    "chameleon": [
+     "BILLYGOAT",
+     "HIDEONWALL",
+     "NOZZLENOSE"
+    ]
+   }
+  },
+  "BILLYGOAT": {
+   "name": "Billygoat Shard",
+   "rarity": "RARE",
+   "num": 78,
+   "category": "COMBAT",
+   "families": [
+    "ARCTIC"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STONEWORM",
+    "chameleon": [
+     "HIDEONWALL",
+     "NOZZLENOSE",
+     "STONEWORM"
+    ]
+   }
+  },
+  "HIDEONWALL": {
+   "name": "Hideonwall Shard",
+   "rarity": "RARE",
+   "num": 79,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "NOZZLENOSE",
+     "STONEWORM",
+     "FLUFFLING"
+    ]
+   }
+  },
+  "NOZZLENOSE": {
+   "name": "Nozzlenose Shard",
+   "rarity": "RARE",
+   "num": 80,
+   "category": "WATER",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "STINGRAY",
+    "chameleon": [
+     "STONEWORM",
+     "FLUFFLING",
+     "STINGRAY"
+    ]
+   }
+  },
+  "STONEWORM": {
+   "name": "Stoneworm Shard",
+   "rarity": "RARE",
+   "num": 81,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ZOMBUDDY",
+    "chameleon": [
+     "FLUFFLING",
+     "STINGRAY",
+     "ZOMBUDDY"
+    ]
+   }
+  },
+  "FLUFFLING": {
+   "name": "Fluffling Shard",
+   "rarity": "RARE",
+   "num": 82,
+   "category": "FOREST",
+   "families": [
+    "PANDA"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PUCK",
+    "chameleon": [
+     "STINGRAY",
+     "ZOMBUDDY",
+     "PUCK"
+    ]
+   }
+  },
+  "STINGRAY": {
+   "name": "Stingray Shard",
+   "rarity": "RARE",
+   "num": 83,
+   "category": "WATER",
+   "families": [
+    "TREASURE_FISH"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GIANT_WATER_BUG",
+    "chameleon": [
+     "ZOMBUDDY",
+     "PUCK",
+     "TROODON"
+    ]
+   }
+  },
+  "ZOMBUDDY": {
+   "name": "Zombuddy Shard",
+   "rarity": "RARE",
+   "num": 84,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "PUCK",
+     "TROODON",
+     "BLACK_WIDOW"
+    ]
+   }
+  },
+  "PUCK": {
+   "name": "Puck Shard",
+   "rarity": "RARE",
+   "num": 85,
+   "category": "FOREST",
+   "families": [
+    "POLTERGEIST"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PANGOLIN",
+    "chameleon": [
+     "TROODON",
+     "BLACK_WIDOW",
+     "PANGOLIN"
+    ]
+   }
+  },
+  "TROODON": {
+   "name": "Troodon Shard",
+   "rarity": "RARE",
+   "num": 86,
+   "category": "WATER",
+   "families": [
+    "DINOSAUR"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GIANT_WATER_BUG",
+    "chameleon": [
+     "BLACK_WIDOW",
+     "PANGOLIN",
+     "GIANT_WATER_BUG"
+    ]
+   }
+  },
+  "BLACK_WIDOW": {
+   "name": "Black Widow Shard",
+   "rarity": "RARE",
+   "num": 87,
+   "category": "COMBAT",
+   "families": [
+    "SPIDER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "PANGOLIN",
+     "GIANT_WATER_BUG",
+     "TERRA"
+    ]
+   }
+  },
+  "PANGOLIN": {
+   "name": "Pangolin Shard",
+   "rarity": "RARE",
+   "num": 88,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MURKBAT",
+    "chameleon": [
+     "GIANT_WATER_BUG",
+     "TERRA",
+     "MURKBAT"
+    ]
+   }
+  },
+  "GIANT_WATER_BUG": {
+   "name": "Giant Water Bug Shard",
+   "rarity": "RARE",
+   "num": 89,
+   "category": "WATER",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GOLDOLOT",
+    "chameleon": [
+     "TERRA",
+     "MURKBAT",
+     "GOLDOLOT"
+    ]
+   }
+  },
+  "MURKBAT": {
+   "name": "Murkbat Shard",
+   "rarity": "RARE",
+   "num": 91,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DRYBARK",
+    "chameleon": [
+     "GOLDOLOT",
+     "TERRA",
+     "RABBIT_NEIGHBOR"
+    ]
+   }
+  },
+  "GOLDOLOT": {
+   "name": "Goldolot Shard",
+   "rarity": "RARE",
+   "num": 92,
+   "category": "WATER",
+   "families": [
+    "AMPHIBIAN",
+    "AXOLOTL"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TORRID",
+    "chameleon": [
+     "TERRA",
+     "RABBIT_NEIGHBOR",
+     "TORRID"
+    ]
+   }
+  },
+  "RABBIT_NEIGHBOR": {
+   "name": "Rabbit Neighbor Shard",
+   "rarity": "RARE",
+   "num": 94,
+   "category": "FOREST",
+   "families": [
+    "CRIME"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DRYBARK",
+    "chameleon": [
+     "TORRID",
+     "TERRA",
+     "DRYBARK"
+    ]
+   }
+  },
+  "TORRID": {
+   "name": "Torrid Shard",
+   "rarity": "RARE",
+   "num": 95,
+   "category": "WATER",
+   "families": [
+    "POLTERGEIST"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "TERRA",
+     "DRYBARK",
+     "CRYO"
+    ]
+   }
+  },
+  "DRYBARK": {
+   "name": "Drybark Shard",
+   "rarity": "RARE",
+   "num": 97,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "TERRA",
+     "CRYO",
+     "AERO"
+    ]
+   }
+  },
+  "TERRA": {
+   "name": "Terra Shard",
+   "rarity": "EPIC",
+   "num": 1,
+   "category": "FOREST",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": false
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "CRYO",
+     "AERO",
+     "PANDARAI"
+    ]
+   }
+  },
+  "CRYO": {
+   "name": "Cryo Shard",
+   "rarity": "EPIC",
+   "num": 2,
+   "category": "WATER",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": false
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ABYSSAL_MINER",
+    "chameleon": [
+     "AERO",
+     "PANDARAI",
+     "LEVIATHAN"
+    ]
+   }
+  },
+  "AERO": {
+   "name": "Aero Shard",
+   "rarity": "EPIC",
+   "num": 3,
+   "category": "COMBAT",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": false
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPECIAL_ZEALOT",
+    "chameleon": [
+     "PANDARAI",
+     "LEVIATHAN",
+     "ALLIGATOR"
+    ]
+   }
+  },
+  "PANDARAI": {
+   "name": "Pandarai Shard",
+   "rarity": "EPIC",
+   "num": 4,
+   "category": "FOREST",
+   "families": [
+    "PANDA"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "PANDA"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "LEVIATHAN",
+     "ALLIGATOR",
+     "FENLORD"
+    ]
+   }
+  },
+  "LEVIATHAN": {
+   "name": "Leviathan Shard",
+   "rarity": "EPIC",
+   "num": 5,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "LIZARD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "LIZARD"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ABYSSAL_MINER",
+    "chameleon": [
+     "ALLIGATOR",
+     "FENLORD",
+     "ABYSSAL_MINER"
+    ]
+   }
+  },
+  "ALLIGATOR": {
+   "name": "Alligator Shard",
+   "rarity": "EPIC",
+   "num": 6,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "CROCO"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "CROCODILE"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPECIAL_ZEALOT",
+    "chameleon": [
+     "FENLORD",
+     "ABYSSAL_MINER",
+     "BASILISK"
+    ]
+   }
+  },
+  "FENLORD": {
+   "name": "Fenlord Shard",
+   "rarity": "EPIC",
+   "num": 7,
+   "category": "FOREST",
+   "families": [
+    "FROG",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "BULLFROG"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "ABYSSAL_MINER",
+     "BASILISK",
+     "IGUANA"
+    ]
+   }
+  },
+  "ABYSSAL_MINER": {
+   "name": "Abyssal Miner Shard",
+   "rarity": "EPIC",
+   "num": 8,
+   "category": "WATER",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WATER_HYDRA",
+    "chameleon": [
+     "BASILISK",
+     "IGUANA",
+     "MORAY_EEL"
+    ]
+   }
+  },
+  "BASILISK": {
+   "name": "Basilisk Shard",
+   "rarity": "EPIC",
+   "num": 9,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "SERPENT"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KING_COBRA"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPECIAL_ZEALOT",
+    "chameleon": [
+     "IGUANA",
+     "MORAY_EEL",
+     "SPECIAL_ZEALOT"
+    ]
+   }
+  },
+  "IGUANA": {
+   "name": "Iguana Shard",
+   "rarity": "EPIC",
+   "num": 10,
+   "category": "FOREST",
+   "families": [
+    "REPTILE",
+    "SCALED"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "GECKO"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "MORAY_EEL",
+     "SPECIAL_ZEALOT",
+     "LUNAR_MOTH"
+    ]
+   }
+  },
+  "MORAY_EEL": {
+   "name": "Moray Eel Shard",
+   "rarity": "EPIC",
+   "num": 11,
+   "category": "WATER",
+   "families": [
+    "EEL",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "EEL"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WATER_HYDRA",
+    "chameleon": [
+     "SPECIAL_ZEALOT",
+     "LUNAR_MOTH",
+     "FIRE_EEL"
+    ]
+   }
+  },
+  "SPECIAL_ZEALOT": {
+   "name": "Special Zealot Shard",
+   "rarity": "EPIC",
+   "num": 12,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BAL",
+    "chameleon": [
+     "LUNAR_MOTH",
+     "FIRE_EEL",
+     "BAL"
+    ]
+   }
+  },
+  "LUNAR_MOTH": {
+   "name": "Lunar Moth Shard",
+   "rarity": "EPIC",
+   "num": 13,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LADYBUG"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "BUG"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "FIRE_EEL",
+     "BAL",
+     "HIDEONSACK"
+    ]
+   }
+  },
+  "FIRE_EEL": {
+   "name": "Fire Eel Shard",
+   "rarity": "EPIC",
+   "num": 14,
+   "category": "WATER",
+   "families": [
+    "EEL",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "MORAY_EEL"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "EEL"
+      },
+      {
+       "shard": "FIREFLY"
+      },
+      {
+       "shard": "FIREFOX"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "WATER_HYDRA",
+    "chameleon": [
+     "BAL",
+     "HIDEONSACK",
+     "WATER_HYDRA"
+    ]
+   }
+  },
+  "BAL": {
+   "name": "Bal Shard",
+   "rarity": "EPIC",
+   "num": 15,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "FLARE",
+    "chameleon": [
+     "HIDEONSACK",
+     "WATER_HYDRA",
+     "FLARE"
+    ]
+   }
+  },
+  "HIDEONSACK": {
+   "name": "Hideonsack Shard",
+   "rarity": "EPIC",
+   "num": 16,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "WATER_HYDRA",
+     "FLARE",
+     "MURDERWING"
+    ]
+   }
+  },
+  "WATER_HYDRA": {
+   "name": "Water Hydra Shard",
+   "rarity": "EPIC",
+   "num": 17,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SEA_EMPEROR",
+    "chameleon": [
+     "FLARE",
+     "MURDERWING",
+     "SEA_EMPEROR"
+    ]
+   }
+  },
+  "FLARE": {
+   "name": "Flare Shard",
+   "rarity": "EPIC",
+   "num": 18,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "PRINCE",
+    "chameleon": [
+     "MURDERWING",
+     "SEA_EMPEROR",
+     "PRINCE"
+    ]
+   }
+  },
+  "MURDERWING": {
+   "name": "Murderwing Shard",
+   "rarity": "EPIC",
+   "num": 19,
+   "category": "FOREST",
+   "families": [
+    "PHANTOM"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "PHANTOM"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "SEA_EMPEROR",
+     "PRINCE",
+     "KOMODO_DRAGON"
+    ]
+   }
+  },
+  "SEA_EMPEROR": {
+   "name": "Loch Emperor Shard",
+   "rarity": "EPIC",
+   "num": 20,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SHELLWISE",
+    "chameleon": [
+     "PRINCE",
+     "KOMODO_DRAGON",
+     "BLUE_CRAB"
+    ]
+   }
+  },
+  "PRINCE": {
+   "name": "Prince Shard",
+   "rarity": "EPIC",
+   "num": 21,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MIMIC",
+    "chameleon": [
+     "KOMODO_DRAGON",
+     "BLUE_CRAB",
+     "MIMIC"
+    ]
+   }
+  },
+  "KOMODO_DRAGON": {
+   "name": "Komodo Dragon Shard",
+   "rarity": "EPIC",
+   "num": 22,
+   "category": "FOREST",
+   "families": [
+    "REPTILE",
+    "SCALED"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "IGUANA"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "BLUE_CRAB",
+     "MIMIC",
+     "WOLVERINE"
+    ]
+   }
+  },
+  "BLUE_CRAB": {
+   "name": "Blue Crab Shard",
+   "rarity": "EPIC",
+   "num": 23,
+   "category": "WATER",
+   "families": [
+    "CRUSTACEAN"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "CRUSTACEAN"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "TREASURE_FISH"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SHELLWISE",
+    "chameleon": [
+     "MIMIC",
+     "WOLVERINE",
+     "SHELLWISE"
+    ]
+   }
+  },
+  "MIMIC": {
+   "name": "Mimic Shard",
+   "rarity": "EPIC",
+   "num": 24,
+   "category": "COMBAT",
+   "families": [
+    "POLTERGEIST"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BARBARIAN_DUKE_X",
+    "chameleon": [
+     "WOLVERINE",
+     "SHELLWISE",
+     "BARBARIAN_DUKE_X"
+    ]
+   }
+  },
+  "WOLVERINE": {
+   "name": "Wolverine Shard",
+   "rarity": "EPIC",
+   "num": 25,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "SHELLWISE",
+     "BARBARIAN_DUKE_X",
+     "TOUCAN"
+    ]
+   }
+  },
+  "SHELLWISE": {
+   "name": "Shellwise Shard",
+   "rarity": "EPIC",
+   "num": 26,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "TURTLE"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SILKBREEZE",
+    "chameleon": [
+     "BARBARIAN_DUKE_X",
+     "TOUCAN",
+     "TENEBRIS"
+    ]
+   }
+  },
+  "BARBARIAN_DUKE_X": {
+   "name": "Barbarian Duke X Shard",
+   "rarity": "EPIC",
+   "num": 27,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GHOST",
+    "chameleon": [
+     "TOUCAN",
+     "TENEBRIS",
+     "CAIMAN"
+    ]
+   }
+  },
+  "TOUCAN": {
+   "name": "Toucan Shard",
+   "rarity": "EPIC",
+   "num": 28,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "TENEBRIS",
+     "CAIMAN",
+     "FIREFLY"
+    ]
+   }
+  },
+  "CAIMAN": {
+   "name": "Caiman Shard",
+   "rarity": "EPIC",
+   "num": 30,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "CROCO"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "ALLIGATOR"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GHOST",
+    "chameleon": [
+     "FIREFLY",
+     "SEA_SERPENT",
+     "GHOST"
+    ]
+   }
+  },
+  "FIREFLY": {
+   "name": "Firefly Shard",
+   "rarity": "EPIC",
+   "num": 31,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "PRAYING_MANTIS"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "BEZAL"
+      },
+      {
+       "shard": "LAVA_FLAME"
+      },
+      {
+       "shard": "FIRE_EEL"
+      },
+      {
+       "shard": "BAL"
+      },
+      {
+       "shard": "FLARE"
+      },
+      {
+       "shard": "CINDER_BAT"
+      },
+      {
+       "shard": "FLAMING_SPIDER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "XYZ",
+    "chameleon": [
+     "SEA_SERPENT",
+     "GHOST",
+     "XYZ"
+    ]
+   }
+  },
+  "SEA_SERPENT": {
+   "name": "Sea Serpent Shard",
+   "rarity": "EPIC",
+   "num": 32,
+   "category": "WATER",
+   "families": [
+    "EEL",
+    "SERPENT",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "MORAY_EEL"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SILKBREEZE",
+    "chameleon": [
+     "GHOST",
+     "XYZ",
+     "LEATHERBACK"
+    ]
+   }
+  },
+  "GHOST": {
+   "name": "Ghost Shard",
+   "rarity": "EPIC",
+   "num": 33,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPHINX",
+    "chameleon": [
+     "XYZ",
+     "LEATHERBACK",
+     "CAVERNSHADE"
+    ]
+   }
+  },
+  "XYZ": {
+   "name": "XYZ Shard",
+   "rarity": "EPIC",
+   "num": 34,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DIVE_GHAST",
+    "chameleon": [
+     "LEATHERBACK",
+     "CAVERNSHADE",
+     "DRAGONFLY"
+    ]
+   }
+  },
+  "LEATHERBACK": {
+   "name": "Leatherback Shard",
+   "rarity": "EPIC",
+   "num": 35,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "TURTLE"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SHELLWISE"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SILKBREEZE",
+    "chameleon": [
+     "CAVERNSHADE",
+     "DRAGONFLY",
+     "TENEBRIS"
+    ]
+   }
+  },
+  "CAVERNSHADE": {
+   "name": "Cavernshade Shard",
+   "rarity": "EPIC",
+   "num": 36,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "family": "CAVE_DWELLER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPHINX",
+    "chameleon": [
+     "DRAGONFLY",
+     "TENEBRIS",
+     "SPHINX"
+    ]
+   }
+  },
+  "DRAGONFLY": {
+   "name": "Dragonfly Shard",
+   "rarity": "EPIC",
+   "num": 37,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "FIREFLY"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "DRAGON"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "DIVE_GHAST",
+    "chameleon": [
+     "TENEBRIS",
+     "SPHINX",
+     "BLIZZARD"
+    ]
+   }
+  },
+  "SPHINX": {
+   "name": "Sphinx Shard",
+   "rarity": "EPIC",
+   "num": 39,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "KING_MINOS",
+    "chameleon": [
+     "TENEBRIS",
+     "BLIZZARD",
+     "KING_MINOS"
+    ]
+   }
+  },
+  "KING_MINOS": {
+   "name": "King Minos Shard",
+   "rarity": "EPIC",
+   "num": 42,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BURNINGSOUL",
+    "chameleon": [
+     "DIVE_GHAST",
+     "SILKBREEZE",
+     "GEMZIE"
+    ]
+   }
+  },
+  "DIVE_GHAST": {
+   "name": "Dive Ghast Shard",
+   "rarity": "EPIC",
+   "num": 43,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOUNTAIN_GOAT",
+    "chameleon": [
+     "SILKBREEZE",
+     "GEMZIE",
+     "RABBIT_GODMOTHER"
+    ]
+   }
+  },
+  "SILKBREEZE": {
+   "name": "Silkbreeze Shard",
+   "rarity": "EPIC",
+   "num": 44,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GIANT_ISOPOD",
+    "chameleon": [
+     "GEMZIE",
+     "RABBIT_GODMOTHER",
+     "GIANT_ISOPOD"
+    ]
+   }
+  },
+  "GEMZIE": {
+   "name": "Gemzie Shard",
+   "rarity": "EPIC",
+   "num": 45,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "BURNINGSOUL",
+    "chameleon": [
+     "RABBIT_GODMOTHER",
+     "GIANT_ISOPOD",
+     "BURNINGSOUL"
+    ]
+   }
+  },
+  "RABBIT_GODMOTHER": {
+   "name": "Rabbit Godmother Shard",
+   "rarity": "EPIC",
+   "num": 46,
+   "category": "FOREST",
+   "families": [
+    "CRIME"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOUNTAIN_GOAT",
+    "chameleon": [
+     "GIANT_ISOPOD",
+     "BURNINGSOUL",
+     "QUEEN_BEE"
+    ]
+   }
+  },
+  "GIANT_ISOPOD": {
+   "name": "Giant Isopod Shard",
+   "rarity": "EPIC",
+   "num": 47,
+   "category": "WATER",
+   "families": [
+    "CRUSTACEAN"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "BURNINGSOUL",
+     "QUEEN_BEE",
+     "TENEBRIS"
+    ]
+   }
+  },
+  "BURNINGSOUL": {
+   "name": "Inferno Demonlord Shard",
+   "rarity": "EPIC",
+   "num": 48,
+   "category": "COMBAT",
+   "families": [
+    "DEMON"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SCATHA",
+    "chameleon": [
+     "QUEEN_BEE",
+     "TENEBRIS",
+     "BONZO"
+    ]
+   }
+  },
+  "QUEEN_BEE": {
+   "name": "Queen Bee Shard",
+   "rarity": "EPIC",
+   "num": 49,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOUNTAIN_GOAT",
+    "chameleon": [
+     "TENEBRIS",
+     "BONZO",
+     "BEEHEEMOTH"
+    ]
+   }
+  },
+  "BONZO": {
+   "name": "Bonzo Shard",
+   "rarity": "EPIC",
+   "num": 51,
+   "category": "COMBAT",
+   "families": [
+    "DEMON"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SCATHA",
+    "chameleon": [
+     "BEEHEEMOTH",
+     "TENEBRIS",
+     "SCARF"
+    ]
+   }
+  },
+  "BEEHEEMOTH": {
+   "name": "Beeheemoth Shard",
+   "rarity": "EPIC",
+   "num": 52,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "QUEEN_BEE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LUNAR_MOTH"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "MOUNTAIN_GOAT",
+    "chameleon": [
+     "TENEBRIS",
+     "SCARF",
+     "BLIZZARD"
+    ]
+   }
+  },
+  "SCARF": {
+   "name": "Scarf Shard",
+   "rarity": "EPIC",
+   "num": 54,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SCATHA",
+    "chameleon": [
+     "TENEBRIS",
+     "BLIZZARD",
+     "THORN"
+    ]
+   }
+  },
+  "THORN": {
+   "name": "Thorn Shard",
+   "rarity": "EPIC",
+   "num": 57,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SCATHA",
+    "chameleon": [
+     "MOUNTAIN_GOAT",
+     "TENEBRIS",
+     "SCATHA"
+    ]
+   }
+  },
+  "MOUNTAIN_GOAT": {
+   "name": "Mountain Goat Shard",
+   "rarity": "EPIC",
+   "num": 58,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "TENEBRIS",
+     "SCATHA",
+     "BLIZZARD"
+    ]
+   }
+  },
+  "SCATHA": {
+   "name": "Scatha Shard",
+   "rarity": "EPIC",
+   "num": 60,
+   "category": "COMBAT",
+   "families": [
+    "CAVE_DWELLER"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LITTLEFOOT",
+    "chameleon": [
+     "TENEBRIS",
+     "BLIZZARD",
+     "NILBOG"
+    ]
+   }
+  },
+  "NILBOG": {
+   "name": "Nilbog Shard",
+   "rarity": "EPIC",
+   "num": 63,
+   "category": "COMBAT",
+   "families": [
+    "POLTERGEIST",
+    "CAVE_DWELLER"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "GIMMIEGOLD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LITTLEFOOT",
+    "chameleon": [
+     "TENEBRIS",
+     "BLIZZARD",
+     "LITTLEFOOT"
+    ]
+   }
+  },
+  "LITTLEFOOT": {
+   "name": "Littlefoot Shard",
+   "rarity": "EPIC",
+   "num": 66,
+   "category": "COMBAT",
+   "families": [
+    "ARCTIC"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "TENEBRIS",
+     "BLIZZARD",
+     "TEMPEST"
+    ]
+   }
+  },
+  "TENEBRIS": {
+   "name": "Tenebris Shard",
+   "rarity": "LEGENDARY",
+   "num": 1,
+   "category": "FOREST",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": false
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "family": "ELEMENTAL"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "BLIZZARD",
+     "TEMPEST"
+    ]
+   }
+  },
+  "BLIZZARD": {
+   "name": "Blizzard Shard",
+   "rarity": "LEGENDARY",
+   "num": 2,
+   "category": "WATER",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": false
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "family": "ELEMENTAL"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "NESSIE",
+    "chameleon": [
+     "TEMPEST",
+     "NESSIE"
+    ]
+   }
+  },
+  "TEMPEST": {
+   "name": "Tempest Shard",
+   "rarity": "LEGENDARY",
+   "num": 3,
+   "category": "COMBAT",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": false
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "family": "ELEMENTAL"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ENDSTONE_PROTECTOR",
+    "chameleon": [
+     "NESSIE",
+     "TIAMAT"
+    ]
+   }
+  },
+  "CHAMELEON": {
+   "name": "Chameleon Shard",
+   "rarity": "LEGENDARY",
+   "num": 4,
+   "category": "FOREST",
+   "families": [
+    "REPTILE"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "NESSIE",
+     "TIAMAT",
+     "WYVERN"
+    ]
+   }
+  },
+  "NESSIE": {
+   "name": "Nessie Shard",
+   "rarity": "LEGENDARY",
+   "num": 5,
+   "category": "WATER",
+   "families": [
+    "REPTILE"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPIKE",
+    "chameleon": [
+     "TIAMAT",
+     "WYVERN",
+     "TORTOISE"
+    ]
+   }
+  },
+  "TIAMAT": {
+   "name": "Tiamat Shard",
+   "rarity": "LEGENDARY",
+   "num": 6,
+   "category": "COMBAT",
+   "families": [
+    "REPTILE",
+    "CROCO"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "CAIMAN"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "ENDSTONE_PROTECTOR",
+    "chameleon": [
+     "WYVERN",
+     "TORTOISE",
+     "ENDSTONE_PROTECTOR"
+    ]
+   }
+  },
+  "WYVERN": {
+   "name": "Wyvern Shard",
+   "rarity": "LEGENDARY",
+   "num": 7,
+   "category": "FOREST",
+   "families": [
+    "REPTILE",
+    "SCALED"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KOMODO_DRAGON"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "category": "FOREST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "TORTOISE",
+     "ENDSTONE_PROTECTOR",
+     "RABBIT_GODFATHER"
+    ]
+   }
+  },
+  "TORTOISE": {
+   "name": "Tortoise Shard",
+   "rarity": "LEGENDARY",
+   "num": 8,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "TURTLE"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LEATHERBACK"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPIKE",
+    "chameleon": [
+     "ENDSTONE_PROTECTOR",
+     "RABBIT_GODFATHER",
+     "NAGA"
+    ]
+   }
+  },
+  "ENDSTONE_PROTECTOR": {
+   "name": "End Stone Protector Shard",
+   "rarity": "LEGENDARY",
+   "num": 9,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "KRAKEN",
+    "chameleon": [
+     "RABBIT_GODFATHER",
+     "NAGA",
+     "LAPIS_CREEPER"
+    ]
+   }
+  },
+  "RABBIT_GODFATHER": {
+   "name": "Rabbit Godfather Shard",
+   "rarity": "LEGENDARY",
+   "num": 10,
+   "category": "FOREST",
+   "families": [
+    "CRIME"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "RABBIT_GODMOTHER"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      },
+      {
+       "category": "COMBAT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "NAGA",
+     "LAPIS_CREEPER",
+     "WARTYBUG"
+    ]
+   }
+  },
+  "NAGA": {
+   "name": "Naga Shard",
+   "rarity": "LEGENDARY",
+   "num": 11,
+   "category": "WATER",
+   "families": [
+    "EEL",
+    "AMPHIBIAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SEA_SERPENT"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "SPIKE",
+    "chameleon": [
+     "LAPIS_CREEPER",
+     "WARTYBUG",
+     "SPIKE"
+    ]
+   }
+  },
+  "LAPIS_CREEPER": {
+   "name": "Lapis Creeper Shard",
+   "rarity": "LEGENDARY",
+   "num": 12,
+   "category": "COMBAT",
+   "families": [
+    "LAPIS"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LAPIS_SKELETON"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "GHOST"
+      },
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "KRAKEN",
+    "chameleon": [
+     "WARTYBUG",
+     "SPIKE",
+     "KRAKEN"
+    ]
+   }
+  },
+  "WARTYBUG": {
+   "name": "Wartybug Shard",
+   "rarity": "LEGENDARY",
+   "num": 13,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "DRAGONFLY"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "LUNAR_MOTH"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "SPIKE",
+     "KRAKEN"
+    ]
+   }
+  },
+  "SPIKE": {
+   "name": "Spike Shard",
+   "rarity": "LEGENDARY",
+   "num": 14,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TAURUS",
+    "chameleon": [
+     "KRAKEN",
+     "TAURUS"
+    ]
+   }
+  },
+  "KRAKEN": {
+   "name": "Kraken Shard",
+   "rarity": "LEGENDARY",
+   "num": 15,
+   "category": "COMBAT",
+   "families": [
+    "DEMON"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HELLWISP",
+    "chameleon": [
+     "TAURUS",
+     "DAEMON"
+    ]
+   }
+  },
+  "TAURUS": {
+   "name": "Taurus Shard",
+   "rarity": "LEGENDARY",
+   "num": 17,
+   "category": "WATER",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LORD_JAWBUS",
+    "chameleon": [
+     "DAEMON",
+     "MOLTENFISH"
+    ]
+   }
+  },
+  "DAEMON": {
+   "name": "Daemon Shard",
+   "rarity": "LEGENDARY",
+   "num": 18,
+   "category": "COMBAT",
+   "families": [
+    "DEMON"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KRAKEN"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KRAKEN"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HELLWISP",
+    "chameleon": [
+     "MOLTENFISH"
+    ]
+   }
+  },
+  "MOLTENFISH": {
+   "name": "Moltenfish Shard",
+   "rarity": "LEGENDARY",
+   "num": 20,
+   "category": "WATER",
+   "families": [
+    "DEMON"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KRAKEN"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "LORD_JAWBUS",
+    "chameleon": []
+   }
+  },
+  "DOOMSPIRAL": {
+   "name": "Doomspiral Shard",
+   "rarity": "LEGENDARY",
+   "num": 21,
+   "category": "COMBAT",
+   "families": [
+    "DEMON",
+    "ELEMENTAL"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": "HELLWISP",
+    "chameleon": [
+     "ANANKE"
+    ]
+   }
+  },
+  "MACAW": {
+   "name": "Macaw Shard",
+   "rarity": "LEGENDARY",
+   "num": 22,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "ANANKE",
+     "HIDEONBOX"
+    ]
+   }
+  },
+  "SHINYFISH": {
+   "name": "Shinyfish Shard",
+   "rarity": "LEGENDARY",
+   "num": 23,
+   "category": "WATER",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": "LORD_JAWBUS",
+    "chameleon": [
+     "ANANKE",
+     "HIDEONBOX",
+     "LORD_JAWBUS"
+    ]
+   }
+  },
+  "ANANKE": {
+   "name": "Ananke Shard",
+   "rarity": "LEGENDARY",
+   "num": 24,
+   "category": "COMBAT",
+   "families": [
+    "DEMON",
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KRAKEN"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "HELLWISP",
+    "chameleon": [
+     "HIDEONBOX",
+     "LORD_JAWBUS",
+     "HELLWISP"
+    ]
+   }
+  },
+  "HIDEONBOX": {
+   "name": "Hideonbox Shard",
+   "rarity": "LEGENDARY",
+   "num": 25,
+   "category": "FOREST",
+   "families": [
+    "SHULKER"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "family": "SHULKER"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "CINDER_BAT",
+    "chameleon": [
+     "LORD_JAWBUS",
+     "HELLWISP",
+     "CINDER_BAT"
+    ]
+   }
+  },
+  "LORD_JAWBUS": {
+   "name": "Lord Jawbus Shard",
+   "rarity": "LEGENDARY",
+   "num": 26,
+   "category": "WATER",
+   "families": [
+    "CREATION"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": [
+     "HELLWISP",
+     "CINDER_BAT",
+     "MEGALITH"
+    ]
+   }
+  },
+  "HELLWISP": {
+   "name": "Hellwisp Shard",
+   "rarity": "LEGENDARY",
+   "num": 27,
+   "category": "COMBAT",
+   "families": [
+    "DEMON"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "CINDER_BAT",
+     "MEGALITH",
+     "POWER_DRAGON"
+    ]
+   }
+  },
+  "CINDER_BAT": {
+   "name": "Cinderbat Shard",
+   "rarity": "LEGENDARY",
+   "num": 28,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GRIZZLY_BEAR",
+    "chameleon": [
+     "MEGALITH",
+     "POWER_DRAGON",
+     "CONDOR"
+    ]
+   }
+  },
+  "MEGALITH": {
+   "name": "Megalith Shard",
+   "rarity": "LEGENDARY",
+   "num": 29,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "TURTLE"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "TORTOISE"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "EPIC",
+       "up": true
+      },
+      {
+       "category": "WATER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": [
+     "POWER_DRAGON",
+     "CONDOR",
+     "SUN_FISH"
+    ]
+   }
+  },
+  "POWER_DRAGON": {
+   "name": "Power Dragon Shard",
+   "rarity": "LEGENDARY",
+   "num": 30,
+   "category": "COMBAT",
+   "families": [
+    "DRAGON"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "CONDOR",
+     "SUN_FISH",
+     "APEX_DRAGON"
+    ]
+   }
+  },
+  "CONDOR": {
+   "name": "Condor Shard",
+   "rarity": "LEGENDARY",
+   "num": 31,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "family": "BIRD"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GRIZZLY_BEAR",
+    "chameleon": [
+     "SUN_FISH",
+     "APEX_DRAGON",
+     "DODO"
+    ]
+   }
+  },
+  "SUN_FISH": {
+   "name": "Sun Fish Shard",
+   "rarity": "LEGENDARY",
+   "num": 32,
+   "category": "WATER",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SHINYFISH"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "BEZAL"
+      },
+      {
+       "shard": "LAVA_FLAME"
+      },
+      {
+       "shard": "FIRE_EEL"
+      },
+      {
+       "shard": "BAL"
+      },
+      {
+       "shard": "FLARE"
+      },
+      {
+       "shard": "CINDER_BAT"
+      },
+      {
+       "shard": "FLAMING_SPIDER"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": [
+     "APEX_DRAGON",
+     "DODO",
+     "QUEEN_SNAKE"
+    ]
+   }
+  },
+  "APEX_DRAGON": {
+   "name": "Apex Dragon Shard",
+   "rarity": "LEGENDARY",
+   "num": 33,
+   "category": "COMBAT",
+   "families": [
+    "DRAGON"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "POWER_DRAGON"
+      }
+     ]
+    },
+    null
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "DODO",
+     "QUEEN_SNAKE",
+     "JORMUNG"
+    ]
+   }
+  },
+  "DODO": {
+   "name": "Dodo Shard",
+   "rarity": "LEGENDARY",
+   "num": 34,
+   "category": "FOREST",
+   "families": [
+    "BIRD"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "CONDOR"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": true
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "GRIZZLY_BEAR",
+    "chameleon": [
+     "QUEEN_SNAKE",
+     "JORMUNG"
+    ]
+   }
+  },
+  "QUEEN_SNAKE": {
+   "name": "Queen Snake Shard",
+   "rarity": "LEGENDARY",
+   "num": 35,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "SCALED",
+    "SERPENT"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "QUEEN_BEE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "QUEEN_ANT"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": [
+     "JORMUNG",
+     "GHOST_CRAB"
+    ]
+   }
+  },
+  "JORMUNG": {
+   "name": "Jormung Shard",
+   "rarity": "LEGENDARY",
+   "num": 36,
+   "category": "COMBAT",
+   "families": [
+    "DEMON",
+    "DRAGON"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "POWER_DRAGON"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KRAKEN"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "GHOST_CRAB",
+     "ETHERDRAKE"
+    ]
+   }
+  },
+  "GHOST_CRAB": {
+   "name": "Ghost Crab Shard",
+   "rarity": "LEGENDARY",
+   "num": 38,
+   "category": "WATER",
+   "families": [
+    "CRUSTACEAN"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "BLUE_CRAB"
+      }
+     ]
+    },
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "RARE",
+       "up": true
+      },
+      {
+       "family": "POLTERGEIST"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": [
+     "ETHERDRAKE",
+     "GRIZZLY_BEAR"
+    ]
+   }
+  },
+  "ETHERDRAKE": {
+   "name": "Etherdrake Shard",
+   "rarity": "LEGENDARY",
+   "num": 39,
+   "category": "COMBAT",
+   "families": [
+    "DEMON",
+    "DRAGON"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "APEX_DRAGON"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "KRAKEN"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "GRIZZLY_BEAR"
+    ]
+   }
+  },
+  "GRIZZLY_BEAR": {
+   "name": "Grizzly Bear Shard",
+   "rarity": "LEGENDARY",
+   "num": 40,
+   "category": "FOREST",
+   "families": [],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  },
+  "GALAXY_FISH": {
+   "name": "Galaxy Fish Shard",
+   "rarity": "LEGENDARY",
+   "num": 41,
+   "category": "WATER",
+   "families": [],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SUN_FISH"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "SUN_FISH"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": false,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": []
+   }
+  },
+  "MOLTHORN": {
+   "name": "Molthorn Shard",
+   "rarity": "LEGENDARY",
+   "num": 42,
+   "category": "COMBAT",
+   "families": [
+    "DEMON",
+    "DRAGON"
+   ],
+   "recipe": [
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "ETHERDRAKE"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "JORMUNG"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": false,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  },
+  "STARBORN": {
+   "name": "Starborn Shard",
+   "rarity": "LEGENDARY",
+   "num": 44,
+   "category": "WATER",
+   "families": [
+    "ELEMENTAL"
+   ],
+   "recipe": [
+    {
+     "mode": "all",
+     "terms": [
+      {
+       "rarity": "LEGENDARY",
+       "up": false
+      },
+      {
+       "family": "ELEMENTAL"
+      }
+     ]
+    },
+    {
+     "mode": "any",
+     "terms": [
+      {
+       "shard": "GALAXY_FISH"
+      }
+     ]
+    }
+   ],
+   "synthesized": true,
+   "chameleonable": false,
+   "wiki": {
+    "id": "TITANOBOA",
+    "chameleon": [
+     "COCOALEECH",
+     "TITANOBOA"
+    ]
+   }
+  },
+  "PRIMORDIAL": {
+   "name": "Primordial Shard",
+   "rarity": "LEGENDARY",
+   "num": 45,
+   "category": "COMBAT",
+   "families": [
+    "SPIDER"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "COCOALEECH",
+     "TITANOBOA"
+    ]
+   }
+  },
+  "COCOALEECH": {
+   "name": "Cocoaleech Shard",
+   "rarity": "LEGENDARY",
+   "num": 46,
+   "category": "FOREST",
+   "families": [
+    "BUG"
+   ],
+   "synthesized": false,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": [
+     "TITANOBOA"
+    ]
+   }
+  },
+  "TITANOBOA": {
+   "name": "Titanoboa Shard",
+   "rarity": "LEGENDARY",
+   "num": 47,
+   "category": "WATER",
+   "families": [
+    "REPTILE",
+    "SERPENT",
+    "SCALED"
+   ],
+   "synthesized": true,
+   "chameleonable": true,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  },
+  "RAINBUG": {
+   "name": "Rainbug Shard",
+   "rarity": "LEGENDARY",
+   "num": 49,
+   "category": "FOREST",
+   "families": [
+    "MIRACLE",
+    "BUG"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  },
+  "PARAGON": {
+   "name": "Paragon Shard",
+   "rarity": "LEGENDARY",
+   "num": 54,
+   "category": "COMBAT",
+   "families": [],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  },
+  "TIMESTALK_CLONE": {
+   "name": "Timestalk Clone Shard",
+   "rarity": "LEGENDARY",
+   "num": 57,
+   "category": "COMBAT",
+   "families": [
+    "POLTERGEIST"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  },
+  "WUMPA": {
+   "name": "Wumpa Shard",
+   "rarity": "LEGENDARY",
+   "num": 60,
+   "category": "COMBAT",
+   "families": [
+    "ARCTIC"
+   ],
+   "synthesized": false,
+   "chameleonable": false,
+   "wiki": {
+    "id": null,
+    "chameleon": []
+   }
+  }
+ }
+}

@@ -1,6 +1,6 @@
 # Bazaar Calc
 
-A free, open-source Hypixel SkyBlock market calculator. It finds and ranks five kinds of flips, and plans the best
+A free, open-source Hypixel SkyBlock market calculator. It finds and ranks seven kinds of flips, and plans the best
 combination of them for your coins, slots, unlocks and playing time:
 
 - **Bazaar flips**: buy order, then relist as a sell offer.
@@ -9,6 +9,10 @@ combination of them for your coins, slots, unlocks and playing time:
 - **Forge flips**: buy or craft the inputs, forge them, sell the output.
 - **NPC flips**: buy on the bazaar and sell to an NPC merchant (no tax, 500M coins a day), or buy from a merchant and
   sell on the bazaar (640 of an item a day, 6,400 in a Shopping Spree).
+- **Kat upgrades**: buy a pet on the auction house, have Kat raise it one rarity, sell it there (lowest BINs of each
+  rarity, AH fees and Kat's fee counted, one pet at a time, Taming level checked).
+- **Shard fusion**: buy two kinds of attribute shards on the bazaar, fuse them, sell the result (the cheapest pair the
+  Fusion Machine is sure to offer, wiki fusion rules, Foraging 12 for Galatea).
 
 Every route is listed with the full working, order sizes for the daily bazaar limit, measured fill times, market
 warnings (spoofed walls, mass delists, pumped prices) and a confidence level saying how far its numbers can be trusted.
@@ -80,7 +84,7 @@ Every package has a README listing its files.
 - **Hypixel Public API**: market, auctions (stored without any player ids), election, items.
 - **Internet Archive copies of the Hypixel API**: older history, labelled `origin = 6`.
 - **NotEnoughUpdates-REPO** (MIT): recipes, forge recipes and durations, unlock requirements, level tables.
-- **hypixelskyblock.minecraft.wiki** (CC BY-NC-SA 3.0): enchant combining caps, Enchanting requirements, Forge and Bazaar rules. Facts only, with attribution.
+- **hypixelskyblock.minecraft.wiki** (CC BY-NC-SA 3.0): enchant combining caps, Enchanting requirements, Forge and Bazaar rules, Kat's Taming levels, shard fusion rules. Facts only, with attribution.
 - **No Coflnet, skykings or skyblock.bz data.** Their terms don't allow republishing.
 
 See `NOTICE.md` for attributions. Code: MIT (`LICENSE`).
@@ -205,6 +209,8 @@ Every result on the site has a **Details** view that lists each step with real n
   - Every poll, each item's best buy order and best sell offer is followed from the moment a new best price appears until it is beaten or gone ("episodes", last 24 h). That gives how long a fresh top order really stays on top and how many units trade against it.
   - Flow per hour is the item's measured trade rate: real instant trades counted from the rise of Hypixel's 7-day counters between polls once an item has at least 1 hour of them, otherwise the min of Hypixel's 7-day figure ÷ 168 and what we saw leave the book. The episodes give its shape over time.
   - With fewer than 8 episodes on a side, a standard model (Poisson undercut rate) fills in and the route says "estimated".
+- **One trade at a time:** a flip buys its batch, then sells it, so its rate is 1 / (1/buy rate + 1/sell rate) unless you turn on "I keep buying while my sell offer is up" (then the slower side sets the rate). Paper trades took 3.1x the old side-by-side prediction and 1.4x this one (9 trades, 2026-10-04).
+- **Fill-speed correction:** paper trades record how long the buy and the sell side really took against the model's prediction; every flip's fill speed is divided by that ratio (per side, per item when it has trades, pulled toward the model while trades are few). The Track record page shows the current correction.
 - **Batches and order sizes:** a route runs in batches of B: one buy order per ingredient for B × the recipe amount and one sell offer for B, so you only ever sell what you bought. B is the smallest batch that gets the best rate within your coins (orders + stock), daily limit and clicking time. Bigger orders do not fill faster; they only tie up more coins and count more toward the daily limit on every relist. Open a route and press **Order sizes & daily limit** for the batch table.
 - **Planner:** coins are handed out in 5% steps, each to the route (new or already picked) that earns the most extra per step, within order slots, forge slots, the daily limit and clicking time. Coins are "tied up at once" (money in orders + unsold stock), so they are reused as items sell; profit made during the day is not reinvested in the estimate.
 - **Limits:**
@@ -217,7 +223,7 @@ Every result on the site has a **Details** view that lists each step with real n
 - **Audit:** `node scripts/checks/audit.mjs` re-derives every listed route from the exact market snapshot the calculator used (`GET /api/v1/market`), checks books and recipes against the raw sources, and compares with skyblock.bz.
 - **Every route is listed**, losing ones too (shown in red at your settings); routes with market warnings come after clean ones; recipes that cannot be priced are listed with the reason.
 - **Per item:** the item page shows time on top (survival curve), outbid vs filled, the order-size table and a quota calculator ("how long to buy 10,000?": p10 / p50 / p90 from 2,000 runs over real episodes). API: `GET /api/v1/bazaar/{id}/fill?check=5&qty=10000`.
-- **Requirements:** come from NEU's craft text (collections, HotM, slayer, reputation), the Forge (HotM 2), and XP costs for combining books.
+- **Requirements:** come from NEU's craft text (collections, HotM, slayer, reputation), the Forge (HotM 2), XP costs for combining books, Taming for Kat (1 / 5 / 10 / 20 / 25 for Uncommon to Mythic) and Foraging 12 for the Fusion Machine in Galatea.
 - Two planner picks never order the same item (they would compete with each other).
 - **Confidence:** each route's score multiplies factors for what its numbers rest on: estimated fill times (0.6), the sale price's history (7-day median only 0.85, none 0.6; auction reference prices 0.85 or 0.6), fewer than 12 hours of watched trading (0.7 to 1), market warnings (manipulated 0.3, other serious warnings 0.6, little history 0.85) and, on the website, old published history (over 24 h 0.8, over 72 h 0.6). High is 0.75 or more, medium 0.5 or more. The "× confidence" column (coins per hour times the score) ranks routes by what they are likely to earn.
 - **Dips:** the cheapest sell offer is compared with the lower of the 24 h and 7-day medians, so a price falling back to normal after a spike is not called a bargain.

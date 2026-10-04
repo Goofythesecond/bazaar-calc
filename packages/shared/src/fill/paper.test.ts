@@ -30,6 +30,13 @@ describe("paper trading", () => {
     st = paperStep(st, 21_000, mk(10, 20, 1000, 1000), pick, o);
     expect(st.trades).toHaveLength(1);
   });
+  it("records when the buy side completed and predicts buy + sell time from the model's per-side hours", () => {
+    const pickH = () => [{ key: "bazaar:X", title: "X", item: "X", qty: 100, profitPerUnit: 8, unitsH: 50, kind: "bazaar", buyH: 0.5, sellH: 1.5 }];
+    let st = paperStep(newPaperState(), 1_000, mk(10, 20, 1000, 1000), pickH, o);
+    expect(st.trades[0]!.expected).toMatchObject({ hours: 2, buyH: 0.5, sellH: 1.5 });
+    st = paperStep(st, 21_000, mk(10, 20, 1000, 1100), pickH, o);
+    expect(st.trades[0]).toMatchObject({ phase: "selling", boughtAt: 21_000 });
+  });
   it("stops filling when beaten and relists at the next look", () => {
     let st = paperStep(newPaperState(), 1_000, mk(10, 20, 1000, 1000), pick, o);
     st = paperStep(st, 21_000, mk(10.2, 20, 1000, 1050), pick, o); // someone posted 10.2 > our 10.1

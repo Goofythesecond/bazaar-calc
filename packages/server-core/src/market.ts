@@ -15,7 +15,7 @@ export async function loadMarket(db: Db): Promise<Map<string, ItemMarket>> {
     db.query("SELECT item_id, data FROM item_stats"),
     // the active-auction scan runs every 30 min; a key nobody lists any more keeps its old row, so ignore stale ones
     db.query("SELECT item_key, lowest_bin, sales_24h, median_sale_24h FROM ah_latest WHERE ts > now() - interval '2 hours'"),
-    db.query("SELECT id, name, npc_sell_price FROM items"),
+    db.query("SELECT id, name, npc_sell_price, unstackable FROM items"),
     loadHoldStats(db),
   ]);
   return assembleMarket({
@@ -28,6 +28,7 @@ export async function loadMarket(db: Db): Promise<Map<string, ItemMarket>> {
       medianSale24h: r.median_sale_24h != null ? r.median_sale_24h / 100 : null }])),
     names: new Map(items.rows.map(r => [r.id as string, r.name as string | null])),
     npcSell: new Map(items.rows.filter(r => r.npc_sell_price != null).map(r => [r.id as string, Number(r.npc_sell_price)])),
+    unstackable: new Set(items.rows.filter(r => r.unstackable).map(r => r.id as string)),
   });
 }
 

@@ -96,6 +96,7 @@ export function SettingsDrawer() {
               <Num id="minunits" label="Ignore routes under (units / hour)" value={s.minUnitsPerHour} step={0.1} max={1e9} onChange={S("minUnitsPerHour")} />
             </div>
             <label className="check"><input type="checkbox" checked={s.includeFlagged} onChange={e => setSettings({ includeFlagged: e.target.checked })} /> Include markets with warnings (thin, walled, jumping)</label>
+            <label className="check" title="Off: a flip buys its batch, then sells it (how one trade really runs). On: you place the next buy order while the last batch is still on sale, which needs coins for both."><input type="checkbox" checked={!!s.overlapOrders} onChange={e => setSettings({ overlapOrders: e.target.checked })} /> I keep buying while my sell offer is up</label>
             <Num id="unknown" label="Assumed time on top when competition is unknown (0–1)" value={s.unknownCompetitionShare} step={0.05} min={0.05} max={1} onChange={S("unknownCompetitionShare")} />
           </>}
 
@@ -135,6 +136,14 @@ export function SettingsDrawer() {
               <div className="grid cols-3" style={{ marginTop: 8 }}>
                 {(slayers.length ? slayers : [{ name: "Zombie", max: 9 }, { name: "Spider", max: 9 }, { name: "Wolf", max: 9 }, { name: "Enderman", max: 9 }, { name: "Blaze", max: 9 }, { name: "Vampire", max: 5 }] as ReqCatalogRow[]).map(r => (
                   <div key={r.name} className="field"><span>{r.name}</span><Stepper label={`${r.name} slayer level`} value={p.slayers[r.name!] ?? 0} max={r.max} onChange={v => setProfile({ slayers: { ...p.slayers, [r.name!]: v } })} /></div>
+                ))}
+              </div>
+            </div>
+            <div>
+              <div className="spread"><span className="eyebrow">Skills</span></div>
+              <div className="grid cols-3" style={{ marginTop: 8 }}>
+                {([["Taming", "Kat upgrades: Taming 1 / 5 / 10 / 20 / 25 for Uncommon to Mythic"], ["Foraging", "Shard fusion: Galatea opens at Foraging 12"]] as const).map(([name, hint]) => (
+                  <div key={name} className="field" title={hint}><span>{name}</span><Stepper label={`${name} skill level`} value={p.skills?.[name] ?? 0} max={60} onChange={v => setProfile({ skills: { ...p.skills, [name]: v } })} /></div>
                 ))}
               </div>
             </div>

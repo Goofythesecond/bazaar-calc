@@ -13,7 +13,11 @@
 import { taxRate } from "../rules/index.js";
 import type { ItemMarket } from "../market/index.js";
 
-export interface PaperCandidate { key: string; title: string; item: string; qty: number; profitPerUnit: number; unitsH: number; kind: string }
+export interface PaperCandidate {
+  key: string; title: string; item: string; qty: number; profitPerUnit: number; unitsH: number; kind: string;
+  /** the fill model's hours to fill the buy order for `qty`, then to sell them (before any calibration) */
+  buyH?: number; sellH?: number;
+}
 
 export interface PaperTrade {
   id: string; key: string; title: string; item: string; qty: number;
@@ -22,7 +26,10 @@ export interface PaperTrade {
   price: number;            // the current virtual order's price
   onTop: boolean; nextLook: number;
   bought: number; sold: number; cost: number; revenue: number; relists: number;
-  expected: { profit: number; hours: number };
+  /** hours = buyH + sellH when the model's per-side prediction is known (one trade buys, then sells) */
+  expected: { profit: number; hours: number; buyH?: number; sellH?: number };
+  /** when the buy side was complete (the sell offer went up): splits the trade's time into buying and selling */
+  boughtAt?: number | null;
   realized: number | null;  // coins after tax, when closed
 }
 
@@ -49,7 +56,7 @@ export function paperStep(st: PaperState, ts: number, market: Map<string, ItemMa
     if (t.phase === "buying") {
       if (t.onTop && m.bid >= t.price - 1e-9) t.onTop = false; // someone matched or beat our virtual bid
       if (t.onTop && known) { const take = Math.min(t.qty - t.bought, sold); t.bought += take; t.cost += take * t.price; }
-      if (t.bought >= t.qty) { t.phase = "selling"; t.price = Math.round((m.ask - 0.1) * 10) / 10; t.onTop = true; t.nextLook = ts + check; }
+      if (t.bought >= t.qty) { t.phase = "selling"; t.boughtAt = ts; t.price = Math.round((m.ask - 0.1) * 10) / 10; t.onTop = true; t.nextLook = ts + check; }
       else if (!t.onTop && ts >= t.nextLook) { t.price = Math.round((m.bid + 0.1) * 10) / 10; t.onTop = true; t.relists++; t.nextLook = ts + check; }
     } else {
       if (t.onTop && m.ask <= t.price + 1e-9) t.onTop = false;
@@ -75,7 +82,8 @@ export function paperStep(st: PaperState, ts: number, market: Map<string, ItemMa
     const m = c && market.get(c.item);
     if (c && m?.bid != null) trades.push({ id: `${ts}-${c.item}`, key: c.key, title: c.title, item: c.item, qty: c.qty, openedAt: ts, closedAt: null, phase: "buying",
       price: Math.round((m.bid + 0.1) * 10) / 10, onTop: true, nextLook: ts + check, bought: 0, sold: 0, cost: 0, revenue: 0, relists: 0,
-      expected: { profit: c.profitPerUnit * c.qty, hours: c.qty / c.unitsH }, realized: null });
+      expected: { profit: c.profitPerUnit * c.qty, hours: c.buyH != null && c.sellH != null ? c.buyH + c.sellH : c.qty / c.unitsH, buyH: c.buyH, sellH: c.sellH },
+      boughtAt: null, realized: null });
   }
   return { trades: trades.slice(-200), lastPick, counters, lastTs: ts };
 }

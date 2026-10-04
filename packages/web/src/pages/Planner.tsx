@@ -9,8 +9,8 @@ import { ConfidencePill, Detail, Flags, Flow, Requirements } from "../components
 import { KIND_LABEL, api, coins, dataAge, historyAge, num, pct } from "../lib";
 import { useApp } from "../state";
 
-const KINDS = ["bazaar", "craft", "book", "forge", "npc"] as const;
-const KIND_ICON = { bazaar: "swap", craft: "craft", book: "book", forge: "flame", npc: "sell" } as const;
+const KINDS = ["bazaar", "craft", "book", "forge", "npc", "kat", "fusion"] as const;
+const KIND_ICON = { bazaar: "swap", craft: "craft", book: "book", forge: "flame", npc: "sell", kat: "paw", fusion: "merge" } as const;
 
 function Meter({ label, used, total, fmt }: { label: string; used: number; total: number; fmt: (v: number) => string }) {
   const share = total > 0 ? Math.min(1, used / total) : 0;
@@ -42,7 +42,7 @@ export function Planner() {
         <div>
           <span className="eyebrow">Best route</span>
           <h1>What to run today</h1>
-          <p className="lede">The mix of bazaar, craft, book, forge and NPC flips that earns the most per day with your coins, order and forge slots, the daily bazaar limit and the time you have to click.</p>
+          <p className="lede">The mix of bazaar, craft, book, forge, NPC, Kat and fusion flips that earns the most per day with your coins, order and forge slots, the daily bazaar limit and the time you have to click.</p>
         </div>
       </div>
 

@@ -62,6 +62,8 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
     const forge = c.steps.some(x => x.type === "forge");
     const forgeLeft = fSlots - others.reduce((a, x) => a + x.o.forgeSlotsUsed, 0);
     if (forge && forgeLeft <= 0) return null;
+    // Kat cares for one pet at a time: one Kat route in a plan
+    if (c.steps.some(x => x.type === "kat") && others.some(x => x.c.steps.some(y => y.type === "kat"))) return null;
     const have = idx >= 0 ? picks[idx]!.o : null;
     const limits = {
       activeSecondsH: 3600 * s.attention - others.reduce((a, x) => a + x.o.activeSecondsH, 0),

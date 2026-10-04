@@ -15,6 +15,8 @@ const INFO: Record<string, { title: string; text: string }> = {
   craft: { title: "Craft flips", text: "Buy the ingredients (crafting cheaper parts yourself when that wins), craft, sell the result. Recipes from NotEnoughUpdates-REPO." },
   book: { title: "Book flips", text: "Buy low-level enchanted books, combine pairs in an anvil up to the highest level that can be combined, sell the high book. Levels that only come from other sources, such as Dedication IV, are never used." },
   forge: { title: "Forge flips", text: "Buy or craft the inputs, forge, sell. Times include your Quick Forge level and Cole's Molten Forge when it is active." },
+  kat: { title: "Kat flips", text: "Buy a pet on the auction house, have Kat raise it one rarity, sell it there. Pets are priced at the lowest BIN of each rarity, any level, and the sale keeps that minus the auction fees. Kat cares for one pet at a time. Recipes from NotEnoughUpdates-REPO." },
+  fusion: { title: "Shard fusion", text: "Buy two kinds of attribute shards on the bazaar, fuse them in the Fusion Machine (Galatea, Foraging 12), sell the result. For each shard the cheapest pair that makes it right now is shown; fusing costs nothing. Fusion rules from the wiki." },
   npc: { title: "NPC flips", text: "Buy on the bazaar and sell to an NPC shop (no bazaar tax; NPCs pay out at most 500M coins a day), or buy from an NPC shop (at most 640 a day per merchant, 6,400 under Diaz's Shopping Spree) and sell on the bazaar." },
 };
 
@@ -30,8 +32,8 @@ const PAGE = 50;
 function TopPicks({ rows, spread, onOpen }: { rows: RankedOpportunity[]; spread: boolean; onOpen: (o: RankedOpportunity) => void }) {
   const step = (o: RankedOpportunity) => {
     const buy = o.orderPlan.find(l => l.side === "buy"), sell = o.orderPlan.find(l => l.side === "sell");
-    const b = buy ? `buy order ${num(buy.qty)}× ${buy.name} @ ${num(buy.price, 1)}` : o.buys.map(x => `${x.mode === "npc" ? "NPC" : "instant buy"} ${x.name}`).join(", ");
-    const s = sell ? `sell offer @ ${num(sell.price, 1)}` : o.sell.mode === "npc" ? `sell to an NPC @ ${num(o.sell.grossPrice, 1)}` : `instant sell @ ${num(o.sell.grossPrice, 1)}`;
+    const b = buy ? `buy order ${num(buy.qty)}× ${buy.name} @ ${num(buy.price, 1)}` : o.buys.map(x => `${x.mode === "npc" ? "NPC" : x.mode === "ah" ? "auction BIN" : x.mode === "fee" ? "pay" : "instant buy"} ${x.name}`).join(", ");
+    const s = sell ? `sell offer @ ${num(sell.price, 1)}` : o.sell.mode === "npc" ? `sell to an NPC @ ${num(o.sell.grossPrice, 1)}` : o.sell.mode === "ah_reference" ? `auction BIN @ ${num(o.sell.grossPrice, 1)}` : `instant sell @ ${num(o.sell.grossPrice, 1)}`;
     return `${b} → ${s}`;
   };
   return (
@@ -131,7 +133,7 @@ export function Flips() {
                     <td className={`n ${o.coinsH > 0 ? "coin" : "down"}`}><b>{coins(o.coinsH)}</b></td>
                     <td className="n"><ConfidencePill c={o.confidence} /></td><td className={`n ${o.profitPerUnit > 0 ? "" : "down"}`}>{coins(o.profitPerUnit)}</td><td className={`n ${o.marginPct > 0 ? "" : "down"}`}>{pct(o.marginPct)}</td>
                     <td className="n">{num(o.unitsH, 1)}</td><td className="l">{o.limitedBy}</td>
-                    <td className="l small">{[...new Set(o.buys.map(b => (b.mode === "order" ? "order" : b.mode === "npc" ? "NPC" : "instant")))].join(" + ")} → {o.sell.mode === "offer" ? "offer" : o.sell.mode === "npc" ? "NPC" : o.sell.mode}</td>
+                    <td className="l small">{[...new Set(o.buys.map(b => (b.mode === "order" ? "order" : b.mode === "npc" ? "NPC" : b.mode === "ah" ? "AH" : b.mode === "fee" ? "fee" : "instant")))].join(" + ")} → {o.sell.mode === "offer" ? "offer" : o.sell.mode === "npc" ? "NPC" : o.sell.mode === "ah_reference" ? "AH" : o.sell.mode}</td>
                     <td className="n">{coins(o.capitalUsed)}</td><td className="n">{o.ordersUsed}</td>
                     <td className="l"><Requirements o={o} compact /></td>
                   </tr>

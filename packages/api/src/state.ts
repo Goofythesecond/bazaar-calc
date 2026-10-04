@@ -1,6 +1,6 @@
 // In-memory caches of the market, recipes and events, refreshed from Postgres.
 import { type Db, currentPerks, loadEvents, loadMarket, loadRecipes } from "@bc/server-core";
-import { type Ctx, type GameEvent, type ItemMarket, NO_PERKS, type Opportunity, type RankedOpportunity, type PerkEffects, type Profile, type Recipe, type Settings, buildOpportunities } from "@bc/shared";
+import { type Ctx, type FillCalibration, type GameEvent, type ItemMarket, NO_CALIBRATION, NO_PERKS, type Opportunity, type RankedOpportunity, type PerkEffects, type Profile, type Recipe, type Settings, buildOpportunities } from "@bc/shared";
 
 export class State {
   market = new Map<string, ItemMarket>();
@@ -8,6 +8,8 @@ export class State {
   events: GameEvent[] = [];
   /** mayor / minister perks active now (tax, forge times, NPC limits) */
   perks: PerkEffects = NO_PERKS;
+  /** fill-speed correction from this server's paper trading (set by jobs.ts after every step) */
+  calibration: FillCalibration = NO_CALIBRATION;
   loadedAt = 0;
   /** when Hypixel published the newest prices in the market (not when we re-read the database) */
   dataAt = 0;
@@ -54,7 +56,7 @@ export class State {
   private cache = new Map<string, { list: RankedOpportunity[]; skipped: NonNullable<Ctx["skipped"]> }>();
 
   private build(kind: Opportunity["kind"] | "all", settings: Settings, profile: Profile, includeAhForge: boolean, listAll: boolean) {
-    return buildOpportunities({ market: this.market, recipes: this.recipes, perks: this.perks }, kind, settings, profile, includeAhForge, listAll);
+    return buildOpportunities({ market: this.market, recipes: this.recipes, perks: this.perks, calibration: this.calibration }, kind, settings, profile, includeAhForge, listAll);
   }
 }
 

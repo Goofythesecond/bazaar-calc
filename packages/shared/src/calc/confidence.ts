@@ -1,7 +1,8 @@
 // How much to trust a route's numbers, from the evidence behind them. A ranking aid with stated reasons, not a
 // probability: each factor below is 1 when the evidence is complete and smaller when it is thin, and the score is
 // their product.
-//   fill     order legs: fill times measured from >= 8 time-on-top episodes (1) or estimated (0.6)
+//   fill     order legs: fill times measured from >= 8 time-on-top episodes (1) or estimated (0.6); measured from fewer
+//            than 30 episodes: 0.75-1 (the fill backtest's biggest misses on 2026-10-04 came from sides with 6-17 episodes)
 //   price    the sale price backed by history: 24 h median from >= 6 hourly closes (1), 7-day median (0.85), none (0.6);
 //            NPC sales have a fixed price (1); auction reference prices: 0.85 with >= 5 sales a day, else 0.6
 //   flow     hours of watched trading behind the trade rates (least of the items traded): >= 12 h (1), else 0.7-1
@@ -22,6 +23,11 @@ export function routeConfidence(o: Opportunity, market: Market, statsAgeH = 0): 
 
   const estimated = o.orderPlan.filter(l => l.basis !== "measured");
   if (estimated.length) factor(0.6, `fill times estimated (too few measured episodes) for ${estimated.map(l => l.name).join(", ")}`);
+  const thin = o.orderPlan.filter(l => l.basis === "measured" && (l.hold?.n ?? 0) < 30);
+  if (thin.length) {
+    const n = Math.min(...thin.map(l => l.hold?.n ?? 0));
+    factor(0.75 + 0.25 * Math.max(0, n - 8) / 22, `fill times measured from only ${n} time-on-top episodes (${[...new Set(thin.map(l => l.name))].join(", ")})`);
+  }
 
   const sold = market.get(o.sell.item);
   if (o.sell.mode === "offer" || o.sell.mode === "instant") {

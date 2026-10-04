@@ -31,11 +31,12 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEAL
 ```
 
 ## Hypixel SkyBlock Wiki (CC BY-NC-SA 3.0)
-Enchanted-book combining caps, Enchanting requirements, apply / combine XP costs, and Forge and Bazaar rules were taken from
-https://hypixelskyblock.minecraft.wiki, whose content is licensed under
-[CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/). The derived rule file
-`packages/shared/src/rules/enchants.json` is therefore shared under the same licence, with this attribution. Each entry links
-to its source page. This project is non-commercial.
+Enchanted-book combining caps, Enchanting requirements, apply / combine XP costs, Forge, Bazaar and Auction House rules,
+Kat's Taming levels and the attribute-shard fusion rules were taken from https://hypixelskyblock.minecraft.wiki, whose
+content is licensed under [CC BY-NC-SA 3.0](https://creativecommons.org/licenses/by-nc-sa/3.0/). The derived rule files
+`packages/shared/src/rules/enchants.json` and `packages/shared/src/rules/fusion.json` (from the page
+User:Wiki_Editor_33/AttributeFusion and its contributors) are therefore shared under the same licence, with this
+attribution. Each file names its source page. This project is non-commercial.
 
 ## Community research
 The bazaar daily-limit behaviour (15B/day, reset 00:00 UTC, which actions count, per-action integer cap) follows the

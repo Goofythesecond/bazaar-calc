@@ -54,7 +54,7 @@ rules  ←  market, recipes  ←  fill  ←  calc, data  ←  service
 | `market` | market types, signals and flags, names, book packing, `assembleMarket`, event impact, dips | rules |
 | `recipes` | `Recipe`, NotEnoughUpdates-REPO parser | rules |
 | `fill` | time-on-top episodes, fill / order-size model, order tracker, paper trading | rules, market |
-| `calc` | route engine, route builders (bazaar, craft, book, forge, NPC), confidence, planner | rules, market, recipes, fill |
+| `calc` | route engine, route builders (bazaar, craft, book, forge, NPC, Kat, fusion), confidence, planner | rules, market, recipes, fill |
 | `data` | Hypixel shapes and checks, NBT reader, contribution file format, collector core | rules, market, fill |
 | `service` | endpoint logic shared by the API and the static site | rules, market, recipes, fill, calc |
 

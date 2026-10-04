@@ -11,9 +11,9 @@ import { type ElectionResponse, fetchElection, fetchItems, getJson } from "../hy
 
 export async function ingestItems(db: Db): Promise<number> {
   const { items } = await fetchItems();
-  return insertMany(db, "items", ["id", "name", "category", "tier", "material", "npc_sell_price", "updated_at"],
-    items.map(i => [i.id, i.name ?? null, i.category ?? null, i.tier ?? null, i.material ?? null, i.npc_sell_price ?? null, new Date().toISOString()]),
-    "ON CONFLICT (id) DO UPDATE SET name = excluded.name, category = excluded.category, tier = excluded.tier, material = excluded.material, npc_sell_price = excluded.npc_sell_price, updated_at = excluded.updated_at");
+  return insertMany(db, "items", ["id", "name", "category", "tier", "material", "npc_sell_price", "unstackable", "updated_at"],
+    items.map(i => [i.id, i.name ?? null, i.category ?? null, i.tier ?? null, i.material ?? null, i.npc_sell_price ?? null, !!i.unstackable, new Date().toISOString()]),
+    "ON CONFLICT (id) DO UPDATE SET name = excluded.name, category = excluded.category, tier = excluded.tier, material = excluded.material, npc_sell_price = excluded.npc_sell_price, unstackable = excluded.unstackable, updated_at = excluded.updated_at");
 }
 
 /** Store an election response and upsert the mayor term it describes. */
@@ -43,7 +43,7 @@ export async function ingestElection(db: Db): Promise<void> {
 
 const NEU_REPO = "NotEnoughUpdates/NotEnoughUpdates-REPO";
 /** Bump when parsing changes so the next sync re-reads the same commit (2: damage-value ids, NPC shop prices). */
-const NEU_PARSER = 3; // 3: pets ("BEE;0") no longer read as enchanted books
+const NEU_PARSER = 4; // 4: Kat upgrades ("katgrade"), pets as auction keys
 
 /** Download the NEU repo tarball, parse every item, and replace the recipes table. Returns the commit used. */
 export async function syncNeuRecipes(db: Db): Promise<{ commit: string; recipes: number }> {

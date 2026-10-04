@@ -62,7 +62,7 @@ export function dataAge(dataAt: number | undefined, fallback: number): { label: 
     stale: min > 5 ? `These prices are ${min < 120 ? `${Math.round(min)} min` : `${(min / 60).toFixed(1)} h`} old: the scanner has not delivered new data, so the numbers may be out of date.` : null };
 }
 
-export const KIND_LABEL: Record<Opportunity["kind"], string> = { bazaar: "Bazaar flip", craft: "Craft flip", book: "Book flip", forge: "Forge", npc: "NPC flip" };
+export const KIND_LABEL: Record<Opportunity["kind"], string> = { bazaar: "Bazaar flip", craft: "Craft flip", book: "Book flip", forge: "Forge", npc: "NPC flip", kat: "Kat upgrade", fusion: "Shard fusion" };
 
 /** Static website: how old the published history (competition, fill times, typical prices) is, when that matters. */
 export function historyAge(statsAt: number | undefined, used: boolean | undefined): string | null {

@@ -1,5 +1,5 @@
 // Display names: Hypixel's item names where present; readable fallbacks for books and tags.
-import { enchantRules, parseBookId } from "../rules/index.js";
+import { SHARDS, enchantRules, parseBookId } from "../rules/index.js";
 
 const ROMAN = ["", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X"];
 
@@ -20,6 +20,12 @@ export function prettyName(id: string, name?: string | null): string {
     const base = rule?.name ?? b.enchant.replace(/^ENCHANTMENT_(ULTIMATE_)?/, "").replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
     return `${base} ${ROMAN[b.level] ?? b.level}`;
   }
+  // pets on the auction house are keyed by type and rarity (the data module's nbt.ts): "PET_FLYING_FISH_LEGENDARY" -> "Flying Fish Pet (Legendary)"
+  // shards: the wiki's names (rules/fusion.json), the items API has none for them
+  const shard = /^SHARD_(\w+)$/.exec(id);
+  if (shard && SHARDS[shard[1]!]) return SHARDS[shard[1]!]!.name;
+  const pet = /^PET_(\w+)_(COMMON|UNCOMMON|RARE|EPIC|LEGENDARY|MYTHIC)$/.exec(id);
+  if (pet) return `${titleCase(pet[1]!)} Pet (${titleCase(pet[2]!)})`;
   return titleCase(id);
 }
 const titleCase = (s: string) => s.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
