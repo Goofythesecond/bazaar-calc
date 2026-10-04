@@ -15,7 +15,7 @@ The same pages build two ways:
 | `src/lib.ts` | `api()`, number / time formatting, saved settings, data-age notes |
 | `src/state.tsx`, `src/theme.ts` | Settings and unlocks state; theme |
 | `src/live.ts` | Live updates: tells pages when a new snapshot (static site: every 20 s while visible) or new history is in |
-| `src/prefs.ts` | What stays in this browser: favourites, tracked orders, alert settings, decision journal, paper record |
+| `src/prefs.ts` | What stays in this browser: favourites, tracked orders, alert settings, decision journal, paper record, a random visitor id (spreads top picks; never sent) |
 | `src/runners.ts` | Background work on every snapshot: flip alerts, tracked orders |
 | `src/notify.ts` | Toasts, sound, browser notifications, Discord webhook |
 | `src/track.ts` | "Track this route": journal entry plus the route's buy orders in My orders |
@@ -28,7 +28,7 @@ The same pages build two ways:
 | `src/pages/Market.tsx` | Outlook, Items, Item, Events & mayors |
 | `src/pages/Info.tsx` | Self-hosted reference pages: Timing, Contribute, API, Status, Sources |
 | `src/pages/Static.tsx` | Static-site versions: Contribute (collectors), Data status, Data files |
-| `src/components/` | Charts, layout, route detail, order plan, fill panel, settings drawer, icons, live badge and perk notes, toasts, quantity calculator |
+| `src/components/` | Charts, layout, route detail, order plan, fill panel, settings drawer, icons, live badge and perk notes, toasts, quantity calculator, sell-first reminder |
 | `src/static/backend.ts` | The static site's backend: the same `/api/v1/...` paths, answered in the browser |
 | `src/static/worker.ts`, `src/static/client.ts` | Run that backend in a Web Worker and talk to it |
 | `src/static/collect-worker.ts` | The browser data collector |

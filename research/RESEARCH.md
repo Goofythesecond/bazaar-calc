@@ -126,3 +126,28 @@ Known limits: holds shorter than one poll (~20 s, the API refresh rate) cannot b
   profitable, 16.7M realized vs 36.6M expected (46%), 8.3 h per trade vs 1.3 h predicted (including about 4 hours with
   the PC off). The fill model is optimistic for the illiquid high-margin items these picks favour; more trades are
   needed before changing it.
+
+## Order handling and spreading picks (2026-10-04)
+- **Spreading top picks:** everyone following the same flip competes for the same instant buyers and sellers. The flip
+  pages pick each visitor's top 3 among routes within 10% of the best score, the same all day (`spreadPicks`).
+- **Sell before buying:** the flip and planner pages remind you of tracked buy orders that filled without a sell offer
+  (`unsoldBuys`), so purchases do not outpace sales.
+- **Order expiry and partial claims:** orders expire 7 days after they are placed ([wiki: Bazaar](https://hypixelskyblock.minecraft.wiki/w/Bazaar));
+  My orders counts 7 days from when an order was added, stops filling it after that, and records claims.
+- **Same-price queue:** our tracker assumes first come, first served at one price; a shrinking level is only an
+  estimate (cancels shrink it too), and the best price moving strictly past an order confirms it. Hypixel has not
+  published the rule; the only public claim (newest first, a 2020 forum thread) has no evidence.
+- **Not done yet:** mixing buy orders and instant buys for one ingredient (orders up to their fill rate, the rest
+  bought up the book). The engine already limits a route by measured buy-order fills, walks the book for instant buys
+  and compares both for every route; mixing within one ingredient waits for measured fill-speed data.
+
+## Scanner CPU on a free host (measured 2026-10-04)
+- The Wispbyte free server was stopped for CPU use (the panel stopped it two minutes after a BIN scan and a push).
+  Measured on a desktop CPU, per step: reading Hypixel's 3.5 MB bazaar JSON 28 ms (unzip + parse), recording it 53 ms,
+  every 20 s; a BIN scan about 4 s in one burst (78 ms of decoding per 1,000 auctions, ~45 pages); the 30-minute file
+  34 ms at gzip level 9, 8 ms at level 6.
+- Changes, each checked to record byte-identical data on 18 saved polls (or to give the same scan result):
+  no lookup map per item and poll (53 -> 44 ms), unchanged products (76.6% between consecutive polls) skip the book
+  comparison, auction items are decoded once per listing (remembered by auction id), the scan fetches one page at a time
+  with a pause sized to keep it near 10% of a core, files are compressed at level 6.
+- Node's heap settings did not change CPU (40.5 ms per poll by default, 41.1 ms with `--max-old-space-size=192`).

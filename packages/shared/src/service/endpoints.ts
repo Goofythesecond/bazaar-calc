@@ -279,7 +279,8 @@ const OrderSpec = z.object({ id: z.string().max(80).optional(), item: z.string()
 // an order returned by an earlier call (TrackedOrder): sent back as it was, so its queue position carries on
 const Tracked = OrderSpec.extend({ id: z.string().max(80), name: z.string().max(200), createdAt: z.number(), updatedAt: z.number(), ahead: z.number(), filled: z.number(),
   confirmed: z.boolean(), seen: z.boolean(), status: z.enum(["top", "behind", "filled"]), best: z.number().nullable(), level: z.number(), better: z.number(),
-  buyWeek: z.number().nullable().optional(), sellWeek: z.number().nullable().optional(), decisionId: z.string().max(80).optional() });
+  buyWeek: z.number().nullable().optional(), sellWeek: z.number().nullable().optional(), decisionId: z.string().max(80).optional(),
+  claimed: z.number().min(0).optional(), expired: z.boolean().optional() });
 const OrdersCheckBody = z.object({ orders: z.array(z.union([Tracked, OrderSpec])).min(1).max(50) });
 /** POST /api/v1/orders/check: new orders ({item, side, price, amount}) are placed in the queue; orders from an earlier
  *  answer are advanced to the current book (fill/order-tracker.ts), with the events since (outbid, filled, back on top). */
@@ -304,4 +305,24 @@ export function perksResponse(perks: PerkEffects) {
 /** GET /api/v1/paper: a paper-trading record with its summary (realized vs expected, win rate, time per trade). */
 export function paperResponse(state: PaperState, extra: Record<string, unknown>) {
   return { ...extra, summary: paperSummary(state), state };
+}
+
+/** FNV-1a: a small stable hash, so a visitor's choice among near-equal picks stays the same all day. */
+function hash32(s: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < s.length; i++) { h ^= s.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; }
+  return h;
+}
+
+/**
+ * Top picks spread over visitors. Everyone who follows the same flip competes for the same instant buyers and sellers,
+ * so visitors are spread over the flips that are about as good. Among the picks within
+ * `within` of the best score (coins/h x confidence), each `seed` (a visitor and a day) gets its own `n`, shown best
+ * first; when no more than `n` are that close, everyone gets the same top `n`. `rows` must be sorted best first.
+ */
+export function spreadPicks<T extends { key: string; scoreH: number }>(rows: T[], seed: string, n = 3, within = 0.9): T[] {
+  if (!rows.length) return [];
+  const close = rows.filter(r => r.scoreH >= rows[0]!.scoreH * within);
+  if (close.length <= n) return rows.slice(0, n);
+  return [...close].sort((a, b) => hash32(`${seed}|${a.key}`) - hash32(`${seed}|${b.key}`)).slice(0, n).sort((a, b) => b.scoreH - a.scoreH);
 }

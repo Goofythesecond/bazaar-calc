@@ -32,7 +32,8 @@ export async function trackSellAfterBuy(buy: TrackedOrder): Promise<void> {
   const b = (await api<{ items: Record<string, Book> }>(`/api/v1/books?ids=${encodeURIComponent(buy.item)}`)).items[buy.item];
   if (!b || !b.asks[0]) throw new Error(`${buy.name} has no sell offers to price against right now`);
   const price = Math.round((b.asks[0].price - 0.1) * 10) / 10;
-  const sell = trackOrder({ id: `${buy.id}-sell`, item: buy.item, name: buy.name, side: "sell", price, amount: buy.filled, decisionId: buy.decisionId }, b);
+  // you sell what you bought: the filled units (or what you claimed of them, when you said)
+  const sell = trackOrder({ id: `${buy.id}-sell`, item: buy.item, name: buy.name, side: "sell", price, amount: buy.claimed || buy.filled, decisionId: buy.decisionId }, b);
   trackedOrders.set(all => [...all, sell]);
   if (buy.decisionId) journal.set(all => all.map(d => (d.id === buy.decisionId ? { ...d, orderIds: [...d.orderIds, sell.id] } : d)));
 }

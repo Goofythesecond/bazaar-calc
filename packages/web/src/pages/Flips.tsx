@@ -2,11 +2,12 @@
 import { useQuery } from "@tanstack/react-query";
 import { Fragment, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import type { RankedOpportunity } from "@bc/shared";
+import { type RankedOpportunity, spreadPicks } from "@bc/shared";
 import { Icon } from "../components/Icon";
+import { SellFirst } from "../components/SellFirst";
 import { ConfidencePill, Detail, FavouriteStar, Flags, Requirements } from "../components/RouteView";
 import { type CalcResponse, api, coins, dataAge, historyAge, num, pct } from "../lib";
-import { favourites } from "../prefs";
+import { favourites, visitorId } from "../prefs";
 import { useApp } from "../state";
 
 const INFO: Record<string, { title: string; text: string }> = {
@@ -26,7 +27,7 @@ const DEFAULT: Filters = { q: "", minCoinsH: 0, minMargin: 0, maxCapital: 0, max
 const PAGE = 50;
 
 /** The three best routes right now as plain instructions: buy order N x item @ price, then sell offer @ price. */
-function TopPicks({ rows, onOpen }: { rows: RankedOpportunity[]; onOpen: (o: RankedOpportunity) => void }) {
+function TopPicks({ rows, spread, onOpen }: { rows: RankedOpportunity[]; spread: boolean; onOpen: (o: RankedOpportunity) => void }) {
   const step = (o: RankedOpportunity) => {
     const buy = o.orderPlan.find(l => l.side === "buy"), sell = o.orderPlan.find(l => l.side === "sell");
     const b = buy ? `buy order ${num(buy.qty)}× ${buy.name} @ ${num(buy.price, 1)}` : o.buys.map(x => `${x.mode === "npc" ? "NPC" : "instant buy"} ${x.name}`).join(", ");
@@ -42,6 +43,7 @@ function TopPicks({ rows, onOpen }: { rows: RankedOpportunity[]; onOpen: (o: Ran
           <span className="row" style={{ gap: 8 }}><span className="coin"><b>{coins(o.coinsH)}</b>/h</span><ConfidencePill c={o.confidence} /><button className="ghost" onClick={() => onOpen(o)}>Details</button></span>
         </div>
       ))}
+      {spread && <span className="small muted">More flips are about as good as these. Each visitor sees a different few of them (the same all day), so not everyone crowds the same item: anyone following the same flip competes for the same buyers and sellers.</span>}
     </section>
   );
 }
@@ -66,7 +68,10 @@ export function Flips() {
   });
   // top picks: the best routes by coins/h x confidence, without market warnings
   const picks = useQuery({ queryKey: ["calc", kind, "picks", settings, profile], placeholderData: prev => prev,
-    queryFn: () => api<CalcResponse>(`/api/v1/calc/${kind}`, { settings, profile, filters: { sort: "scoreH", limit: 3, profitableOnly: true, noFlags: true } }) });
+    queryFn: () => api<CalcResponse>(`/api/v1/calc/${kind}`, { settings, profile, filters: { sort: "scoreH", limit: 30, profitableOnly: true, noFlags: true } }) });
+  const visitor = visitorId.use();
+  const topRows = picks.data ? spreadPicks(picks.data.rows, `${visitor}|${new Date().toISOString().slice(0, 10)}`) : [];
+  const spread = (picks.data?.rows.filter(r => r.scoreH >= (picks.data!.rows[0]?.scoreH ?? 0) * 0.9).length ?? 0) > topRows.length; // spreadPicks chose among more
   const info = INFO[kind] ?? INFO.bazaar!;
   const set = (p: Partial<Filters>) => { setF({ ...f, ...p }); setPage(0); };
   const Th = ({ k, children }: { k: Filters["sort"]; children: string }) => (
@@ -95,11 +100,12 @@ export function Flips() {
         <button className="ghost" onClick={() => { setF(DEFAULT); setPage(0); }}>Reset</button>
       </section>
 
+      <SellFirst />
       {q.error && <div className="note"><Icon name="warn" />{(q.error as Error).message}</div>}
       {q.isLoading && !q.data && <div className="card empty">Calculating from the current market…</div>}
       {q.data && dataAge(q.data.dataAt, q.data.marketAt).stale && <div className="note"><Icon name="warn" />{dataAge(q.data.dataAt, q.data.marketAt).stale}</div>}
       {q.data && historyAge(q.data.statsAt, q.data.statsUsed) && <div className="note"><Icon name="info" />{historyAge(q.data.statsAt, q.data.statsUsed)}</div>}
-      {picks.data && picks.data.rows.length > 0 && <TopPicks rows={picks.data.rows} onOpen={o => { setF({ ...DEFAULT, sort: f.sort, q: o.title }); setPage(0); setOpen(o.key); }} />}
+      {topRows.length > 0 && <TopPicks rows={topRows} spread={spread} onOpen={o => { setF({ ...DEFAULT, sort: f.sort, q: o.title }); setPage(0); setOpen(o.key); }} />}
       {q.data && <>
         <div className="spread small muted" style={{ marginBottom: 8 }}>
           <span>{num(q.data.total)} routes, <b>{num(q.data.profitable)}</b> make money at your settings · routes with market warnings come last · {dataAge(q.data.dataAt, q.data.marketAt).label} · select a row for the full working and order sizes</span>

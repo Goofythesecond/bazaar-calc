@@ -3,7 +3,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { type ItemMarket, buyFlowH, sellFlowH, trackOrder } from "@bc/shared";
+import { type ItemMarket, buyFlowH, claimOrder, expiresAt, sellFlowH, trackOrder } from "@bc/shared";
 import { Icon } from "../components/Icon";
 import { api, ago, coins, dur, num } from "../lib";
 import { trackedOrders } from "../prefs";
@@ -37,7 +37,7 @@ export function Orders() {
   return (
     <>
       <div className="pagehead"><div><span className="eyebrow">Trading</span><h1>My orders</h1>
-        <p className="lede">Type in the buy orders and sell offers you placed in game. Every new snapshot checks them against the order book: on top or not, how many units are ahead of you, how much has filled, and the price to relist at. Estimates until the best price moves past yours (then the fill is certain). Saved in this browser only.</p></div></div>
+        <p className="lede">Type in the buy orders and sell offers you placed in game. Every new snapshot checks them against the order book: on top or not, how many units are ahead of you, how much has filled, and the price to relist at. Estimates until the best price moves past yours (then the fill is certain). Orders expire 7 days after they are placed (counted from when you add them here). Saved in this browser only.</p></div></div>
       <section className="card filters" aria-label="Add an order">
         <label className="field grow" htmlFor="oi"><span>Item (name or id)</span><input id="oi" list="oi-list" value={item} onChange={e => setItem(e.target.value)} placeholder="ENCHANTED_DIAMOND" />
           <datalist id="oi-list">{(search.data ?? []).map(i => <option key={i.id} value={i.id}>{i.name}</option>)}</datalist></label>
@@ -58,24 +58,27 @@ export function Orders() {
             return (
               <tr key={o.id}>
                 <td className="l"><b>{o.side === "buy" ? "Buy order" : "Sell offer"}</b> {num(o.amount)} × <Link className="itemname" to={`/item/${o.item}`}>{o.name}</Link> @ {num(o.price, 1)}</td>
-                <td className="l">{o.status === "filled" ? <span className="pill good"><Icon name="check" size={12} />filled{o.confirmed ? "" : " (estimate)"}</span>
+                <td className="l">{o.expired ? <span className="pill warn" title="Bazaar orders expire after 7 days: claim what filled, the rest comes back">expired</span>
+                  : o.status === "filled" ? <span className="pill good"><Icon name="check" size={12} />filled{o.confirmed ? "" : " (estimate)"}</span>
                   : !o.seen ? <span className="pill">not in the book yet</span>
                   : o.status === "top" ? <span className="pill good">on top</span> : <span className="pill warn"><Icon name="warn" size={12} />{o.side === "buy" ? "outbid" : "undercut"}</span>}</td>
-                <td className="n">{num(o.filled)} / {num(o.amount)}</td>
+                <td className="n">{num(o.filled)} / {num(o.amount)}{(o.claimed ?? 0) > 0 && <div className="small muted">{num(o.claimed!)} claimed</div>}</td>
                 <td className="n">{o.seen ? num(o.ahead) : "–"}</td>
                 <td className="n">{o.best != null ? coins(o.best) : "–"}</td>
-                <td className="l small">{o.status === "filled" ? "claim it in the bazaar" : o.status === "behind" && relist != null ? <>relist at <b>{num(relist, 1)}</b></> : eta != null ? <>~{dur(eta)} to fill at the current rate</> : "waiting"}</td>
+                <td className="l small">{o.expired ? "claim it in the bazaar" : o.status === "filled" ? "claim it in the bazaar" : o.status === "behind" && relist != null ? <>relist at <b>{num(relist, 1)}</b></> : eta != null ? <>~{dur(eta)} to fill at the current rate</> : "waiting"}
+                  {!o.expired && o.status !== "filled" && <div className="muted">expires in {dur(Math.max(0, expiresAt(o) - Date.now()) / 3.6e6)}</div>}</td>
                 <td className="n small muted">{ago(o.updatedAt)}</td>
-                <td className="row" style={{ gap: 6, flexWrap: "nowrap" }}>
-                  {o.side === "buy" && o.status === "filled" && !orders.some(x => x.id === `${o.id}-sell`) &&
+                <td><div className="row" style={{ gap: 6, flexWrap: "wrap", justifyContent: "flex-end", minWidth: 150 }}>
+                  {o.filled > (o.claimed ?? 0) && <button className="ghost" title="You collected the filled units in game" onClick={() => trackedOrders.set(all => all.map(x => (x.id === o.id ? claimOrder(x) : x)))}>Claimed {num(o.filled - (o.claimed ?? 0))}</button>}
+                  {o.side === "buy" && (o.status === "filled" || o.expired) && o.filled > 0 && !orders.some(x => x.id === `${o.id}-sell`) &&
                     <button className="ghost" onClick={() => void trackSellAfterBuy(o).catch(e => setErr((e as Error).message))}>Track the sell offer</button>}
-                  <button className="ghost" onClick={() => remove(o.id)} aria-label="Stop tracking">Remove</button></td>
+                  <button className="ghost" onClick={() => remove(o.id)} aria-label="Stop tracking">Remove</button></div></td>
               </tr>
             );
           })}</tbody>
         </table></div>
       )}
-      {orders.some(o => o.status === "filled") && <button className="ghost" style={{ marginTop: 10 }} onClick={() => trackedOrders.set(all => all.filter(o => o.status !== "filled"))}>Clear filled orders</button>}
+      {orders.some(o => o.status === "filled" || o.expired) && <button className="ghost" style={{ marginTop: 10 }} onClick={() => trackedOrders.set(all => all.filter(o => o.status !== "filled" && !o.expired))}>Clear filled and expired orders</button>}
     </>
   );
 }

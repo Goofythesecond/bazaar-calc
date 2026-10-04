@@ -53,6 +53,7 @@ export function useOrderRunner() {
         const o = e.order, what = `${o.name}: your ${sideWord(o)} of ${num(o.amount)} at ${num(o.price, 1)}`;
         if (e.type === "outbid") notify({ channel: "orders", level: "warn", link: "/orders", title: `${o.side === "buy" ? "Outbid" : "Undercut"}: ${o.name}`, body: `${what} is no longer on top (best ${num(o.best, 1)}). Relist at ${num(e.relist, 1)}.` });
         else if (e.type === "filled") notify({ channel: "orders", level: "good", link: "/orders", title: `Filled: ${o.name}`, body: `${what} ${e.confirmed ? "is filled (the best price moved past yours)" : "looks filled (estimate)"}. Claim it in the bazaar.` });
+        else if (e.type === "expired") notify({ channel: "orders", level: "warn", link: "/orders", title: `Expired: ${o.name}`, body: `${what} expired after 7 days with ${num(o.filled)} filled. Claim them and the rest in the bazaar.` });
         else if (e.type === "top") notify({ channel: "orders", level: "info", link: "/orders", title: `Back on top: ${o.name}`, body: `${what} is the best price again.` });
       }
     }).catch(() => { /* next snapshot tries again */ });

@@ -1,5 +1,5 @@
 // Your own bazaar orders (typed in by you; nothing reads your account), followed against every new order-book snapshot.
-// Queue rules (the same as Coflnet's open-source SkyBazaar matcher, and our fill model):
+// Queue rules (the same as our fill model; Hypixel has not published the rule, see research/RESEARCH.md):
 //  - orders at one price fill first come, first served: when you add an order, everything already at your price is
 //    counted ahead of you
 //  - units leaving your price level (fills or cancels: polls cannot tell) and real instant trades reaching your price
@@ -8,6 +8,8 @@
 //    your sell offer) means your order was used up: filled, confirmed
 //  - being outbid or undercut alone proves nothing: your order still waits behind the better price
 // Everything before "confirmed" is an estimate and is shown as one.
+// Orders expire 7 days after they are placed; whatever filled stays claimable, the rest comes back
+// (hypixelskyblock.minecraft.wiki/w/Bazaar, checked 2026-10-04). Claims can be partial: `claimed` counts what you took.
 import type { BookLevel } from "../market/index.js";
 
 export type OrderSide = "buy" | "sell";
@@ -41,7 +43,17 @@ export interface TrackedOrder {
   updatedAt: number;
   /** optional link to a decision in the journal */
   decisionId?: string;
+  /** units you have claimed in game so far (you tell the tracker; claims can be partial) */
+  claimed?: number;
+  /** 7 days after it was added: it fills no more; filled units and the rest wait to be claimed */
+  expired?: boolean;
 }
+
+/** Bazaar orders expire 7 days after they are placed (wiki: Bazaar). Counted from when the order was added here. */
+export const ORDER_LIFETIME_MS = 7 * 86400_000;
+export const expiresAt = (o: Pick<TrackedOrder, "createdAt">) => o.createdAt + ORDER_LIFETIME_MS;
+/** You claimed `units` (default: everything filled so far) in game. */
+export const claimOrder = (o: TrackedOrder, units = o.filled): TrackedOrder => ({ ...o, claimed: Math.min(o.filled, Math.max(o.claimed ?? 0, units)) });
 
 export interface BookSnapshot { ts: number; bids: BookLevel[]; asks: BookLevel[]; buyWeek: number; sellWeek: number }
 
@@ -49,7 +61,8 @@ export type OrderEvent =
   | { type: "outbid"; order: TrackedOrder; by: number; relist: number }
   | { type: "top"; order: TrackedOrder }
   | { type: "partial"; order: TrackedOrder; filled: number }
-  | { type: "filled"; order: TrackedOrder; confirmed: boolean };
+  | { type: "filled"; order: TrackedOrder; confirmed: boolean }
+  | { type: "expired"; order: TrackedOrder };
 
 const cents = (p: number) => Math.round(p * 100);
 const levels = (b: BookSnapshot, side: OrderSide) => (side === "buy" ? b.bids : b.asks);
@@ -78,7 +91,8 @@ export function trackOrder(o: { id: string; item: string; name: string; side: Or
 
 /** One new snapshot: queue position, fills and status. Returns the events worth telling you about. */
 export function updateOrder(o: TrackedOrder, b: BookSnapshot): { order: TrackedOrder; events: OrderEvent[] } {
-  if (o.status === "filled" || b.ts <= o.updatedAt) return { order: o, events: [] };
+  if (o.status === "filled" || o.expired || b.ts <= o.updatedAt) return { order: o, events: [] };
+  if (b.ts >= expiresAt(o)) { const order = { ...o, expired: true, updatedAt: b.ts }; return { order, events: [{ type: "expired", order }] }; }
   const l = look(o.side, o.price, b);
   const events: OrderEvent[] = [];
   let { ahead, filled } = o;
@@ -113,4 +127,11 @@ export function updateOrder(o: TrackedOrder, b: BookSnapshot): { order: TrackedO
     if (status === "top" && o.status === "behind") events.push({ type: "top", order: next });
   }
   return { order: next, events };
+}
+
+/** Sell first: buy orders whose units filled but have no sell offer tracked yet (`<id>-sell`). Buying more before these
+ *  are listed ties up coins and lets purchases outpace sales. */
+export function unsoldBuys(orders: TrackedOrder[]): TrackedOrder[] {
+  const sells = new Set(orders.filter(o => o.side === "sell").map(o => o.id));
+  return orders.filter(o => o.side === "buy" && o.filled > 0 && !sells.has(`${o.id}-sell`));
 }

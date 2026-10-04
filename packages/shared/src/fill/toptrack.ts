@@ -38,7 +38,9 @@ interface Open { price: number; startTs: number; prevTs: number; lastTs: number;
 
 const key = (p: number) => Math.round(p * 100);
 const better = (side: Side, a: number, b: number) => (side === "bid" ? a > b + 1e-9 : a < b - 1e-9);
-const amounts = (levels: BookLevel[]) => new Map(levels.map(l => [key(l.price), l.amount]));
+/** Units at one price (key) in a book side. A scan of at most 30 levels: building a lookup map per item and poll was the
+ *  scanner's biggest CPU cost (2026-10-04 profile) and gives the same answer. */
+const amountAt = (levels: BookLevel[], k: number) => { for (const l of levels) if (key(l.price) === k) return l.amount; return 0; };
 
 /** Follows the top of both sides of many items across consecutive polls. Feed every poll in time order. */
 export class TopTracker {
@@ -66,13 +68,13 @@ export class TopTracker {
       const before = side === "bid" ? prev.bids : prev.asks;
       const top = cur[0];
       if (st) {
-        const now = amounts(cur);
-        const removedHere = Math.max(0, (amounts(before).get(key(st.price)) ?? 0) - (now.get(key(st.price)) ?? 0));
+        const sk = key(st.price);
+        const removedHere = Math.max(0, amountAt(before, sk) - amountAt(cur, sk));
         let flow = removedHere;
         if (!top || better(side, st.price, top.price)) {
           // our level emptied and the best got worse: everything consumed down to the new best passed through our price first
           flow = 0;
-          for (const l of before) if (!top || !better(side, top.price, l.price)) flow += Math.max(0, l.amount - (now.get(key(l.price)) ?? 0));
+          for (const l of before) if (!top || !better(side, top.price, l.price)) flow += Math.max(0, l.amount - amountAt(cur, key(l.price)));
         }
         st.removed += removedHere;
         st.flow += flow;

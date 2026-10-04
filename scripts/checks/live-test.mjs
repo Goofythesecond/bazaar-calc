@@ -6,6 +6,8 @@
 //  3. tracked orders: an order typed in is placed in the queue and updated on later snapshots
 //  4. paper trading: the record in this browser advances with every snapshot; the published around-the-clock record
 //  5. flip pages list routes, and no page shows script errors
+//  6. top picks are spread over visitors among near-equal routes
+//  7. the sell-first reminder, order expiry after 7 days and claims
 // Usage: node scripts/checks/live-test.mjs <site url, e.g. https://goofythesecond.github.io/bazaar-calc/> [out dir] [paper minutes]
 import { spawn } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
@@ -161,6 +163,44 @@ for (const k of ["bazaar", "craft", "book", "forge", "npc"]) {
 }
 await shot("5-flips-npc");
 result("flip pages: every kind lists routes", Object.values(flips).every(v => /routes, [\d,]+ make money/.test(v) && !/^0 routes/.test(v)), { flips });
+// ---- 6. top picks spread over visitors: different visitor ids, the same day
+const picksFor = async id => {
+  await evalJs(`localStorage.setItem("bazaar-calc.visitor", ${JSON.stringify(JSON.stringify(id))})`);
+  await send("Page.navigate", { url: `${SITE}flips/bazaar` }, page);
+  // item names only (prices move between visits) plus whether the "each visitor sees a different few" note is shown
+  for (let i = 0; i < 60; i++) {
+    await sleep(500);
+    const t = await evalJs(`(() => { const s = document.querySelector('[aria-label="Top picks"]'); return s ? JSON.stringify({ names: [...s.querySelectorAll("b")].map(b => b.innerText).filter(x => /^\\d\\. /.test(x)), note: /Each visitor sees a different few/.test(s.innerText) }) : null; })()`);
+    if (t) return JSON.parse(t);
+  }
+  return { names: [], note: false };
+};
+const views = [];
+for (const v of ["visitor-a", "visitor-b", "visitor-c", "visitor-d"]) views.push(await picksFor(v));
+const titles = views.map(v => v.names.join(" | "));
+const spreadNote = views.some(v => v.note);
+result("top picks: different visitors get different near-equal picks (or all the same when few are close)", spreadNote ? new Set(titles).size > 1 : new Set(titles).size === 1,
+  { spreadNoteShown: spreadNote, picksPerVisitor: titles });
+
+// ---- 7. sell first, expiry and claims (orders injected into this browser's storage)
+const t0Orders = Date.now();
+const orders = [
+  { id: "t-buy", item: ITEM, name: "Enchanted Diamond", side: "buy", price: 1, amount: 64, createdAt: t0Orders - 3600_000, ahead: 0, filled: 64, confirmed: true, seen: true, status: "filled", best: 1, level: 0, better: 0, buyWeek: 0, sellWeek: 0, updatedAt: t0Orders - 60_000 },
+  { id: "t-old", item: ITEM, name: "Enchanted Diamond", side: "buy", price: 1, amount: 64, createdAt: t0Orders - 8 * 86400_000, ahead: 10, filled: 5, confirmed: false, seen: true, status: "top", best: 1, level: 70, better: 0, buyWeek: null, sellWeek: null, updatedAt: t0Orders - 8 * 86400_000 + 60_000 },
+];
+await evalJs(`localStorage.setItem("bazaar-calc.orders", ${JSON.stringify(JSON.stringify(orders))})`);
+await go("flips/craft");
+const banner = await evalJs(`(document.body.innerText.match(/Sell first:[^\\n]*/) || [""])[0]`);
+result("sell first: a filled buy order without a sell offer shows the reminder", /64 Enchanted Diamond/.test(banner), { banner });
+await go("orders");
+await sleep(25_000); // the next snapshot runs the order tracker
+const before = await evalJs(`[...document.querySelectorAll("table tbody tr")].map(r => r.innerText.replace(/\\s+/g, " ").trim())`);
+await evalJs(`[...document.querySelectorAll("button")].find(b => /^Claimed \\d/.test(b.innerText.trim())).click()`);
+await sleep(1000);
+const after = await evalJs(`JSON.parse(localStorage.getItem("bazaar-calc.orders")).map(o => ({ id: o.id, filled: o.filled, claimed: o.claimed ?? 0, expired: !!o.expired }))`);
+await shot("6-orders-expiry-claims");
+result("orders: 7-day expiry and claims", before.some(r => /\bexpired\b/.test(r)) && after.some(o => o.claimed > 0) && after.find(o => o.id === "t-old")?.expired === true,
+  { rows: before, stored: after });
 result("no script errors on any page", errors.length === 0, { errors });
 
 report.finishedAt = new Date().toISOString();

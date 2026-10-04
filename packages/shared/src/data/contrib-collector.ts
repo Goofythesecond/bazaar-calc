@@ -3,7 +3,7 @@
 // Platform independent: the Node collector and the website's browser collector both feed it.
 import type { BookLevel } from "../market/index.js";
 import { TopTracker } from "../fill/index.js";
-import { type BazaarResponse, type ElectionResponse, bookFlow, counterTrades, degradedBazaar, toLevels, validateBazaar } from "./hypixel.js";
+import { type BazaarResponse, type ElectionResponse, type HypixelOrder, bookFlow, counterTrades, degradedBazaar, toLevels, validateBazaar } from "./hypixel.js";
 import type { BinAgg } from "./nbt.js";
 import { type CollectorKind, type DataFile, emptyDataFile } from "./contrib-format.js";
 
@@ -21,7 +21,7 @@ export class DataCollector {
   private keyIdx = new Map<string, number>();
   private closes = new Map<string, Close>();           // `${item}|${hour}` -> last poll of that hour
   private flows = new Map<string, Flow>();             // `${item}|${hour}`
-  private prev = new Map<string, { ts: number; bids: BookLevel[]; asks: BookLevel[]; buyWeek: number; sellWeek: number }>();
+  private prev = new Map<string, { ts: number; bids: BookLevel[]; asks: BookLevel[]; buyWeek: number; sellWeek: number; raw?: BazaarProduct }>();
   private tracker = new TopTracker(MAX_GAP_MS);
   private lastPoll = 0;
   private lastProducts = 0;
@@ -56,7 +56,10 @@ export class DataCollector {
     for (const [id, p] of Object.entries(d.products)) {
       const q = p.quick_status;
       const bidsRaw = p.sell_summary ?? [], asksRaw = p.buy_summary ?? []; // Hypixel names sides from the instant-trade view
-      const bids = toLevels(bidsRaw), asks = toLevels(asksRaw);
+      // about 3 in 4 products are exactly as in the previous poll (measured 2026-10-04): reuse their book levels and skip
+      // the book comparison (it is zero); everything recorded is identical, the scanner just uses less CPU
+      const pr = this.prev.get(id), same = !!pr?.raw && sameProduct(pr.raw, p);
+      const bids = same ? pr!.bids : toLevels(bidsRaw), asks = same ? pr!.asks : toLevels(asksRaw);
       const i = this.item(id), ck = `${i}|${hour}`;
       const close: Close = { poll, ask: cents(asksRaw[0]?.pricePerUnit), bid: cents(bidsRaw[0]?.pricePerUnit),
         askVol: q.buyVolume ?? 0, bidVol: q.sellVolume ?? 0, askOrders: q.buyOrders ?? 0, bidOrders: q.sellOrders ?? 0, buyWeek: q.buyMovingWeek ?? 0, sellWeek: q.sellMovingWeek ?? 0 };
@@ -68,9 +71,8 @@ export class DataCollector {
         ep.item.push(i); ep.side.push(e.side === "bid" ? 0 : 1); ep.start.push(e.startTs); ep.dur.push(Math.round(e.durS * 10));
         ep.polls.push(e.polls); ep.flow.push(Math.round(e.flow)); ep.end.push(END[e.end]);
       }
-      const pr = this.prev.get(id);
       if (pr && ts > pr.ts && ts - pr.ts <= MAX_GAP_MS) {
-        const fl = bookFlow(pr.bids, pr.asks, bidsRaw, asksRaw);
+        const fl = same ? NO_FLOW : bookFlow(pr.bids, pr.asks, bidsRaw, asksRaw);
         const k = `${i}|${hour}`;
         const r = this.flows.get(k) ?? { intervals: 0, seconds: 0, bidOutbid: 0, askUndercut: 0, bidRemoved: 0, askRemoved: 0, tradeIntervals: 0, tradeSeconds: 0, bidTrades: 0, askTrades: 0 };
         r.intervals++; r.seconds += (ts - pr.ts) / 1000; r.bidOutbid += fl.outbid ? 1 : 0; r.askUndercut += fl.undercut ? 1 : 0;
@@ -79,7 +81,7 @@ export class DataCollector {
         if (t) { r.tradeIntervals++; r.tradeSeconds += (ts - pr.ts) / 1000; r.bidTrades += t.bid; r.askTrades += t.ask; }
         this.flows.set(k, r);
       }
-      this.prev.set(id, { ts, bids, asks, buyWeek: q.buyMovingWeek ?? 0, sellWeek: q.sellMovingWeek ?? 0 });
+      this.prev.set(id, { ts, bids, asks, buyWeek: q.buyMovingWeek ?? 0, sellWeek: q.sellMovingWeek ?? 0, raw: p });
     }
     return "accepted";
   }
@@ -184,4 +186,19 @@ function sortColumns(cols: Record<string, number[]>, key: (c: Record<string, num
     return 0;
   });
   for (const nm of names) { const src = cols[nm]!; cols[nm] = order.map(i => src[i]!); }
+}
+
+const NO_FLOW = { bidRemoved: 0, askRemoved: 0, outbid: false, undercut: false };
+type BazaarProduct = BazaarResponse["products"][string];
+const sameOrders = (a: HypixelOrder[] | undefined, b: HypixelOrder[] | undefined) => {
+  if (!a || !b) return a === b;
+  if (a.length !== b.length) return false;
+  for (let i = 0; i < a.length; i++) if (a[i]!.pricePerUnit !== b[i]!.pricePerUnit || a[i]!.amount !== b[i]!.amount || a[i]!.orders !== b[i]!.orders) return false;
+  return true;
+};
+/** The same book and the same quick status (every field this collector reads) as in the previous poll. */
+function sameProduct(a: BazaarProduct, b: BazaarProduct): boolean {
+  const x = a.quick_status, y = b.quick_status;
+  return x.buyVolume === y.buyVolume && x.sellVolume === y.sellVolume && x.buyOrders === y.buyOrders && x.sellOrders === y.sellOrders
+    && x.buyMovingWeek === y.buyMovingWeek && x.sellMovingWeek === y.sellMovingWeek && sameOrders(a.sell_summary, b.sell_summary) && sameOrders(a.buy_summary, b.buy_summary);
 }

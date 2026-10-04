@@ -54,11 +54,11 @@ export function degradedBazaar(d: BazaarResponse, prevCount: number): string | n
 /** What changed at the top of the book between two snapshots. Removed units = filled or cancelled. */
 export function bookFlow(prevBids: BookLevel[], prevAsks: BookLevel[], bids: HypixelOrder[], asks: HypixelOrder[]) {
   const bestBid = bids[0]?.pricePerUnit ?? 0, bestAsk = asks[0]?.pricePerUnit ?? Infinity;
-  const nowBid = new Map(bids.map(o => [Math.round(o.pricePerUnit * 100), o.amount]));
-  const nowAsk = new Map(asks.map(o => [Math.round(o.pricePerUnit * 100), o.amount]));
+  // units now at a price: a scan of at most 30 levels (no lookup map per item and poll: the scanner runs this every 20 s)
+  const at = (side: HypixelOrder[], cents: number) => { for (const o of side) if (Math.round(o.pricePerUnit * 100) === cents) return o.amount; return 0; };
   let bidRemoved = 0, askRemoved = 0;
-  for (const l of prevBids) if (l.price >= bestBid) bidRemoved += Math.max(0, l.amount - (nowBid.get(Math.round(l.price * 100)) ?? 0));
-  for (const l of prevAsks) if (l.price <= bestAsk) askRemoved += Math.max(0, l.amount - (nowAsk.get(Math.round(l.price * 100)) ?? 0));
+  for (const l of prevBids) if (l.price >= bestBid) bidRemoved += Math.max(0, l.amount - at(bids, Math.round(l.price * 100)));
+  for (const l of prevAsks) if (l.price <= bestAsk) askRemoved += Math.max(0, l.amount - at(asks, Math.round(l.price * 100)));
   return {
     bidRemoved, askRemoved,
     outbid: prevBids[0] != null && bestBid > prevBids[0].price + 1e-9,

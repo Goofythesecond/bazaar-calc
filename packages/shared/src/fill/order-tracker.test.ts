@@ -1,6 +1,6 @@
 // Tests: following your own orders through order-book snapshots (queue position, fills, outbid, confirmed fills).
 import { describe, expect, it } from "vitest";
-import { trackOrder, updateOrder } from "../index.js";
+import { ORDER_LIFETIME_MS, claimOrder, trackOrder, updateOrder } from "../index.js";
 
 const book = (ts: number, bids: [number, number][], asks: [number, number][], sellWeek = 1000, buyWeek = 1000) =>
   ({ ts, bids: bids.map(([price, amount]) => ({ price, amount, orders: 1 })), asks: asks.map(([price, amount]) => ({ price, amount, orders: 1 })), buyWeek, sellWeek });
@@ -35,5 +35,18 @@ describe("order tracker", () => {
     const o = trackOrder({ id: "c", item: "X", name: "X", side: "buy", price: 10, amount: 10 }, book(0, [[10, 110]], [[11, 1]]));
     const r = updateOrder(o, book(20_000, [[10, 110]], [[11, 1]], 900, 800));
     expect(r.order.filled).toBe(0); expect(r.order.ahead).toBe(100);
+  });
+  it("expires 7 days after it was added, keeps what filled, and records partial claims", () => {
+    const o = trackOrder({ id: "e", item: "X", name: "X", side: "buy", price: 10, amount: 100 }, book(0, [[10, 100]], [[11, 10]]));
+    let r = updateOrder(o, book(20_000, [[10, 60]], [[11, 10]], 1040));
+    expect(r.order.filled).toBe(40);
+    const c = claimOrder(r.order, 25);
+    expect(c.claimed).toBe(25);
+    const all = claimOrder(c);
+    expect(all.claimed).toBe(40); // claim the rest of what filled
+    r = updateOrder(all, book(ORDER_LIFETIME_MS + 1, [[10, 0]], [[11, 10]], 1200));
+    expect(r.order).toMatchObject({ expired: true, filled: 40, claimed: 40 });
+    expect(r.events.map(e => e.type)).toEqual(["expired"]);
+    expect(updateOrder(r.order, book(ORDER_LIFETIME_MS + 60_000, [], [[11, 10]], 1300)).order).toBe(r.order); // no more fills
   });
 });

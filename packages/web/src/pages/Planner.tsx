@@ -4,6 +4,7 @@ import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import type { RankedOpportunity, Plan } from "@bc/shared";
 import { Icon } from "../components/Icon";
+import { SellFirst } from "../components/SellFirst";
 import { ConfidencePill, Detail, Flags, Flow, Requirements } from "../components/RouteView";
 import { KIND_LABEL, api, coins, dataAge, historyAge, num, pct } from "../lib";
 import { useApp } from "../state";
@@ -41,10 +42,11 @@ export function Planner() {
         <div>
           <span className="eyebrow">Best route</span>
           <h1>What to run today</h1>
-          <p className="lede">The mix of bazaar, craft, book and forge flips that earns the most per day with your coins, order and forge slots, the daily bazaar limit and the time you have to click.</p>
+          <p className="lede">The mix of bazaar, craft, book, forge and NPC flips that earns the most per day with your coins, order and forge slots, the daily bazaar limit and the time you have to click.</p>
         </div>
       </div>
 
+      <SellFirst />
       {q.error && <div className="note"><Icon name="warn" />{(q.error as Error).message}</div>}
       {q.data && dataAge(q.data.dataAt, q.data.marketAt).stale && <div className="note"><Icon name="warn" />{dataAge(q.data.dataAt, q.data.marketAt).stale}</div>}
       {q.data && historyAge(q.data.statsAt, q.data.statsUsed) && <div className="note"><Icon name="info" />{historyAge(q.data.statsAt, q.data.statsUsed)}</div>}

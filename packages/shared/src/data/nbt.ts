@@ -83,12 +83,13 @@ export function auctionItemKey(nbtBytes: Uint8Array): { key: string; count: numb
 /** Lowest / second-lowest BIN per item key over a set of active auctions. */
 export interface BinAgg { lowest: number; second: number | null; bins: number; total: number }
 
-/** `key(item_bytes)` decodes one auction's item (gunzip + auctionItemKey); platform specific, so it is passed in. */
-export async function aggregateBins(auctions: Auction[], key: (itemBytes: string) => Promise<{ key: string; count: number } | null> | { key: string; count: number } | null,
+/** `key(item_bytes, auction)` decodes one auction's item (gunzip + auctionItemKey); platform specific, so it is passed in
+ *  (it also gets the auction: a listing's item never changes, so a caller can reuse what it decoded by `uuid`). */
+export async function aggregateBins(auctions: Auction[], key: (itemBytes: string, auction: Auction) => Promise<{ key: string; count: number } | null> | { key: string; count: number } | null,
   into = new Map<string, BinAgg>()): Promise<Map<string, BinAgg>> {
   for (const a of auctions) {
     if (a.claimed) continue;
-    const info = await key(a.item_bytes);
+    const info = await key(a.item_bytes, a);
     if (!info) continue;
     const agg = into.get(info.key) ?? { lowest: Infinity, second: null, bins: 0, total: 0 };
     agg.total++;

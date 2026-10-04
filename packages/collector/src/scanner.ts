@@ -87,7 +87,7 @@ function finishChunk(): void {
   col.reset();
   const start = f.polls[0] ?? f.ah.sales.ts[0] ?? f.from;
   const name = dataFileName({ name: cfg.name, from: start }).replace(/\.json\.gz$/, `_${TAG}.json.gz`);
-  const gz = zlib.gzipSync(encodeDataFile(f), { level: 9 });
+  const gz = zlib.gzipSync(encodeDataFile(f), { level: 6 }); // level 9 took 4x the CPU (34 vs 8 ms per file, measured 2026-10-04); the content is the same
   const errors = [...structureErrors(f), ...sanityCheck(f).errors];
   if (errors.length) { writeAtomic(join(REJECTED, name), gz); log(`${name} NOT pushed (kept in ${REJECTED}): ${errors.join("; ")}`); return; }
   writeAtomic(join(PENDING, name), gz);

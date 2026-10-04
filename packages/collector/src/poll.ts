@@ -16,9 +16,15 @@ export interface PollOptions {
 }
 export interface PollCounts { sales: number; scans: number; errors: number }
 
-/** Pages of the auction scan fetched at once. Each page is added up and dropped as soon as it arrives, so memory holds a
- *  few pages, not all ~45 (keeping every page before adding them up peaked at 431 MB, measured 2026-10-03). */
-const BIN_WORKERS = 2;
+/** The auction scan, gentle on a small host's CPU (free hosts stop servers that use too much for minutes):
+ *  - one page at a time, and the next page only once the whole process has used no more than BIN_CPU_SHARE of one core
+ *    since the scan began (snapshots and garbage collection included), whatever the host's speed: a fixed pause ran
+ *    the first scan at 18-26% of a core on a fast PC, a pause sized to each page's own CPU at 10-17%; each page is
+ *    added up and dropped as it arrives, so memory holds one page, not all ~45 (431 MB peak when kept)
+ *  - a listing's item never changes, so it is decoded once and remembered by auction id until it is no longer listed:
+ *    decoding every item was ~90% of a scan's CPU (78 ms per 1,000 auctions), and most listings outlive a scan */
+const BIN_CPU_SHARE = 0.08, BIN_MIN_PAUSE_MS = 400;
+const cpuMs = () => { const c = process.cpuUsage(); return (c.user + c.system) / 1000; };
 
 export function startPolling(col: DataCollector, o: PollOptions): { counts: PollCounts; stop: () => void } {
   const lastModified = new Map<string, string>();
@@ -46,6 +52,14 @@ export function startPolling(col: DataCollector, o: PollOptions): { counts: Poll
   }
   const itemKey = (b64: string) => { try { return auctionItemKey(new Uint8Array(zlib.gunzipSync(Buffer.from(b64, "base64")))); } catch { return null; } };
   const counts: PollCounts = { sales: 0, scans: 0, errors: 0 };
+  type ItemKey = ReturnType<typeof itemKey>;
+  let decoded = new Map<string, ItemKey>(); // auction uuid -> decoded item, from the last complete scan
+  const scanKey = (seen: Map<string, ItemKey>) => (b64: string, a: { uuid: string }) => {
+    let v = decoded.get(a.uuid);
+    if (v === undefined) v = itemKey(b64);
+    seen.set(a.uuid, v);
+    return v;
+  };
   const timers = new Set<NodeJS.Timeout>();
   let stopped = false;
 
@@ -79,23 +93,23 @@ export function startPolling(col: DataCollector, o: PollOptions): { counts: Poll
   if (o.bins) loop("auction BIN scan", o.binsEveryMs, async () => {
     const first = await get<AuctionsPage>(`${HYPIXEL}/skyblock/auctions?page=0`);
     if (!first) return;
-    const total = first.totalPages, ts = first.lastUpdated;
-    const agg = await aggregateBins(first.auctions, a => itemKey(a));
+    const total = first.totalPages, ts = first.lastUpdated, seen = new Map<string, ItemKey>(), key = scanKey(seen);
+    const agg = await aggregateBins(first.auctions, key);
     first.auctions = [];
-    let next = 1, done = 1, failed: string | null = null;
-    const worker = async () => {
-      while (!failed && next < total) {
-        const i = next++;
-        try {
-          const p = await get<AuctionsPage>(`${HYPIXEL}/skyblock/auctions?page=${i}`);
-          if (!p) { failed = `page ${i} empty`; return; }
-          await aggregateBins(p.auctions, a => itemKey(a), agg);
-          done++;
-        } catch (e) { failed = `page ${i}: ${(e as Error).message}`; }
-      }
-    };
-    await Promise.all(Array.from({ length: BIN_WORKERS }, worker));
+    let done = 1, failed: string | null = null;
+    const c0 = cpuMs(), t0 = Date.now();
+    for (let i = 1; i < total && !failed && !stopped; i++) {
+      do await new Promise(r => setTimeout(r, BIN_MIN_PAUSE_MS));
+      while (!stopped && cpuMs() - c0 > BIN_CPU_SHARE * (Date.now() - t0));
+      try {
+        const p = await get<AuctionsPage>(`${HYPIXEL}/skyblock/auctions?page=${i}`);
+        if (!p) { failed = `page ${i} empty`; break; }
+        await aggregateBins(p.auctions, key, agg);
+        done++;
+      } catch (e) { failed = `page ${i}: ${(e as Error).message}`; }
+    }
     if (failed || done !== total) { o.log(`auction scan incomplete (${failed ?? `${done} of ${total} pages`}), not stored`); return; } // incomplete scans are never stored
+    decoded = seen; // forget listings that are gone
     col.addBinScan(ts, agg);
     counts.scans++;
   });

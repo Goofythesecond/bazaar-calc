@@ -28,6 +28,10 @@ export const toggleFavourite = (id: string) => favourites.set(f => (f.includes(i
 
 export const trackedOrders = store<TrackedOrder[]>("bazaar-calc.orders", []);
 
+/** A random id for this browser (never sent anywhere): spreads visitors over near-equal top picks (spreadPicks). */
+export const visitorId = store<string>("bazaar-calc.visitor", Math.random().toString(36).slice(2, 12));
+try { if (!localStorage.getItem("bazaar-calc.visitor")) visitorId.set(visitorId.get()); } catch { /* storage blocked: a new id per tab */ }
+
 export interface AlertSettings {
   enabled: boolean;
   minCoinsH: number;

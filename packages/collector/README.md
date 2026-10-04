@@ -38,6 +38,10 @@ following only the items it trades. The picks come from `paper-candidates.json` 
 workflow computes; picks over 2 hours old open no new trades. The record goes to `data/paper/<login>.json` with each
 push and shows on the site's Track record page.
 
+**CPU:** free hosts stop servers that use too much CPU for minutes. The scanner keeps it low: products unchanged since
+the last snapshot (about 3 in 4) skip the book comparison, the BIN scan fetches one page at a time with a pause and
+decodes each listing only once (remembered by auction id while it is listed), and files are compressed at level 6.
+
 **Memory** (measured 2026-10-04 over 15 minutes with two BIN scans): peak 360 MB with Node's default heap, 329 MB
 started with `--max-old-space-size=192`. On a 512 MB host use that option (see below); if the host still stops it for
 memory, set `"bins": false` (the BIN scan is the biggest part).
@@ -53,8 +57,9 @@ memory, set `"bins": false` (the BIN scan is the biggest part).
    - `scanner.config.json`: `{ "name": "<your GitHub login>" }`
    - `github-token.txt`: the token, nothing else. Never commit or share this file. (Or set `GITHUB_TOKEN`.)
 3. **Start it:** `node --max-old-space-size=192 bazaar-calc-scanner.mjs`. On a panel host such as Wispbyte, choose a
-   Node.js 18+ server, upload the three files, set the startup file to `bazaar-calc-scanner.mjs` and, if the panel
-   lets you, add `--max-old-space-size=192` to the Node options.
+   Node.js 18+ server, upload the three files and end the startup command with
+   `exec /usr/local/bin/node --max-old-space-size=192 /home/container/bazaar-calc-scanner.mjs`. The `exec` matters: without
+   it the panel's stop signal reaches the shell, not the scanner, which then cannot save and push what it recorded.
 4. **Check the log:** `GitHub: <repo> writable with this token`, then every 30 minutes a line per file and
    `pushed 1 data file(s) + paper record ... (commit abc1234)`. On GitHub a commit "Data from <login>'s scanner"
    appears and *Publish the website* runs.
