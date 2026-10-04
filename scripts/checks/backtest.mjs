@@ -131,8 +131,10 @@ for (const id of ids) for (const side of ["bid", "ask"]) {
     const useTrades = measure === "trades" && tradeH >= 1;
     if (measure === "trades" && !useTrades) continue;
     const observed = useTrades ? (tradesTrain.get(k) ?? 0) / tradeH : (removedTrain.get(k) ?? 0) / trainH;
-    const flowH = blendFlow(weekH, observed, useTrades ? tradeH : trainH);
-    const model = fillModel(stats, flowH, null, checkMin, 0.5);
+    // FLOW_PRIOR=<hours> tries another weight for Hypixel's 7-day rate in the blend (default: the calculator's)
+    const flowH = blendFlow(weekH, observed, useTrades ? tradeH : trainH, process.env.FLOW_PRIOR ? Number(process.env.FLOW_PRIOR) : undefined);
+    // times the best price was beaten per hour of the train window: what production passes (server-core stats.ts)
+    const model = fillModel(stats, flowH, stats && trainH > 0 ? ((stats.n - stats.censored) * stats.outbid) / trainH : null, checkMin, 0.5);
     const c = curve(model, checkMin);
     for (const Q of [64, 640, 71680]) {
       const p = at(c, Q), r = replay(id, side, Q, measure);

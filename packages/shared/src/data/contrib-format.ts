@@ -8,7 +8,7 @@
 //   flow      per item and UTC hour: units that left the top of each side between consecutive polls (fills + cancels),
 //             how often the best price was beaten, seconds watched
 //   episodes  time-on-top episodes (see toptrack.ts): how long each freshly posted best price stayed best and how many
-//             units traded against it
+//             units traded against it, and (files from 2026-10-05) in how many of its polls any traded
 //   ah        lowest BINs per item key (last scan of each hour) and anonymous auction sale prices
 //   election  the mayor / election response whenever it changed
 //
@@ -49,6 +49,7 @@ export interface DataFile {
     dur: number[];                                                // tenths of a second on top (midpoint estimate)
     polls: number[]; flow: number[];
     end: number[];                                                // 0 outbid / undercut, 1 gone, 2 cut (data stopped)
+    active?: number[];                                            // polls (of `polls`) in which units traded: burstiness (files from 2026-10-05)
   };
   ah: {
     keys: string[];
@@ -62,7 +63,7 @@ export const emptyDataFile = (name: string, kind: CollectorKind, version: string
   format: DATA_FORMAT, name, collector: { kind, version, source }, from: 0, to: 0, polls: [], items: [],
   closes: { poll: [], item: [], ask: [], bid: [], askVol: [], bidVol: [], askOrders: [], bidOrders: [], buyWeek: [], sellWeek: [] },
   flow: { hour: [], item: [], intervals: [], seconds: [], bidOutbid: [], askUndercut: [], bidRemoved: [], askRemoved: [], tradeIntervals: [], tradeSeconds: [], bidTrades: [], askTrades: [] },
-  episodes: { item: [], side: [], start: [], dur: [], polls: [], flow: [], end: [] },
+  episodes: { item: [], side: [], start: [], dur: [], polls: [], flow: [], end: [], active: [] },
   ah: { keys: [], bins: { ts: [], key: [], lowest: [], second: [], bins: [], total: [] }, sales: { ts: [], key: [], price: [], bin: [] } },
   election: [],
 });
@@ -174,6 +175,12 @@ export function structureErrors(f: DataFile): string[] {
     else cols("flow", f.flow as never, { tradeIntervals: nn, tradeSeconds: nn, bidTrades: nn, askTrades: nn });
   }
   cols("episodes", f.episodes as never, { item: idx(I), side: (x: unknown) => x === 0 || x === 1, start: isInt, dur: nn, polls: (x: unknown) => isInt(x) && (x as number) >= 1, flow: nn, end: (x: unknown) => x === 0 || x === 1 || x === 2 });
+  // optional (older files have none): one per episode, never more than its polls
+  const act = (f.episodes as { active?: unknown })?.active;
+  if (act !== undefined) {
+    if (!Array.isArray(act) || act.length !== f.episodes.item.length) e.push("episodes.active must have one value per episode");
+    else if (act.some((x, i) => !isInt(x) || (x as number) < 0 || (x as number) > f.episodes.polls[i]!)) e.push("episodes.active: whole numbers from 0 to the episode's polls");
+  }
   if (!Array.isArray(f.ah?.keys) || f.ah.keys.some(x => typeof x !== "string" || x.length > 120)) e.push("ah.keys");
   cols("ah.bins", f.ah?.bins as never, { ts: isInt, key: idx(K), lowest: cents, second: cents, bins: nn, total: nn });
   cols("ah.sales", f.ah?.sales as never, { ts: isInt, key: idx(K), price: (x: unknown) => isInt(x) && (x as number) > 0, bin: (x: unknown) => x === 0 || x === 1 });

@@ -17,7 +17,12 @@ export interface Ctx {
   skipped?: { kind: Route["kind"]; key: string; title: string; reason: string }[];
   /** fill-speed correction measured by paper trading (fill/calibration.ts); none = the model as measured */
   calibration?: FillCalibration;
+  /** trading speed in your play hours vs the daily average (market playFactor); none = the average */
+  flowFactor?: { bid: number; ask: number };
 }
+/** Instant sells per hour (they fill buy orders) and instant buys per hour (they fill sell offers), in your play hours. */
+const bidFlow = (ctx: Ctx, m: ItemMarket) => buyFlowH(m) * (ctx.flowFactor?.bid ?? 1);
+const askFlow = (ctx: Ctx, m: ItemMarket) => sellFlowH(m) * (ctx.flowFactor?.ask ?? 1);
 
 export const nameOf = (ctx: Ctx, id: string) => ctx.market.get(id)?.name ?? ctx.names?.get(id) ?? id.replace(/_/g, " ").toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
 const allowed = (ctx: Ctx, m: ItemMarket | undefined): m is ItemMarket =>
@@ -52,11 +57,11 @@ const models = new WeakMap<ItemMarket, Map<string, FillModel>>();
 function modelFor(ctx: Ctx, m: ItemMarket, side: "bid" | "ask"): FillModel {
   let byKey = models.get(m);
   if (!byKey) models.set(m, (byKey = new Map()));
-  const k = `${side}|${ctx.settings.checkIntervalMin}|${ctx.settings.unknownCompetitionShare}`;
+  const k = `${side}|${ctx.settings.checkIntervalMin}|${ctx.settings.unknownCompetitionShare}|${ctx.flowFactor?.bid ?? 1}|${ctx.flowFactor?.ask ?? 1}`;
   let f = byKey.get(k);
   if (!f) byKey.set(k, (f = side === "bid"
-    ? fillModel(m.holdBid, buyFlowH(m), m.undercutBuyH, ctx.settings.checkIntervalMin, ctx.settings.unknownCompetitionShare)
-    : fillModel(m.holdAsk, sellFlowH(m), m.undercutSellH, ctx.settings.checkIntervalMin, ctx.settings.unknownCompetitionShare)));
+    ? fillModel(m.holdBid, bidFlow(ctx, m), m.undercutBuyH, ctx.settings.checkIntervalMin, ctx.settings.unknownCompetitionShare)
+    : fillModel(m.holdAsk, askFlow(ctx, m), m.undercutSellH, ctx.settings.checkIntervalMin, ctx.settings.unknownCompetitionShare)));
   return f;
 }
 
@@ -66,7 +71,7 @@ const maxOrderQty = (price: number, sell: boolean, unstackable?: boolean) =>
 
 export function buyLeg(ctx: Ctx, m: ItemMarket, qty: number, mode: BuyMode): BuyLeg {
   if (mode === "instant") {
-    const flow = sellFlowH(m);
+    const flow = askFlow(ctx, m);
     return { item: m.id, name: m.name, qty, mode, price: walkBook(m.topAsk, instantBatch(ctx, qty, flow), m.ask!), flowH: flow, share: null, undercutsH: null };
   }
   const fill = modelFor(ctx, m, "bid"), maxQty = maxOrderQty(m.bid! + 0.1, false, m.unstackable);
@@ -80,7 +85,7 @@ export function sellLeg(ctx: Ctx, m: ItemMarket, mode: SellMode): SellLeg {
   // You sell after you buy (and craft), so a price pushed well above its typical level is not counted on: the sale is
   // priced at no more than 10% above the item's typical price from history (normal swings inside that band are kept).
   if (mode === "instant") {
-    const flow = buyFlowH(m), now = walkBook(m.topBid, instantBatch(ctx, 1, flow), m.bid!), tb = typicalPrice(m, "bid");
+    const flow = bidFlow(ctx, m), now = walkBook(m.topBid, instantBatch(ctx, 1, flow), m.bid!), tb = typicalPrice(m, "bid");
     const gross = tb && TYPICAL_BAND * tb.price < now ? TYPICAL_BAND * tb.price : now;
     return { item: m.id, name: m.name, mode, grossPrice: gross, netPrice: gross * (1 - tax), flowH: flow, share: null, undercutsH: null,
       ...(gross < now ? { currentPrice: now, priceBasis: `typical buy order + 10% (${tb!.basis}, ${tb!.hours} h of history)` } : {}) };

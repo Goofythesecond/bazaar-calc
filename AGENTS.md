@@ -97,7 +97,7 @@ pnpm install                         # pnpm 12 (see packageManager); Node 24 in 
 pnpm check                           # architecture rules, build every package, run every test
 node scripts/checks/architecture.mjs # just the structure rules (no install needed)
 pnpm -r build                        # type checks every package and builds them
-pnpm -r test                         # 68 calculator / rule tests, 4 ingestion tests (PGlite), 3 GitHub-client tests
+pnpm -r test                         # 74 calculator / rule tests, 4 ingestion tests (PGlite), 3 GitHub-client tests
 ```
 
 After changing `package.json`, run `pnpm install` and commit `pnpm-lock.yaml`. CI installs with
@@ -118,7 +118,7 @@ Pick the checks that fit what you changed.
 | The website | Build with `scripts/site/build-pages.mjs`, serve it, then `node scripts/checks/screenshot.mjs <dir> <url> 1440` and `... 390`. No PROBLEM lines, and look at the screenshots |
 | Live behaviour of the website (prices, search, orders, paper trading) | `node scripts/checks/live-test.mjs <site url> <out dir> [paper minutes]`, against a local build and, after a deploy, the real site: `ALL PASSED`, and read report.json |
 | The scanner | `bazaar-calc-scanner.mjs --dry-run` with `"everyMin": 1` for a few minutes: files in `out/pending`, a paper trade within a minute, memory in the log; `pnpm --filter @bc/collector test` |
-| Performance | Time `buildOpportunities` for `"all"` on real data: about 1.8 s in Node (2,944 routes incl. 322 shard fusions, one trade at a time), 2026-10-05; the first call also builds the fusion pair table (~0.7 s, once). It runs in visitors' browsers (a Web Worker) |
+| Performance | Time `buildOpportunities` for `"all"` on real data: about 2.5 s in Node on this PC (2,957 routes incl. shard fusions, one trade at a time), 2026-10-05; a plan request (routes + plan + two what-if plans) about 1.2 s once the routes are cached. The fusion pair table is built once (~0.2 s). It runs in visitors' browsers (a Web Worker) |
 
 Lessons from this repository's history:
 - `Number#toLocaleString(locale, options)` in hot loops was 90% of the calculation time. Reuse an `Intl.NumberFormat`.

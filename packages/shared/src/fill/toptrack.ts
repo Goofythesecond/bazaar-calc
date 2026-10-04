@@ -32,9 +32,11 @@ export interface TopEpisode {
   startAmount: number;
   startOrders: number;
   end: EpisodeEnd;
+  /** poll intervals (of `polls`) in which units traded against it: few means trades came in bursts (absent in older data) */
+  active?: number;
 }
 
-interface Open { price: number; startTs: number; prevTs: number; lastTs: number; polls: number; flow: number; removed: number; startAmount: number; startOrders: number; fresh: boolean }
+interface Open { price: number; startTs: number; prevTs: number; lastTs: number; polls: number; flow: number; active: number; removed: number; startAmount: number; startOrders: number; fresh: boolean }
 
 const key = (p: number) => Math.round(p * 100);
 const better = (side: Side, a: number, b: number) => (side === "bid" ? a > b + 1e-9 : a < b - 1e-9);
@@ -78,6 +80,7 @@ export class TopTracker {
         }
         st.removed += removedHere;
         st.flow += flow;
+        if (flow > 0) st.active++;
         if (top && key(top.price) === key(st.price)) { st.polls++; st.lastTs = ts; continue; }
         if (st.fresh) out.push(close(side, st, ts, top && better(side, top.price, st.price) ? "outbid" : "gone"));
         this.open.delete(k);
@@ -104,14 +107,14 @@ export class TopTracker {
 }
 
 function start(top: BookLevel, ts: number, prevTs: number, fresh: boolean): Open {
-  return { price: top.price, startTs: ts, prevTs, lastTs: ts, polls: 1, flow: 0, removed: 0, startAmount: top.amount, startOrders: top.orders, fresh };
+  return { price: top.price, startTs: ts, prevTs, lastTs: ts, polls: 1, flow: 0, active: 0, removed: 0, startAmount: top.amount, startOrders: top.orders, fresh };
 }
 
 function close(side: Side, st: Open, endTs: number, end: EpisodeEnd): TopEpisode {
   const loS = (st.lastTs - st.startTs) / 1000;
   const hiS = (end === "cut" ? st.lastTs - st.prevTs : endTs - st.prevTs) / 1000;
   const durS = end === "cut" ? loS + (st.startTs - st.prevTs) / 2000 : (loS + hiS) / 2;
-  return { side, price: st.price, startTs: st.startTs, endTs, durS, loS, hiS, polls: st.polls, flow: st.flow, removedAtPrice: st.removed, startAmount: st.startAmount, startOrders: st.startOrders, end };
+  return { side, price: st.price, startTs: st.startTs, endTs, durS, loS, hiS, polls: st.polls, flow: st.flow, removedAtPrice: st.removed, startAmount: st.startAmount, startOrders: st.startOrders, end, active: st.active };
 }
 
 // ---- summaries -------------------------------------------------------------------------------------------------
@@ -156,11 +159,19 @@ export function summarizeTop(eps: TopEpisode[], hours: number): TopSummary | nul
     gone: ended.filter(e => e.end === "gone").length / Math.max(1, ended.length),
     flowPerMin: totalS > 0 ? (units.reduce((a, b) => a + b, 0) / totalS) * 60 : 0,
     unitsP50: pick(units, 0.5), unitsMean: units.reduce((a, b) => a + b, 0) / units.length,
+    activeShare: burstiness(eps),
     // evenly spaced in time so a burst does not dominate; episodes must be in time order
     samples: Array.from({ length: Math.min(MAX_SAMPLES, eps.length) }, (_, i) => eps[Math.floor((i * eps.length) / Math.min(MAX_SAMPLES, eps.length))]!)
       // third value 1 = the best price was NOT beaten: its order was used up or pulled, or our data stopped (censored)
       .map(e => [Math.round(e.durS * 10) / 10, Math.round(e.flow), e.end === "outbid" ? 0 : 1] as [number, number, number]),
   };
+}
+
+/** Share of the polls on top that saw units trade (episodes of 3+ polls that recorded it; shorter ones say little). */
+function burstiness(eps: TopEpisode[]): number | null {
+  let act = 0, polls = 0;
+  for (const e of eps) if (e.active != null && e.polls >= 3) { act += e.active; polls += e.polls; }
+  return polls >= 30 ? Math.round((act / polls) * 1000) / 1000 : null;
 }
 
 /**

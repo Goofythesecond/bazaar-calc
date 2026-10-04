@@ -1,10 +1,11 @@
 // One route in detail: the buy / process / sell flow, unlock requirements, market warnings and the full working.
 import { Fragment, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { FLAG_TEXT, type Opportunity, type RankedOpportunity } from "@bc/shared";
 import { favourites, toggleFavourite } from "../prefs";
 import { trackRoute } from "../track";
-import { coins, num, pct } from "../lib";
+import { api, coins, num, pct } from "../lib";
 import { useApp } from "../state";
 import { Icon } from "./Icon";
 import { OrderPlan } from "./OrderPlan";
@@ -118,6 +119,7 @@ export function Detail({ o }: { o: Opportunity & Partial<Pick<RankedOpportunity,
       <div>
         <h4>Route</h4>
         <Flow o={o} />
+        <RoundTimes o={o} />
         <h4>How the number is built</h4>
         <ol className="calc">{o.explain.map((x, i) => <li key={i}>{x}</li>)}</ol>
         {o.notes.length > 0 && <p className="small muted">{o.notes.join(" · ")}</p>}
@@ -139,6 +141,34 @@ export function Detail({ o }: { o: Opportunity & Partial<Pick<RankedOpportunity,
         {o.flags.length > 0 && <><h4>Market warnings</h4><Flags flags={o.flags} max={8} /></>}
       </div>
     </div>
+    </>
+  );
+}
+
+type Quota = { p10: number; p50: number; p90: number; unfinished: number } | null;
+const mins = (m: number) => (m < 1 ? "under a minute" : m < 90 ? `${Math.round(m)} min` : `${(m / 60).toFixed(1)} h`);
+/** How long each order of one round takes: typical, fast and slow, from 2,000 replays of the item's real time-on-top
+ *  episodes (the item page's quota simulation). The average hides how much single rounds swing. */
+function RoundTimes({ o }: { o: Opportunity }) {
+  const { settings: s } = useApp();
+  const legs = o.orderPlan.map(l => ({ l, total: l.qty * l.parallel }));
+  const q = useQuery({
+    queryKey: ["round", o.key, legs.map(x => x.total), s.checkIntervalMin],
+    enabled: legs.length > 0,
+    staleTime: 60_000,
+    queryFn: () => Promise.all(legs.map(({ l, total }) => api<{ buy: { quota: Quota } | null; sell: { quota: Quota } | null } | null>(`/api/v1/bazaar/${l.item}/fill?check=${s.checkIntervalMin}&qty=${Math.round(total)}`)
+      .then(r => (l.side === "buy" ? r?.buy : r?.sell)?.quota ?? null).catch(() => null))),
+  });
+  if (!legs.length) return null;
+  return (
+    <>
+      <h4>How long one round takes</h4>
+      <table className="caps"><tbody>{legs.map(({ l, total }, i) => {
+        const r = q.data?.[i];
+        return <tr key={`${l.side}${l.item}`}><td className="l">{l.side === "buy" ? "Buy order" : "Sell offer"} {num(total)}× {l.name}</td>
+          <td className="l why">{q.isLoading ? "working it out…" : r ? <>usually <b>{mins(r.p50)}</b> · fast {mins(r.p10)} · slow {mins(r.p90)}{r.unfinished / 2000 > 0.1 ? ` · ${Math.round((r.unfinished / 2000) * 100)}% not done within a day` : ""}</> : "not enough measured episodes to simulate"}</td></tr>;
+      })}</tbody></table>
+      <p className="small muted">Replays of the item's real time on top (relisting at every look): 1 in 10 rounds is faster than "fast", 1 in 10 slower than "slow". Before the paper-trading correction and your play hours.</p>
     </>
   );
 }

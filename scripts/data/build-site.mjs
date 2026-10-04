@@ -12,7 +12,7 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, wri
 import { join, relative } from "node:path";
 import zlib from "node:zlib";
 import {
-  computeAuctionStats, computeEventImpact, computeHoldStats, computeStats, createPool, importDataFiles, ingestElection, ingestItems, loadMayors,
+  computeAuctionStats, computeEventImpact, computeHoldStats, computeStats, createPool, hourProfile, importDataFiles, ingestElection, ingestItems, loadMayors,
   migrate, syncNeuRecipes,
 } from "@bc/server-core";
 import {
@@ -84,7 +84,11 @@ const ah = Object.fromEntries((await q(`SELECT item_key, extract(epoch from ts) 
   .map(r => [r.item_key, { ts: Math.round(Number(r.t)), lowestBin: r.lowest_bin == null ? null : r.lowest_bin / 100, secondBin: r.second_bin == null ? null : r.second_bin / 100,
     bins: r.bin_count, auctions: r.auction_count, sales24h: r.sales_24h ?? 0, medianSale24h: r.median_sale_24h == null ? null : r.median_sale_24h / 100 }]));
 const marketIds = new Set([...Object.keys(stats), ...Object.keys(ah)]);
-write("market.json", { asOf, stats, hold: holdStats, ah, names: Object.fromEntries([...marketIds].map(id => [id, names.get(id) ?? null])) });
+// how busy the bazaar is by UTC hour (null until every hour of the day is measured on 2+ days): fill speeds follow the
+// visitor's play hours when they set them
+const hours = await hourProfile(db, asOf);
+log(hours ? `hour-of-day profile from ${hours.days}+ days per hour` : "hour-of-day profile: not enough days yet");
+write("market.json", { asOf, stats, hold: holdStats, ah, hourProfile: hours, names: Object.fromEntries([...marketIds].map(id => [id, names.get(id) ?? null])) });
 
 write("items.json", (await q("SELECT id, name, category, tier, on_bazaar, npc_sell_price, unstackable FROM items ORDER BY on_bazaar DESC, length(id)"))
   .map(({ unstackable, ...r }) => ({ ...r, name: prettyName(r.id, r.name), ...(unstackable ? { unstackable: true } : {}) })));

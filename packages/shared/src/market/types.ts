@@ -55,6 +55,11 @@ export interface ItemMarket {
 export type Market = Map<string, ItemMarket>;
 
 /** Measured time-on-top statistics for one side of one item (see fill/toptrack.ts summarizeTop). */
+/** How busy the bazaar is by hour of the day (UTC), from every item's measured instant trades: trades per watched hour
+ *  at that hour / the 24-hour average (1 = average). buy = instant buys (they fill sell offers), sell = instant sells (they
+ *  fill buy orders). */
+export interface HourProfile { buy: number[]; sell: number[]; days: number }
+
 export interface HoldStats {
   n: number;                 // fresh top-of-book episodes measured
   censored: number;          // still on top when the data stopped
@@ -67,6 +72,8 @@ export interface HoldStats {
   unitsP50: number; unitsMean: number;
   holdQ: number[];
   samples: Sample[]; // [seconds on top, units traded, 1 if it ended by being used up] spread evenly over the window
+  /** share of polls on top (episodes of 3+ polls) in which units traded: low means trades come in bursts (null: no data yet) */
+  activeShare?: number | null;
 }
 /** [seconds on top, units traded against it, 1 if the episode ended because that order was used up / pulled (not beaten)] */
 export type Sample = [number, number] | [number, number, number];

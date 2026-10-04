@@ -1,6 +1,6 @@
 // Periodic statistics per bazaar item: reference medians (calc window, default 14 days), competition (undercuts per
 // hour over the last 6 h), price an hour ago, 14-day sparkline, changes, volatility; and (daily) event impact.
-import { type EventImpact, eventImpact } from "@bc/shared";
+import { type EventImpact, type HourProfile, eventImpact } from "@bc/shared";
 import type { Db } from "./db.js";
 import { insertMany } from "./db.js";
 import { loadEvents, type ItemStats } from "./market.js";
@@ -43,6 +43,23 @@ export function delists(c: FlowSums | undefined, k: { span: unknown; b1: unknown
   return { hours: watched,
     bidRemoved: Number(c.br), bidTrades: trades(Number(k.s1), Number(k.s2)),   // buy orders are hit by instant SELLS
     askRemoved: Number(c.ar), askTrades: trades(Number(k.b1), Number(k.b2)) }; // sell offers are hit by instant BUYS
+}
+
+/** How busy the bazaar is by UTC hour of the day: every item's real instant trades per watched second at that hour, over
+ *  the last `days`, divided by the 24-hour average (shared market/types.ts HourProfile). Null until every hour of the
+ *  day has been watched on at least `minDays` different days (one day's hours would mix the time of day with that day). */
+export async function hourProfile(db: Db, now = Date.now(), days = 14, minDays = 2): Promise<HourProfile | null> {
+  const r = await db.query(
+    `SELECT extract(hour from hour AT TIME ZONE 'UTC')::int AS h, count(DISTINCT date_trunc('day', hour AT TIME ZONE 'UTC')) AS d,
+            sum(trade_seconds) AS secs, sum(bid_trades) AS sold, sum(ask_trades) AS bought
+       FROM bazaar_flow_hourly
+      WHERE hour >= $1::timestamptz - make_interval(days => $2) AND hour <= $1::timestamptz AND trade_seconds > 0
+      GROUP BY 1`, [new Date(now).toISOString(), days]);
+  const by = new Map(r.rows.map(x => [Number(x.h), x]));
+  if (by.size < 24 || [...by.values()].some(x => Number(x.d) < minDays || Number(x.secs) <= 0)) return null;
+  const rate = (k: "sold" | "bought") => Array.from({ length: 24 }, (_, h) => Number(by.get(h)![k]) / Number(by.get(h)!.secs));
+  const norm = (xs: number[]) => { const m = xs.reduce((a, x) => a + x, 0) / xs.length; return xs.map(x => (m > 0 ? Math.round((x / m) * 1000) / 1000 : 1)); };
+  return { buy: norm(rate("bought")), sell: norm(rate("sold")), days: Math.min(...[...by.values()].map(x => Number(x.d))) };
 }
 
 /** `now`: the moment the statistics describe (the website build uses the newest contributed data, not the clock). */

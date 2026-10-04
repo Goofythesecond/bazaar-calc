@@ -11,21 +11,22 @@ export const EPISODE_RETENTION_DAYS = 3;
 export async function storeEpisodes(db: Parameters<typeof insertMany>[0], items: { item: string; e: TopEpisode }[]): Promise<void> {
   if (!items.length) return;
   await insertMany(db, "bazaar_top_episodes",
-    ["item_id", "side", "start_ts", "end_ts", "price_cents", "dur_s", "lo_s", "hi_s", "polls", "flow", "removed", "start_amount", "start_orders", "end_reason"],
+    ["item_id", "side", "start_ts", "end_ts", "price_cents", "dur_s", "lo_s", "hi_s", "polls", "flow", "removed", "start_amount", "start_orders", "end_reason", "active"],
     items.map(({ item, e }) => [item, e.side === "bid" ? "b" : "a", new Date(e.startTs).toISOString(), new Date(e.endTs).toISOString(), Math.round(e.price * 100),
-      e.durS, e.loS, e.hiS, e.polls, Math.round(e.flow), Math.round(e.removedAtPrice), Math.round(e.startAmount), e.startOrders, END[e.end]]));
+      e.durS, e.loS, e.hiS, e.polls, Math.round(e.flow), Math.round(e.removedAtPrice), Math.round(e.startAmount), e.startOrders, END[e.end], e.active ?? null]));
 }
 
 const rowToEpisode = (r: Record<string, unknown>): TopEpisode => ({
   side: r.side === "b" ? "bid" : "ask", price: Number(r.price_cents) / 100, startTs: Number(r.start_ms), endTs: Number(r.end_ms),
   durS: Number(r.dur_s), loS: Number(r.lo_s), hiS: Number(r.hi_s), polls: Number(r.polls), flow: Number(r.flow), removedAtPrice: Number(r.removed),
   startAmount: Number(r.start_amount), startOrders: Number(r.start_orders), end: END_BACK[String(r.end_reason)] ?? "cut",
+  ...(r.active == null ? {} : { active: Number(r.active) }),
 });
 
 /** Episodes of one item and side, oldest first. */
 export async function loadEpisodes(db: Db, item: string, side: "bid" | "ask", hours = HOLD_WINDOW_HOURS): Promise<TopEpisode[]> {
   const res = await db.query(
-    `SELECT side, price_cents, extract(epoch from start_ts) * 1000 AS start_ms, extract(epoch from end_ts) * 1000 AS end_ms, dur_s, lo_s, hi_s, polls, flow, removed, start_amount, start_orders, end_reason
+    `SELECT side, price_cents, extract(epoch from start_ts) * 1000 AS start_ms, extract(epoch from end_ts) * 1000 AS end_ms, dur_s, lo_s, hi_s, polls, flow, removed, start_amount, start_orders, end_reason, active
        FROM bazaar_top_episodes WHERE item_id = $1 AND side = $2 AND end_ts >= now() - make_interval(hours => $3) ORDER BY start_ts`,
     [item, side === "bid" ? "b" : "a", hours]);
   return res.rows.map(rowToEpisode);
@@ -45,7 +46,7 @@ async function polledHours(db: Db, hours: number, at: string): Promise<number> {
 export async function computeHoldStats(db: Db, hours = HOLD_WINDOW_HOURS, now = Date.now()): Promise<{ items: number; episodes: number; pruned: number }> {
   const at = new Date(now).toISOString();
   const res = await db.query(
-    `SELECT item_id, side, price_cents, extract(epoch from start_ts) * 1000 AS start_ms, extract(epoch from end_ts) * 1000 AS end_ms, dur_s, lo_s, hi_s, polls, flow, removed, start_amount, start_orders, end_reason
+    `SELECT item_id, side, price_cents, extract(epoch from start_ts) * 1000 AS start_ms, extract(epoch from end_ts) * 1000 AS end_ms, dur_s, lo_s, hi_s, polls, flow, removed, start_amount, start_orders, end_reason, active
        FROM bazaar_top_episodes WHERE end_ts >= $2::timestamptz - make_interval(hours => $1) AND end_ts <= $2::timestamptz ORDER BY item_id, side, start_ts`, [hours, at]);
   const span = await polledHours(db, hours, at);
   const groups = new Map<string, TopEpisode[]>();

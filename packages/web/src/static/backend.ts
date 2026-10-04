@@ -4,7 +4,7 @@
 // built from community contributions (scripts/data/build-site.mjs). The calculations are the shared ones the server runs.
 import {
   type BazaarResponse, BAZAAR, BAZAAR_SOURCES, CALC_KINDS, type CalcKind, ENCHANT_SOURCE, FORGE, FORGE_SOURCES, type EventImpact, type GameEvent, HYPIXEL,
-  type HoldStats, type ItemMarket, type ItemStats, type MayorTerm, NOTICE, type Opportunity, type RankedOpportunity, type Profile, type Recipe, type Settings, type TopEpisode,
+  type HoldStats, type HourProfile, type ItemMarket, type ItemStats, type MayorTerm, NOTICE, type Opportunity, type RankedOpportunity, type Profile, type Recipe, type Settings, type TopEpisode,
   type FillCalibration, type PaperState, type PerkEffects, calibrate, ProfileSchema, SettingsSchema, alertCheckResponse, assembleMarket, booksResponse, ordersCheckResponse, paperResponse, perksResponse, buildOpportunities, dipsResponse, paperCandidates, paperStep, currentTerm, describePerks, perkEffects, calcResponse, calendarEvents, enchantRules, fillReport, forgeSlots, mayorEvents, orderSlots, outlookResponse, parseBookId,
   planResponse, prettyName, quickForgeReduction, quotesFromBazaar, realtimeEvents, requirementsCatalog, siteFileId, taxRate, timingTable,
 } from "@bc/shared";
@@ -33,6 +33,7 @@ interface Base {
   recipeRows: RecipeRow[]; recipes: Map<string, Recipe[]>; items: ItemRow[];
   terms: (MayorTerm & { votes: number | null; candidates: unknown })[]; election: { year: number; candidates: { key?: string; name: string; votes?: number; perks: { name: string; minister?: boolean }[] }[] } | null;
   calibration: FillCalibration;
+  hourProfile: HourProfile | null;
 }
 
 const getJson = async <T>(url: string, what: string): Promise<T> => {
@@ -46,7 +47,7 @@ function base(): Promise<Base> {
   return (basePromise ??= (async () => {
     const [manifest, market, recipeRows, items, mayors] = await Promise.all([
       getJson<Manifest>(`${DATA}manifest.json`, "data manifest"),
-      getJson<{ asOf: number; stats: Record<string, ItemStats>; hold: Record<string, { bid?: HoldStats; ask?: HoldStats }>; ah: Record<string, AhLatest>; names: Record<string, string | null> }>(`${DATA}market.json`, "market statistics"),
+      getJson<{ asOf: number; stats: Record<string, ItemStats>; hold: Record<string, { bid?: HoldStats; ask?: HoldStats }>; ah: Record<string, AhLatest>; names: Record<string, string | null>; hourProfile?: HourProfile | null }>(`${DATA}market.json`, "market statistics"),
       getJson<RecipeRow[]>(`${DATA}recipes.json`, "recipes"),
       getJson<ItemRow[]>(`${DATA}items.json`, "items"),
       getJson<{ terms: Base["terms"]; election: Base["election"] }>(`${DATA}mayors.json`, "mayors"),
@@ -62,7 +63,7 @@ function base(): Promise<Base> {
     const calibration = calibrate(paperRec?.records.flatMap(r => r.state.trades) ?? []);
     return {
       manifest, asOf: market.asOf, stats: new Map(Object.entries(market.stats)), hold: new Map(Object.entries(market.hold)), ah: new Map(Object.entries(market.ah)),
-      names: new Map(Object.entries(market.names)), recipeRows, recipes, items, terms: mayors.terms, election: mayors.election, calibration,
+      names: new Map(Object.entries(market.names)), recipeRows, recipes, items, terms: mayors.terms, election: mayors.election, calibration, hourProfile: market.hourProfile ?? null,
     };
   })().catch(e => { basePromise = null; throw e; }));
 }
@@ -165,7 +166,7 @@ async function checkHistory() {
 }
 
 // ---- the market the calculators use (rebuilt when Hypixel publishes new prices)
-interface Market { key: number; market: Map<string, ItemMarket>; events: GameEvent[]; perks: PerkEffects; marketAt: number; dataAt: number; statsAt: number; statsUsed: boolean; calibration: FillCalibration }
+interface Market { key: number; market: Map<string, ItemMarket>; events: GameEvent[]; perks: PerkEffects; marketAt: number; dataAt: number; statsAt: number; statsUsed: boolean; calibration: FillCalibration; hourProfile: HourProfile | null }
 let cur: Market | null = null;
 async function market(): Promise<Market> {
   const [b, d] = await Promise.all([base(), liveBazaar()]);
@@ -185,7 +186,7 @@ async function market(): Promise<Market> {
     .filter(e => e.end > now - 400 * 86400_000 && e.start < now + 14 * 86400_000).sort((x, y) => x.start - y.start);
   const perks = perkEffects(currentTerm(b.terms, now));
   cache.clear();
-  return (cur = { key: d.lastUpdated, market: m, events, perks, marketAt: now, dataAt: d.lastUpdated, statsAt: b.asOf, statsUsed: use, calibration: b.calibration });
+  return (cur = { key: d.lastUpdated, market: m, events, perks, marketAt: now, dataAt: d.lastUpdated, statsAt: b.asOf, statsUsed: use, calibration: b.calibration, hourProfile: use ? b.hourProfile : null });
 }
 
 const cache = new Map<string, { list: RankedOpportunity[]; skipped: NonNullable<ReturnType<typeof buildOpportunities>["skipped"]> }>();
@@ -193,7 +194,7 @@ const builder = (m: Market, recipes: Map<string, Recipe[]>) => (kind: CalcKind, 
   const k = JSON.stringify([kind, settings, profile, includeAhForge, listAll]);
   let hit = cache.get(k);
   if (!hit) {
-    hit = buildOpportunities({ market: m.market, recipes, perks: m.perks, statsAgeH: m.statsUsed ? Math.max(0, (m.dataAt - m.statsAt) / 3.6e6) : 0, calibration: m.calibration }, kind, settings, profile, includeAhForge, listAll);
+    hit = buildOpportunities({ market: m.market, recipes, perks: m.perks, statsAgeH: m.statsUsed ? Math.max(0, (m.dataAt - m.statsAt) / 3.6e6) : 0, calibration: m.calibration, hourProfile: m.hourProfile }, kind, settings, profile, includeAhForge, listAll);
     cache.set(k, hit);
     if (cache.size > 40) cache.delete(cache.keys().next().value!);
   }

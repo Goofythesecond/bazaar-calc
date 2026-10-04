@@ -69,7 +69,7 @@ export class DataCollector {
       for (const e of this.tracker.step(id, ts, bids, asks)) {
         const ep = this.f.episodes;
         ep.item.push(i); ep.side.push(e.side === "bid" ? 0 : 1); ep.start.push(e.startTs); ep.dur.push(Math.round(e.durS * 10));
-        ep.polls.push(e.polls); ep.flow.push(Math.round(e.flow)); ep.end.push(END[e.end]);
+        ep.polls.push(e.polls); ep.flow.push(Math.round(e.flow)); ep.end.push(END[e.end]); ep.active!.push(e.active ?? 0);
       }
       if (pr && ts > pr.ts && ts - pr.ts <= MAX_GAP_MS) {
         const fl = same ? NO_FLOW : bookFlow(pr.bids, pr.asks, bidsRaw, asksRaw);
@@ -172,7 +172,7 @@ export class DataCollector {
     for (const { item, e } of this.tracker.flushItems()) {
       const ep = this.f.episodes, i = this.item(item);
       ep.item.push(i); ep.side.push(e.side === "bid" ? 0 : 1); ep.start.push(e.startTs); ep.dur.push(Math.round(e.durS * 10));
-      ep.polls.push(e.polls); ep.flow.push(Math.round(e.flow)); ep.end.push(END[e.end]);
+      ep.polls.push(e.polls); ep.flow.push(Math.round(e.flow)); ep.end.push(END[e.end]); ep.active!.push(e.active ?? 0);
     }
   }
 }

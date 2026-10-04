@@ -7,8 +7,9 @@
 //  - while on top it fills from real instant trades (Hypixel's counters); polls where an expiry batch made a counter
 //    fall are skipped (the trades in them are unknown)
 //  - beaten: relisted at the next look (every check interval) at the new best price
-//  - bought out: the units go on a sell offer the same way; after `expireMs` anything unsold is valued at an instant
-//    sell into the best buy order
+//  - bought out: the units go on a sell offer the same way (never above the price the prediction assumed: when the best
+//    offer is pumped, the calculator prices the sale lower, and so does the trade); after `expireMs` anything unsold is
+//    valued at an instant sell into the best buy order
 // The record lives where it runs: the visitor's browser (static site) or the server (self-hosted, every poll).
 import { taxRate } from "../rules/index.js";
 import type { ItemMarket } from "../market/index.js";
@@ -17,6 +18,9 @@ export interface PaperCandidate {
   key: string; title: string; item: string; qty: number; profitPerUnit: number; unitsH: number; kind: string;
   /** the fill model's hours to fill the buy order for `qty`, then to sell them (before any calibration) */
   buyH?: number; sellH?: number;
+  /** the calculator priced the sale below the current best offer (a pumped price, or a higher book level costing less):
+   *  the sell offer goes no higher than this, as the prediction assumed */
+  sellCap?: number;
 }
 
 export interface PaperTrade {
@@ -30,6 +34,8 @@ export interface PaperTrade {
   expected: { profit: number; hours: number; buyH?: number; sellH?: number };
   /** when the buy side was complete (the sell offer went up): splits the trade's time into buying and selling */
   boughtAt?: number | null;
+  /** highest sell offer price, from the candidate (see PaperCandidate.sellCap) */
+  sellCap?: number;
   realized: number | null;  // coins after tax, when closed
 }
 
@@ -39,6 +45,8 @@ export const newPaperState = (): PaperState => ({ trades: [], lastPick: 0, count
 export interface PaperSummary { closed: number; open: number; expected: number; realized: number; capture: number | null; winRate: number | null; avgHours: number | null; avgExpectedHours: number | null }
 
 const PICK_EVERY = 5 * 60_000, EXPIRE = 6 * 3600_000, MAX_OPEN = 3;
+/** Sell offer price: 0.1 under the best offer, never above the price the prediction assumed. */
+const offer = (t: PaperTrade, ask: number) => Math.round(Math.min(ask - 0.1, t.sellCap ?? Infinity) * 10) / 10;
 
 /** One market snapshot: advance open trades, and every 5 minutes open the best candidate not already running. */
 export function paperStep(st: PaperState, ts: number, market: Map<string, ItemMarket>, candidates: () => PaperCandidate[], o: { checkMin: number; flipperLevel: number; quadTaxes?: boolean }): PaperState {
@@ -56,13 +64,13 @@ export function paperStep(st: PaperState, ts: number, market: Map<string, ItemMa
     if (t.phase === "buying") {
       if (t.onTop && m.bid >= t.price - 1e-9) t.onTop = false; // someone matched or beat our virtual bid
       if (t.onTop && known) { const take = Math.min(t.qty - t.bought, sold); t.bought += take; t.cost += take * t.price; }
-      if (t.bought >= t.qty) { t.phase = "selling"; t.boughtAt = ts; t.price = Math.round((m.ask - 0.1) * 10) / 10; t.onTop = true; t.nextLook = ts + check; }
+      if (t.bought >= t.qty) { t.phase = "selling"; t.boughtAt = ts; t.price = offer(t, m.ask); t.onTop = true; t.nextLook = ts + check; }
       else if (!t.onTop && ts >= t.nextLook) { t.price = Math.round((m.bid + 0.1) * 10) / 10; t.onTop = true; t.relists++; t.nextLook = ts + check; }
     } else {
       if (t.onTop && m.ask <= t.price + 1e-9) t.onTop = false;
       if (t.onTop && known) { const take = Math.min(t.bought - t.sold, bought); t.sold += take; t.revenue += take * t.price; }
       if (t.sold >= t.bought) { t.phase = "done"; t.closedAt = ts; t.realized = t.revenue * (1 - tax) - t.cost; }
-      else if (!t.onTop && ts >= t.nextLook) { t.price = Math.round((m.ask - 0.1) * 10) / 10; t.onTop = true; t.relists++; t.nextLook = ts + check; }
+      else if (!t.onTop && ts >= t.nextLook) { t.price = offer(t, m.ask); t.onTop = true; t.relists++; t.nextLook = ts + check; }
     }
     if ((t.phase === "buying" || t.phase === "selling") && ts - t.openedAt >= EXPIRE) {
       // unsold units are sold instantly into the best buy order; unfilled buying is simply cancelled
@@ -83,7 +91,7 @@ export function paperStep(st: PaperState, ts: number, market: Map<string, ItemMa
     if (c && m?.bid != null) trades.push({ id: `${ts}-${c.item}`, key: c.key, title: c.title, item: c.item, qty: c.qty, openedAt: ts, closedAt: null, phase: "buying",
       price: Math.round((m.bid + 0.1) * 10) / 10, onTop: true, nextLook: ts + check, bought: 0, sold: 0, cost: 0, revenue: 0, relists: 0,
       expected: { profit: c.profitPerUnit * c.qty, hours: c.buyH != null && c.sellH != null ? c.buyH + c.sellH : c.qty / c.unitsH, buyH: c.buyH, sellH: c.sellH },
-      boughtAt: null, realized: null });
+      boughtAt: null, realized: null, ...(c.sellCap != null ? { sellCap: c.sellCap } : {}) });
   }
   return { trades: trades.slice(-200), lastPick, counters, lastTs: ts };
 }

@@ -1,19 +1,34 @@
 // Market signals computed from one item's data: trade flow per hour (old + new data blended), typical prices from
 // history, warning flags (manipulation, mass delists, walls, spikes...) and the enchanted-book price ladder.
-import type { ItemMarket } from "./types.js";
+import type { HourProfile, ItemMarket } from "./types.js";
 
 export const MIN_FLOW_HOURS = 2;
-/** Hours of Hypixel's 7-day rate counted as if we had watched them ourselves (the prior in the blend below). */
-export const FLOW_PRIOR_HOURS = 12;
+/** Hours of Hypixel's 7-day rate counted as if we had watched them ourselves (the prior in the blend below). Backtest
+ *  2026-10-05 (600 item sides, 8.5 h train / 5.7 h test): 12 -> 6 brought items with few episodes from 1.94x to 1.82x
+ *  predicted / real (640-unit orders) and 1.14x -> 1.05x (71,680), while well-measured items stayed at 1.01x (640) and
+ *  went 0.86x -> 0.83x (71,680); 3 helped thin items more (1.56x) but under-predicted big orders for everyone. */
+export const FLOW_PRIOR_HOURS = 6;
 /**
  * Trades per hour on one side, blending old and new data: what we watched leave the top of the book (last 24 h of polls,
- * T hours of them) and Hypixel's 7-day average, weighted as (observed x T + week x 12) / (T + 12), never above the 7-day
- * average. A rare item that happened not to trade for a few hours keeps most of its weekly rate; a market that really
+ * T hours of them) and Hypixel's 7-day average, weighted as (observed x T + week x 6) / (T + 6), never above the 7-day
+ * average. A rare item that happened not to trade for a few hours keeps much of its weekly rate; a market that really
  * went quiet for a day is pulled down. (Taking the plain minimum used to zero rare items after one quiet stretch.)
  */
-export function blendFlow(weekPerH: number, observedPerH: number | null | undefined, watchedHours: number): number {
+export function blendFlow(weekPerH: number, observedPerH: number | null | undefined, watchedHours: number, priorHours = FLOW_PRIOR_HOURS): number {
   if (observedPerH == null || !(watchedHours > 0)) return weekPerH;
-  return Math.min(weekPerH, (observedPerH * watchedHours + weekPerH * FLOW_PRIOR_HOURS) / (watchedHours + FLOW_PRIOR_HOURS));
+  return Math.min(weekPerH, (observedPerH * watchedHours + weekPerH * priorHours) / (watchedHours + priorHours));
+}
+/** How much faster (or slower) than the 24-hour average the bazaar trades while you play: the profile averaged over
+ *  your hours, starting at `fromUtc` (a UTC hour; -1 or no profile: 1, the daily average). bid: instant sells (fill buy
+ *  orders), ask: instant buys (fill sell offers). */
+export function playFactor(p: HourProfile | null | undefined, fromUtc: number, hours: number): { bid: number; ask: number } {
+  if (!p || fromUtc < 0 || !(hours > 0)) return { bid: 1, ask: 1 };
+  let bid = 0, ask = 0, w = 0;
+  for (let t = 0; t < Math.min(24, hours); t++) {
+    const k = Math.min(1, hours - t), h = (Math.floor(fromUtc) + t) % 24;
+    bid += k * (p.sell[h] ?? 1); ask += k * (p.buy[h] ?? 1); w += k;
+  }
+  return { bid: bid / w, ask: ask / w };
 }
 /** Units instant-sold into buy orders per hour (what fills YOUR buy orders). */
 export const buyFlowH = (m: ItemMarket) => blendFlow(m.isellWeek / 168, m.observedBuyFlowH, m.liveHours);

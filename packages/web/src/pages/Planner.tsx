@@ -30,7 +30,7 @@ export function Planner() {
   const [limitView, setLimitView] = useState(false);
   const q = useQuery({
     queryKey: ["plan", s, profile, kinds, requireMet],
-    queryFn: () => api<Plan & { marketAt: number; dataAt?: number; statsAt?: number; statsUsed?: boolean }>("/api/v1/calc/plan", { settings: s, profile, options: { kinds, requireMet } }),
+    queryFn: () => api<Plan & { marketAt: number; dataAt?: number; statsAt?: number; statsUsed?: boolean; whatIf?: { oneMoreSlot: number; moreCoins: { coins: number; coinsH: number } } }>("/api/v1/calc/plan", { settings: s, profile, options: { kinds, requireMet } }),
     placeholderData: prev => prev, // refreshed on every new snapshot (live.ts)
   });
   const t = q.data?.totals;
@@ -57,6 +57,10 @@ export function Planner() {
           <span className="eyebrow">Expected per day</span>
           <div className="big">{coins(t.coinsDay)}<small>coins</small></div>
           <div className="small muted">{coins(t.coinsH)} per hour over your {s.hoursPerDay} h · a forge run you start before logging off finishes while you are away · {dataAge(q.data!.dataAt, q.data!.marketAt).label}</div>
+          {t.limitedBy && <div className="small" style={{ marginTop: 8 }}>
+            {t.limitedBy === "no more profitable flips" ? "Every profitable flip that fits is in the plan." : <>Limited by <b>{t.limitedBy}</b>.</>}
+            {q.data!.whatIf && <> One more order slot would add <b>{coins(q.data!.whatIf.oneMoreSlot)}/h</b>; {coins(q.data!.whatIf.moreCoins.coins)} more coins would add <b>{coins(q.data!.whatIf.moreCoins.coinsH)}/h</b>.</>}
+          </div>}
         </div>
         <div className="hero-meters">
           <Meter label="Order slots" used={t.ordersUsed} total={t.orderSlots} fmt={v => num(v)} />
@@ -103,6 +107,8 @@ export function Planner() {
               <div className="coin">{coins(o.coinsH)}<span className="muted small"> /h</span></div>
               <div className="sub">{num(o.unitsH, 1)} units/h · {pct(o.marginPct)} margin</div>
               <div className="sub">limited by <b>{o.limitedBy}</b></div>
+              {o.orderPlan.some(l => l.side === "buy") && o.orderPlan.some(l => l.side === "sell") && <div className="sub" title={o.oneAtATime ? "Buy the batch, then sell it, then buy again: one side's orders at a time" : "Put the next buy order up while this batch is on sale: a slot for each, faster"}>
+                {o.oneAtATime ? "one trade at a time" : <b>keep buying while selling</b>}</div>}
               <button className="ghost small" onClick={() => setOpen(open === o.key ? null : o.key)} aria-expanded={open === o.key}>{open === o.key ? "Hide working" : "Show working"}</button>
             </div>
           </article>

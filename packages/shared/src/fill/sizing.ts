@@ -47,8 +47,12 @@ export function fillModel(stats: HoldStats | null | undefined, flowH: number, un
     const k = measured > 0 ? perS / measured : 0;
     return { basis: "measured", stats, flowH, samples: stats.samples.map(([t, f, g]) => [t, measured > 0 ? f * k : perS * t, g ?? 0] as Sample) };
   }
-  // mean hold: from the Poisson undercut rate when known, else from the "unknown competition" share (f = T / (T + c/2))
+  // mean hold: from the Poisson undercut rate when known; else from the few episodes we have (times beaten per watched
+  // hour: an item seldom beaten holds the top long; the 50% stand-in had such items on top 36-56% of the time when they
+  // really were 80-91%, backtest 2026-10-05); else from the "unknown competition" share (f = T / (T + c/2))
   const c = checkMin * 60;
+  // (stats.outbid is the share of ended episodes that were outbid)
+  if (undercutsH == null && stats && stats.hours >= 1) undercutsH = ((stats.n - stats.censored) * stats.outbid) / stats.hours;
   const mean = undercutsH != null ? (undercutsH > 0 ? 3600 / undercutsH : 6 * 3600) : (unknownShare / Math.max(0.01, 1 - unknownShare)) * (c / 2);
   const n = 20, samples: Sample[] = [];
   for (let i = 0; i < n; i++) { const t = -mean * Math.log(1 - (i + 0.5) / n); samples.push([t, perS * t]); }

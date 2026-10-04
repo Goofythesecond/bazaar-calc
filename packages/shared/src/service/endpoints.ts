@@ -5,7 +5,7 @@ import { BAZAAR, describePerks, limitContribution, maxUnitsPerOrder, type PerkEf
 import { type Ctx, type RankedOpportunity, bazaarFlips, bookFlips, craftFlips, forgeFlips, fusionFlips, katFlips, npcFlips, routeConfidence, DEFAULT_SETTINGS, type Opportunity, type Settings, plan } from "../calc/index.js";
 import type { Recipe } from "../recipes/index.js";
 import { type BookSnapshot, type OrderEvent, type FillCalibration, type PaperCandidate, type PaperState, type TrackedOrder, curve, fillModel, paperSummary, sizeFor, type TopEpisode, quotaTime, survival, trackOrder, updateOrder } from "../fill/index.js";
-import { type HoldStats, type ItemMarket, buyFlowH, sellFlowH, type EventImpact, findDips, outlook, prettyName } from "../market/index.js";
+import { type HoldStats, type HourProfile, type ItemMarket, buyFlowH, playFactor, sellFlowH, type EventImpact, findDips, outlook, prettyName } from "../market/index.js";
 
 /** Drop keys whose value is undefined, so they fall back to the defaults instead of overwriting them. */
 const defined = <T extends object>(v: T): Partial<T> => Object.fromEntries(Object.entries(v).filter(([, x]) => x !== undefined)) as Partial<T>;
@@ -18,7 +18,7 @@ const num = (min: number, max: number) =>
 export const SettingsSchema = z.object({
   coins: num(0, 1e13), bazaarFlipperLevel: num(0, 2), checkIntervalMin: num(0.5, 240), hoursPerDay: num(0.1, 24),
   dailyLimit: num(0, 1e12), attention: num(0.05, 1), craftsPerHourMax: num(0, 1e6), unknownCompetitionShare: num(0.01, 1),
-  minUnitsPerHour: num(0, 1e9), includeFlagged: z.coerce.boolean(), overlapOrders: z.coerce.boolean(), pingMs: num(0, 5000), clickDelayMs: num(0, 10000), typingMs: num(0, 30000),
+  minUnitsPerHour: num(0, 1e9), includeFlagged: z.coerce.boolean(), overlapOrders: z.coerce.boolean(), playFromUtc: z.coerce.number().int().min(-1).max(23), pingMs: num(0, 5000), clickDelayMs: num(0, 10000), typingMs: num(0, 30000),
 }).partial().transform(v => ({ ...DEFAULT_SETTINGS, ...defined(v) }) as Settings);
 
 export const ProfileSchema = z.object({
@@ -86,11 +86,14 @@ export interface MarketSource { market: Map<string, ItemMarket>; recipes: Map<st
   /** age of the history behind the statistics (static site; 0 on a server that scans itself) */
   statsAgeH?: number;
   /** fill-speed correction from paper trading (fill/calibration.ts): the server's own record, or the published one */
-  calibration?: FillCalibration }
+  calibration?: FillCalibration;
+  /** how busy the bazaar is by UTC hour (null until enough days are measured) */
+  hourProfile?: HourProfile | null }
 
 /** Every route of a kind (`listAll`: incl. losing ones and flagged markets, for the flip tables; off for the planner). */
 export function buildOpportunities(src: MarketSource, kind: CalcKind, settings: Settings, profile: Profile, includeAhForge = false, listAll = false) {
-  const c: Ctx = { market: src.market, recipes: src.recipes, settings, listAll, skipped: [], calibration: src.calibration, profile: { ...profile,
+  const c: Ctx = { market: src.market, recipes: src.recipes, settings, listAll, skipped: [], calibration: src.calibration,
+    flowFactor: playFactor(src.hourProfile, settings.playFromUtc, settings.hoursPerDay), profile: { ...profile,
     coleMoltenForge: profile.coleMoltenForge || src.perks.coleMoltenForge, quadTaxes: profile.quadTaxes || src.perks.quadTaxes,
     npcShoppingSpree: profile.npcShoppingSpree || src.perks.shoppingSpree } };
   const out: Opportunity[] = [];
@@ -124,11 +127,15 @@ export function planResponse(build: Build, input: unknown, meta: Record<string, 
   const b = PlanBody.parse(input ?? {});
   const settings = SettingsSchema.parse(b.settings ?? {}), profile = ProfileSchema.parse(b.profile ?? {});
   const candidates = applyFilters(build("all", settings, profile, b.filters?.includeAhForge ?? false, false).list, FilterSchema.parse({ ...(b.filters ?? {}), limit: 500 }));
-  const p = plan(candidates, settings, profile, b.options ?? {});
+  const cache = new Map<string, Opportunity>();
+  const p = plan(candidates, settings, profile, { ...(b.options ?? {}), cache });
   // a pick is its candidate re-sized to the coins it got: same evidence, so the same confidence
   const conf = new Map(candidates.map(c => [c.key, c.confidence]));
   const picks = p.picks.map(o => { const confidence = conf.get(o.key)!; return { ...compact(o), confidence, scoreH: o.coinsH * confidence.score }; });
-  return { ...p, picks, ...meta };
+  // what one more order slot, or 100M more coins, would add per hour (the same plan re-run with that budget)
+  const more = (s: typeof settings, extraSlots = 0) => Math.max(0, plan(candidates, s, profile, { ...(b.options ?? {}), extraSlots, weights: p.weights, cache }).totals.coinsH - p.totals.coinsH);
+  const whatIf = { oneMoreSlot: more(settings, 1), moreCoins: { coins: 100e6, coinsH: more({ ...settings, coins: settings.coins + 100e6 }) } };
+  return { ...p, picks, whatIf, ...meta };
 }
 
 export const FILL_METHOD = [
@@ -250,7 +257,8 @@ export function paperCandidates(list: RankedOpportunity[]): PaperCandidate[] {
       // real times are compared with (fill/calibration.ts)
       const h = o.batchHours;
       return { key: o.key, title: o.title, item: o.outputId, qty, profitPerUnit: o.profitPerUnit, unitsH: o.unitsH, kind: o.kind,
-        ...(h && h.buy > 0 && h.sell > 0 ? { buyH: h.buy * per, sellH: h.sell * per } : {}) };
+        ...(h && h.buy > 0 && h.sell > 0 ? { buyH: h.buy * per, sellH: h.sell * per } : {}),
+        ...(o.sell.currentPrice != null ? { sellCap: o.sell.grossPrice } : {}) };
     });
 }
 

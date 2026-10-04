@@ -92,6 +92,16 @@ export function SettingsDrawer() {
               </label>
               <Num id="check" label="Check orders every (minutes)" value={s.checkIntervalMin} step={0.5} min={0.5} max={240} onChange={S("checkIntervalMin")} hint="How often you relist when outbid" />
               <Num id="hours" label="Hours you flip per day" value={s.hoursPerDay} step={0.5} min={0.1} max={24} onChange={S("hoursPerDay")} />
+              <label className="field" htmlFor="playfrom" title="Orders fill faster at busy times of day. Your local time (stored as UTC). Uses the hour-by-hour trading the scanner measures once every hour of the day is covered on two days; until then the daily average is used."><span>I usually start playing at</span>
+                <select id="playfrom" value={s.playFromUtc ?? -1} onChange={e => S("playFromUtc")(Number(e.target.value))}>
+                  <option value={-1}>Any time (daily average)</option>
+                  {Array.from({ length: 24 }, (_, local) => {
+                    // the select shows your local hours; the calculator works in UTC (hour offsets only, rounded)
+                    const utc = (((local + Math.round(new Date().getTimezoneOffset() / 60)) % 24) + 24) % 24;
+                    return <option key={local} value={utc}>{String(local).padStart(2, "0")}:00 your time ({String(utc).padStart(2, "0")}:00 UTC)</option>;
+                  })}
+                </select>
+              </label>
               <Num id="limit" label="Daily bazaar limit (coins)" value={s.dailyLimit} step={1e9} max={1e12} onChange={S("dailyLimit")} hint={`${coins(s.dailyLimit)} · community value 15B`} />
               <Num id="minunits" label="Ignore routes under (units / hour)" value={s.minUnitsPerHour} step={0.1} max={1e9} onChange={S("minUnitsPerHour")} />
             </div>

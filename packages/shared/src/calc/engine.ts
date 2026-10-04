@@ -18,11 +18,13 @@ export interface Settings extends TimingSettings {
   /** false (default): a route with a buy order and a sell offer runs one trade at a time (buy the batch, then sell it),
    *  as a single trade really does; true: you keep buying the next batch while the last one is on sale */
   overlapOrders: boolean;
+  /** UTC hour you usually start playing (-1: not set): fill speeds follow how busy the bazaar is in your hours */
+  playFromUtc: number;
 }
 
 export const DEFAULT_SETTINGS: Settings = {
   coins: 100_000_000, bazaarFlipperLevel: 0, checkIntervalMin: 5, hoursPerDay: 4, dailyLimit: BAZAAR.dailyLimitDefault,
-  attention: 0.8, craftsPerHourMax: 1000, unknownCompetitionShare: 0.5, minUnitsPerHour: 0, includeFlagged: false, overlapOrders: false,
+  attention: 0.8, craftsPerHourMax: 1000, unknownCompetitionShare: 0.5, minUnitsPerHour: 0, includeFlagged: false, overlapOrders: false, playFromUtc: -1,
   pingMs: 80, clickDelayMs: 350, typingMs: 1500,
 };
 
@@ -103,7 +105,7 @@ export interface OrderPlanLeg {
   freeOrdersH: number;      // sell offers made with "Flip Order" (do not count toward the limit)
   coinsLocked: number;      // coins sitting in the order (buy) or stock sitting in the offer (sell, at cost)
   basis: "measured" | "estimated";
-  hold: { n: number; hours: number; p50: number | null; p90: number | null; beatenFast: number; flowPerMin: number } | null;
+  hold: { n: number; hours: number; p50: number | null; p90: number | null; beatenFast: number; flowPerMin: number; activeShare: number | null } | null;
   /** what other sizes would do for this leg alone */
   options: { qty: number; unitsH: number; ordersH: number; perOrder: number; limitCoinsH: number }[];
 }
@@ -145,10 +147,17 @@ export function shareOnTop(undercutsH: number | null, s: Settings): number | nul
   return t / (t + s.checkIntervalMin / 2);
 }
 
-// one formatter per precision: Number#toLocaleString with options builds a new formatter on every call (that alone was
-// most of the calculation time)
+// "1,234.5": the explanation text is built for every route on every evaluation, and even a reused Intl.NumberFormat was
+// 11% of the calculation time (2026-10-05 profile); this does the same for finite numbers (Intl for the rest)
 const fmts = new Map<number, Intl.NumberFormat>();
-const fmt = (v: number, d = 1) => { let f = fmts.get(d); if (!f) fmts.set(d, (f = new Intl.NumberFormat("en-US", { maximumFractionDigits: d }))); return f.format(v); };
+const fmt = (v: number, d = 1) => {
+  if (!Number.isFinite(v) || Math.abs(v) >= 1e21) { let f = fmts.get(d); if (!f) fmts.set(d, (f = new Intl.NumberFormat("en-US", { maximumFractionDigits: d }))); return f.format(v); }
+  let t = Math.abs(v).toFixed(d);
+  if (d > 0) t = t.replace(/\.?0+$/, "");
+  const dot = t.indexOf("."), int = dot < 0 ? t : t.slice(0, dot);
+  const grouped = int.length > 3 ? int.replace(/\B(?=(\d{3})+(?!\d))/g, ",") : int;
+  return (v < 0 && t !== "0" ? "-" : "") + grouped + (dot < 0 ? "" : t.slice(dot));
+};
 
 /** `capital`: coins this route may use. A single route on its own gets all your coins; the planner passes what is left. */
 export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coins,
@@ -252,6 +261,14 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
     }
     return c;
   };
+  /** Play hours one batch of B waits in the forge / with Kat when trades run one at a time: the runs it needs one after
+   *  another (slots in parallel), each costing at most one session (a long run started before logging off finishes
+   *  overnight). */
+  const procHours = (B: number) => route.steps.reduce((h, st) => {
+    if (st.type !== "forge" && st.type !== "kat") return h;
+    const dH = (st.forgeSeconds ?? 0) / 3600, slots = st.type === "kat" ? 1 : forgeSlotsUsed || 1;
+    return h + Math.ceil((B * st.opsPerUnit) / slots - 1e-9) * Math.min(dH, hoursPlayed);
+  }, 0);
   /** `seq`: one batch at a time (buy, then sell, then buy again): coins only ever hold one side of the batch. */
   const usageAt = (B: number, U: number, seq = false) => {
     let limitH = 0, instantLimitH = 0, clickS = U * stepSec, capitalNow = forgeCapital(U), fullBuysH = 0, buyLock = 0, sellLock = 0;
@@ -275,7 +292,7 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
       legs.push({ side: l.side, item: l.item, name: l.name, price: l.price, qty, parallel, maxQty: l.maxQty, ordersH, unitsH: need,
         perOrder: pt.ordersH > 0 ? pt.unitsH / pt.ordersH : 0, fullShare: pt.fullShare, onTop: pt.onTop, limitCoinsH: lim, freeOrdersH: free,
         coinsLocked: total * l.lock, basis: l.fill.basis, options: [],
-        hold: st ? { n: st.n, hours: st.hours, p50: st.p50, p90: st.p90, beatenFast: st.beatenFast, flowPerMin: st.flowPerMin } : null });
+        hold: st ? { n: st.n, hours: st.hours, p50: st.p50, p90: st.p90, beatenFast: st.beatenFast, flowPerMin: st.flowPerMin, activeShare: st.activeShare ?? null } : null });
     }
     for (const b of route.buys) {
       if (b.mode === "order" && b.fill) continue;
@@ -300,6 +317,9 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
     return { limitH: limitH + instantLimitH, instantLimitH, clickS, capital: capitalNow, legs };
   };
 
+  // coins one batch ties up before any rate (the same for every rate tried at this batch size)
+  const fixedMemo = new Map<number, number>();
+  const fixedCapital = (B: number, seq: boolean) => { const k = seq ? -B : B; let v = fixedMemo.get(k); if (v == null) fixedMemo.set(k, (v = usageAt(B, 0, seq).capital)); return v; };
   const limitBudgetH = (limits?.limitCoinsDay ?? s.dailyLimit) / hours;
   const activeBudget = Math.min(3600 * s.attention, limits?.activeSecondsH ?? Infinity);
   /** Best rate for one batch size: the slowest order leg or other cap, then the limit, clicking and coin budgets. */
@@ -320,10 +340,11 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
       if (r < U) { U = r; by = { name: `${l.name} ${l.side === "buy" ? "supply" : "demand"}`,
         why: () => `${l.side === "buy" ? "buy orders" : "sell offers"} of ${fmt(total, 0)}: on top ${(pt.onTop * 100).toFixed(0)}% of the time, ~${fmt(pt.unitsH, 1)} filled/h (${l.fill.basis})` }; }
     }
-    // one batch at a time: fill the buy orders, then sell the batch, then buy again (BazaarNotifier's sequential model)
+    // one batch at a time: fill the buy orders, then forge / Kat, then sell the batch, then buy again (BazaarNotifier's
+    // sequential model; the passive wait used to be left out, so forge flips with orders looked faster than they are)
     if (seq && Number.isFinite(buyRate) && Number.isFinite(sellRate) && buyRate > 0 && sellRate > 0) {
-      const r = 1 / (1 / buyRate + 1 / sellRate);
-      if (r < U) { U = r; by = { name: "one batch at a time", why: () => `${seqIn ? "your coins cover one batch, not a buy order and unsold stock together" : "one trade at a time (setting: keep buying while selling is off)"}: buy ${fmt(B, 0)} (~${fmt(B / buyRate * 60, 0)} min), then sell them (~${fmt(B / sellRate * 60, 0)} min), then buy again` }; }
+      const waitH = procHours(B), r = B / (B / buyRate + waitH + B / sellRate);
+      if (r < U) { U = r; by = { name: "one batch at a time", why: () => `${seqIn ? "your coins cover one batch, not a buy order and unsold stock together" : "one trade at a time (setting: keep buying while selling is off)"}: buy ${fmt(B, 0)} (~${fmt(B / buyRate * 60, 0)} min)${waitH > 0 ? `, wait for the ${route.steps.some(x => x.type === "kat") ? "upgrade" : "forge"} (~${fmt(waitH, 1)} h of your play time)` : ""}, then sell them (~${fmt(B / sellRate * 60, 0)} min), then buy again` }; }
     }
     if (!Number.isFinite(U)) U = 0;
     // with a fixed batch, relists, clicks and limit use all grow in proportion to the rate
@@ -334,7 +355,7 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
       else by = { name: "your clicking time", why: () => `${fmt(activeBudget / 60)} min/h of clicking (relists, claims, crafts)` };
       U *= Math.min(kLimit, kClick);
     }
-    const fixed = legsOL.length ? usageAt(B, 0, seq).capital : costPerUnit;
+    const fixed = legsOL.length ? fixedCapital(B, seq) : costPerUnit;
     if (fixed > capital) {
       if (!seq && hasBuyOrder && hasSellOffer) return run(B, true);
       return { B, U: 0, seq, by: { name: "your coins", why: () => `one batch of ${fmt(B, 0)} needs ${fmt(fixed, 0)} coins${seq ? "" : " in orders and stock"}; you have ${fmt(capital, 0)}` } };
@@ -349,17 +370,18 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
     // the largest batch your coins cover in each mode is where the best rate usually sits when coins are the limit:
     // a spaced-out grid (…9, 11…) can step right over it (Stock of Stonks: 10 fits 100M side by side, 11 does not)
     for (const seq of [false, true]) {
-      const perBatch = usageAt(1, 0, seq).capital;
+      const perBatch = fixedCapital(1, seq);
       if (perBatch > 0) { const b = Math.floor(capital / perBatch); for (const v of [b - 1, b, b + 1]) if (v >= 1 && v <= bMax && !grid.includes(v)) grid.push(v); }
     }
     grid.sort((a, b) => a - b);
   } else grid.push(1);
   const runs = grid.map(b => run(b));
   let top = runs.reduce((a, r) => (r.U > a.U ? r : a), runs[0]!);
-  // refine: try every whole batch between the grid neighbours of the best one (at most 60 extra evaluations)
+  // refine: batches between the grid neighbours of the best one (at most 16 extra evaluations: 60 cost a quarter of the
+  // calculation time for gains under 1%)
   if (legsOL.length && top.U > 0) {
     const i = grid.indexOf(top.B), lo = grid[Math.max(0, i - 1)]!, hi = grid[Math.min(grid.length - 1, i + 1)]!;
-    const step = Math.max(1, Math.ceil((hi - lo) / 60));
+    const step = Math.max(1, Math.ceil((hi - lo) / 16));
     for (let b = lo; b <= hi; b += step) if (!grid.includes(b)) { const r = run(b); runs.push(r); if (r.U > top.U) top = r; }
     runs.sort((a, b) => a.B - b.B);
   }
@@ -381,7 +403,7 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   caps.push({ name: "your coins", unitsH: best.name === "your coins" ? U : head(use.capital, capital), why: `${fmt(use.capital, 0)} of ${fmt(capital, 0)} coins: ${chosen.seq ? "one batch at a time (buy, then sell)" : "money in buy orders + stock in sell offers"}${forgeHoldH ? " + inputs in the forge" : ""}` });
   const unitsH = U;
   const coinsH = unitsH * profitPerUnit;
-  if (legsOL.length) explain.push(`Runs in batches of ${fmt(chosen.B, 0)}${chosen.seq ? ", one batch at a time" : ""}: ${use.legs.map(l => `${l.side === "buy" ? "buy order" : "sell offer"} ${l.parallel > 1 ? `${l.parallel} x ` : ""}${fmt(l.qty, 0)}x ${l.name}`).join(", ")}`);
+  if (legsOL.length) explain.push(`Runs in batches of ${fmt(chosen.B, 0)}${chosen.seq ? ", one batch at a time" : hasBuyOrder && hasSellOffer ? ", keeping the next buy order up while this batch sells (a slot for each)" : ""}: ${use.legs.map(l => `${l.side === "buy" ? "buy order" : "sell offer"} ${l.parallel > 1 ? `${l.parallel} x ` : ""}${fmt(l.qty, 0)}x ${l.name}`).join(", ")}`);
   for (const l of use.legs)
     explain.push(`${l.side === "buy" ? "Buy order" : "Sell offer"} ${l.name}: ${fmt(l.qty, 0)} per order, ~${fmt(l.ordersH, 1)} orders/h, ~${fmt(l.perOrder, 1)} filled per order, on top ${(l.onTop * 100).toFixed(0)}% of the time (${l.basis === "measured" ? `measured from ${l.hold?.n ?? 0} top-of-book episodes` : "estimated: not enough live data yet"})`);
   // the model's own time for one batch, before the paper-trading correction: what paper trades are compared with
@@ -403,7 +425,12 @@ export function evaluate(route: Route, s: Settings, p: Profile, capital = s.coin
   return {
     ...route, requirements: reqs, costPerUnit, profitPerUnit, marginPct: costPerUnit > 0 ? profitPerUnit / costPerUnit : 0,
     unitsH, coinsH, limitedBy: best.name, caps: caps.filter(c => Number.isFinite(c.unitsH)).sort((a, b) => a.unitsH - b.unitsH),
-    capitalAllocated: capital, capitalUsed: use.capital, ordersUsed: ordersUsed + use.legs.reduce((a, l) => a + l.parallel - 1, 0), oneAtATime: chosen.seq, batchHours,
+    capitalAllocated: capital, capitalUsed: use.capital, oneAtATime: chosen.seq, batchHours,
+    // one trade at a time holds the buy orders, then the sell offer (a filled buy order is flipped, or claimed before the
+    // offer goes up), never both: the slots in use are the larger side, not the sum
+    ordersUsed: chosen.seq && use.legs.some(l => l.side === "buy") && use.legs.some(l => l.side === "sell")
+      ? Math.max(use.legs.filter(l => l.side === "buy").reduce((a, l) => a + l.parallel, 0) + route.buys.filter(b => b.mode === "order" && !b.fill).length, use.legs.filter(l => l.side === "sell").reduce((a, l) => a + l.parallel, 0))
+      : ordersUsed + use.legs.reduce((a, l) => a + l.parallel - 1, 0),
     // slots actually busy at this rate: runs needed per day / runs one slot does per day
     forgeSlotsUsed: unitsH > 0 && forgeSlotsUsed > 0 ? Math.min(forgeSlotsUsed, Math.ceil(Math.max(...route.steps.filter(x => x.type === "forge").map(x => {
       const dH = Math.max(1 / 3600, (x.forgeSeconds ?? 1) / 3600);

@@ -37,6 +37,12 @@ describe("paper trading", () => {
     st = paperStep(st, 21_000, mk(10, 20, 1000, 1100), pickH, o);
     expect(st.trades[0]).toMatchObject({ phase: "selling", boughtAt: 21_000 });
   });
+  it("never offers above the price the prediction assumed (a pumped best offer is not followed)", () => {
+    const capped = () => [{ key: "bazaar:X", title: "X", item: "X", qty: 100, profitPerUnit: 8, unitsH: 50, kind: "bazaar", sellCap: 15 }];
+    let st = paperStep(newPaperState(), 1_000, mk(10, 40, 1000, 1000), capped, o);
+    st = paperStep(st, 21_000, mk(10, 40, 1000, 1100), capped, o); // bought out; the best offer is pumped to 40
+    expect(st.trades[0]).toMatchObject({ phase: "selling", price: 15 });
+  });
   it("stops filling when beaten and relists at the next look", () => {
     let st = paperStep(newPaperState(), 1_000, mk(10, 20, 1000, 1000), pick, o);
     st = paperStep(st, 21_000, mk(10.2, 20, 1000, 1050), pick, o); // someone posted 10.2 > our 10.1

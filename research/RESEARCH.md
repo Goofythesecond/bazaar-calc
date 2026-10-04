@@ -196,3 +196,40 @@ Known limits: holds shorter than one poll (~20 s, the API refresh rate) cannot b
 - Not counted: Pure Reptile (Crocodile shard's attribute, 2-20% to double a reptile fusion's output). Not known: the
   clicks to move bought shards into the Hunting Box and fused ones out (the timing counts the fusion menu only).
 
+## Planner and predictions (2026-10-05)
+Measured on one saved bazaar snapshot with the published statistics (`plan()`; 100M / 1B / 10B coins, 4 h a day):
+- Before: 49.5M/h, 96.8M/h, 85.1M/h (10B planned less than 1B). After: 58.1M/h, 101.7M/h, 101.7M/h (1B and 10B both
+  stop at the 15B daily limit).
+- Order slots: one trade at a time holds the buy orders, then the sell offer (a filled buy order is flipped or claimed
+  first), so a route uses the larger side's slots, not both; it was counted as both, so plans ran out of slots early.
+- Each order route is tried both ways (one trade at a time, or buying the next batch while this one sells) and the plan
+  keeps whichever earns more with the budgets left.
+- Budgets: a move is charged for the budget it uses up fastest; with every budget weighted the same, small picks filled
+  the slots at 10B and pushed out a 25M/h route. The plan is now made up to four times, doubling the weight of a budget
+  the last pass used up (95%+) and halving one it used under half of; the best pass wins. Coins go out in steps of 5%,
+  at most 50M (500M steps sized routes into huge orders that burned the daily limit).
+- Moves are weighted by the route's confidence score; picks under 100k/h (or 1% of the plan) are dropped and their
+  coins handed to the others; the plan names the budget that stops it and what one more order slot or 100M more coins
+  would add (the same plan re-run with the winning weights).
+- One trade at a time now includes the forge / Kat wait inside a round (runs one after another, slots in parallel,
+  each costing at most one play session).
+- Paper trading sells no higher than the price the calculator assumed (the typical-price cap): it used to follow a
+  pumped best offer, so expected and real profit compared different prices.
+- Fill model with too few episodes: the exponential stand-in now uses the item's own beaten rate (outbid episodes per
+  watched hour) when no measured undercut rate is given. Backtest (600 item sides, 8.5 h train / 5.7 h test): time on
+  top predicted - real for those items went from -47 / -44 / -54 points (64 / 640 / 71,680 units) to -32 / -8 / 0.
+  Measured items: predicted / real units 0.98 / 1.01 / 0.86 (96% / 93% / 80% within 2x).
+- 7-day rate prior 12 -> 6 hours (see market/signals.ts FLOW_PRIOR_HOURS for the backtest numbers). The remaining
+  over-prediction for thin items comes from items whose trading is a rare burst (rough gemstones: ~1,600/h by the 7-day
+  counter, ~1/h in the test hours).
+- Play hours: a market-wide profile of instant trades per watched second by UTC hour (server-core `hourProfile`, in
+  market.json) scales fill speeds to the hours you play. It needs every hour of the day on 2+ days; on 2026-10-05 the
+  data with trade counts covered 18 hours on one day, so it is off until the scanner has run about two more days.
+- Burstiness: episodes record in how many of their polls units traded (`active`, data files from 2026-10-05,
+  migration 010); routes whose order sides saw trades in under 30% of their polls on top get a confidence weight of
+  0.8 to 1 (a judgment weight, to be fitted once paper trades measure it). Route details show each order's fill time as
+  typical / fast / slow from 2,000 replays of real episodes (the item page's quota simulation).
+- Speed: the explanation formatter was 11% of the calculation (a hand-written one replaces Intl.NumberFormat); the batch
+  refinement tries at most 16 extra sizes (was 60); the fusion pair table walks each recipe's matching shards (0.63 s ->
+  0.22 s, identical 119,455 pairs); plan passes and what-if plans share their evaluations.
+

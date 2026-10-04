@@ -23,6 +23,13 @@ export function routeConfidence(o: Opportunity, market: Market, statsAgeH = 0): 
 
   const estimated = o.orderPlan.filter(l => l.basis !== "measured");
   if (estimated.length) factor(0.6, `fill times estimated (too few measured episodes) for ${estimated.map(l => l.name).join(", ")}`);
+  // trades in bursts (few of the polls on top saw any): the average fill time holds, single rounds swing widely. A
+  // judgment weight like the others here, 0.8 at worst, until enough rounds are measured to fit it
+  const bursty = o.orderPlan.filter(l => l.hold?.activeShare != null && l.hold.activeShare < 0.3);
+  if (bursty.length) {
+    const a = Math.min(...bursty.map(l => l.hold!.activeShare!));
+    factor(0.8 + 0.2 * (a / 0.3), `trades come in bursts: only ${Math.round(a * 100)}% of the time on top saw any (${[...new Set(bursty.map(l => l.name))].join(", ")}), so one round can take much longer or shorter than the average`);
+  }
   const thin = o.orderPlan.filter(l => l.basis === "measured" && (l.hold?.n ?? 0) < 30);
   if (thin.length) {
     const n = Math.min(...thin.map(l => l.hold?.n ?? 0));

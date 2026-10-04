@@ -84,17 +84,32 @@ const meets = (id: string, c: ShardCond) => {
   return c.mode === "all" ? c.terms.every(ok) : c.terms.some(ok);
 };
 
-/** Per recipe, the shards meeting each condition ("open": blank or unknown, anything might), built once: 52,650 pairs
- *  x 99 recipes are byte lookups instead of condition checks (11 s -> ~0.2 s). */
-//  (conditions as one byte per shard, indexed like `index`; null = open)
-let recipeSets: { t: string; known: boolean; c0: Uint8Array | null; c1: Uint8Array | null }[] | null = null;
+/** For every pair of shards, the recipes it meets (fully known ones and ones the wiki leaves open), built once by walking
+ *  each recipe's matching shards instead of checking 99 recipes for each of 52,650 pairs (11 s at first, 0.6 s with
+ *  byte lookups, a fraction of that this way). Pair (i, j) with i <= j sits at i * N + j. */
+let pairRecipes: { special: (string[] | undefined)[]; maybe: (string[] | undefined)[] } | null = null;
 let index: Map<string, number> | null = null;
-function recipes() {
-  if (recipeSets) return recipeSets;
-  const ids = Object.keys(SHARDS);
+function pairsMeeting() {
+  if (pairRecipes) return pairRecipes;
+  const ids = Object.keys(SHARDS), N = ids.length;
   index = new Map(ids.map((id, i) => [id, i]));
-  const set = (c: ShardCond | null) => (!c || c.unknown ? null : Uint8Array.from(ids, id => (meets(id, c) ? 1 : 0)));
-  return (recipeSets = Object.entries(SHARDS).filter(([, s]) => s.recipe).map(([t, s]) => ({ t, known: known(s), c0: set(s.recipe![0]), c1: set(s.recipe![1]) })));
+  const special: (string[] | undefined)[] = [], maybe: (string[] | undefined)[] = [];
+  const all = ids.map((_, i) => i);
+  // a blank or unknown condition (null): anything might meet it
+  const matching = (c: ShardCond | null) => (!c || c.unknown ? all : all.filter(i => meets(ids[i]!, c)));
+  for (const [t, sh] of Object.entries(SHARDS)) {
+    if (!sh.recipe) continue;
+    const into = known(sh) ? special : maybe, ti = index.get(t)!, seen = new Set<number>();
+    const A = matching(sh.recipe[0]), B = matching(sh.recipe[1]);
+    for (const i of A) for (const j of B) {
+      const k = i <= j ? i * N + j : j * N + i;
+      // a recipe never makes one of its inputs
+      if (i === ti || j === ti || seen.has(k)) continue;
+      seen.add(k);
+      (into[k] ??= []).push(t);
+    }
+  }
+  return (pairRecipes = { special, maybe });
 }
 
 /** The (up to 3) results the Fusion Machine offers for two shards, in its order (`limit`: more, for checks). */
@@ -104,16 +119,10 @@ export function fusionResults(a: string, b: string, limit = 3): FusionResult[] {
     return other === "CHAMELEON" ? [] : chameleonResults(other).flatMap(t => (t ? [{ shard: t, count: 1, type: "chameleon" as const, sure: true }] : []));
   }
   const order = (x: string, y: string) => rank(SHARDS[y]!.rarity) - rank(SHARDS[x]!.rarity) || SHARDS[y]!.num - SHARDS[x]!.num;
-  const special: string[] = [], maybe: string[] = [];
-  const rs = recipes(), ia = index!.get(a)!, ib = index!.get(b)!;
-  for (const r of rs) {
-    if (r.t === a || r.t === b) continue;
-    const a0 = !r.c0 || r.c0[ia] === 1, b0 = !r.c0 || r.c0[ib] === 1;
-    if (!a0 && !b0) continue;
-    // recipes the wiki leaves open (blank or unknown input) that these inputs might meet are never a result here, but in
-    // the game they could take a slot, so a result they could push out is not "sure"
-    if ((a0 && (!r.c1 || r.c1[ib] === 1)) || (b0 && (!r.c1 || r.c1[ia] === 1))) (r.known ? special : maybe).push(r.t);
-  }
+  // recipes the wiki leaves open (blank or unknown input) that these inputs might meet are never a result here, but in
+  // the game they could take a slot, so a result they could push out is not "sure"
+  const pr = pairsMeeting(), ia = index!.get(a)!, ib = index!.get(b)!, N = index!.size, k = ia <= ib ? ia * N + ib : ib * N + ia;
+  const special = pr.special[k] ?? [], maybe = pr.maybe[k] ?? [];
   const ids: string[] = [];
   const sa = SHARDS[a]!, sb = SHARDS[b]!;
   if (sa.category === sb.category) {

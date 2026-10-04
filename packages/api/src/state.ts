@@ -1,6 +1,6 @@
 // In-memory caches of the market, recipes and events, refreshed from Postgres.
-import { type Db, currentPerks, loadEvents, loadMarket, loadRecipes } from "@bc/server-core";
-import { type Ctx, type FillCalibration, type GameEvent, type ItemMarket, NO_CALIBRATION, NO_PERKS, type Opportunity, type RankedOpportunity, type PerkEffects, type Profile, type Recipe, type Settings, buildOpportunities } from "@bc/shared";
+import { type Db, currentPerks, hourProfile, loadEvents, loadMarket, loadRecipes } from "@bc/server-core";
+import { type Ctx, type FillCalibration, type GameEvent, type HourProfile, type ItemMarket, NO_CALIBRATION, NO_PERKS, type Opportunity, type RankedOpportunity, type PerkEffects, type Profile, type Recipe, type Settings, buildOpportunities } from "@bc/shared";
 
 export class State {
   market = new Map<string, ItemMarket>();
@@ -10,6 +10,8 @@ export class State {
   perks: PerkEffects = NO_PERKS;
   /** fill-speed correction from this server's paper trading (set by jobs.ts after every step) */
   calibration: FillCalibration = NO_CALIBRATION;
+  /** how busy the bazaar is by UTC hour (null until every hour is measured on 2+ days) */
+  hourProfile: HourProfile | null = null;
   loadedAt = 0;
   /** when Hypixel published the newest prices in the market (not when we re-read the database) */
   dataAt = 0;
@@ -30,6 +32,7 @@ export class State {
   async refreshSlow(): Promise<void> {
     this.recipes = await loadRecipes(this.db);
     this.events = await loadEvents(this.db, Date.now() - 400 * 86400_000, Date.now() + 14 * 86400_000);
+    this.hourProfile = await hourProfile(this.db);
   }
   async start(): Promise<void> {
     await Promise.all([this.refresh(), this.refreshSlow()]);
@@ -56,7 +59,7 @@ export class State {
   private cache = new Map<string, { list: RankedOpportunity[]; skipped: NonNullable<Ctx["skipped"]> }>();
 
   private build(kind: Opportunity["kind"] | "all", settings: Settings, profile: Profile, includeAhForge: boolean, listAll: boolean) {
-    return buildOpportunities({ market: this.market, recipes: this.recipes, perks: this.perks, calibration: this.calibration }, kind, settings, profile, includeAhForge, listAll);
+    return buildOpportunities({ market: this.market, recipes: this.recipes, perks: this.perks, calibration: this.calibration, hourProfile: this.hourProfile }, kind, settings, profile, includeAhForge, listAll);
   }
 }
 

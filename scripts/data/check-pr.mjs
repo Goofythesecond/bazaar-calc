@@ -90,7 +90,9 @@ for (const path of added) {
       const j = myEps.get(epKey(g, i));
       if (j == null) continue; // the other file may have had a gap here
       cmpEps++;
-      if (f.episodes.dur[j] !== g.episodes.dur[i] || f.episodes.flow[j] !== g.episodes.flow[i] || f.episodes.end[j] !== g.episodes.end[i]) badEps++;
+      // burstiness (episodes.active) only when both files recorded it (older files have none)
+      if (f.episodes.dur[j] !== g.episodes.dur[i] || f.episodes.flow[j] !== g.episodes.flow[i] || f.episodes.end[j] !== g.episodes.end[i]
+        || (f.episodes.active && g.episodes.active && f.episodes.active[j] !== g.episodes.active[i])) badEps++;
     }
     const range = xs => xs.reduce(([a, b], t) => [Math.min(a, t), Math.max(b, t)], [Infinity, -Infinity]);
     const [fa, fb] = range(f.ah.sales.ts), [ga, gb] = range(g.ah.sales.ts), sLo = Math.max(fa, ga), sHi = Math.min(fb, gb);

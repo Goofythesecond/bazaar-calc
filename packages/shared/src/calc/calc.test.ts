@@ -4,7 +4,7 @@ import { describe, expect, it } from "vitest";
 import { readFileSync } from "node:fs";
 import {
   BAZAAR, DEFAULT_PROFILE, DEFAULT_SETTINGS, actionSeconds, bazaarFlips, bookFlips, booksNeeded, canCombineInto, computeFlags,
-  blendFlow, bookCeiling, craftFlips, enchantRules, evaluate, sellLeg, typicalPrice, forgeDurationSeconds, forgeFlips, forgeSlots, fusionFlips, fusionWays, katFlips, isMet, limitContribution, orderSlots, parseBookId, parseCraftText,
+  blendFlow, bookCeiling, craftFlips, enchantRules, evaluate, sellLeg, typicalPrice, forgeDurationSeconds, forgeFlips, forgeSlots, fusionFlips, fusionWays, katFlips, isMet, playFactor, limitContribution, orderSlots, parseBookId, parseCraftText,
   parseNeuItem, plan, prettyName, quickForgeReduction, sbFormat, taxRate, termStart, type Ctx, type ItemMarket, type Recipe,
 } from "../index.js";
 
@@ -152,6 +152,46 @@ describe("calculators on real market data", () => {
     console.log("plan", p.totals, p.picks.map(x => `${x.kind}:${x.title} ${Math.round(x.coinsH).toLocaleString()}`));
   });
 
+  it("planner: more coins never plan less, tiny picks are dropped, and it says what limits it", () => {
+    const c = ctx();
+    const all = [...bazaarFlips(c), ...craftFlips(c), ...bookFlips(c), ...forgeFlips(c)];
+    const totals = [1e8, 1e9, 1e10].map(coins => plan(all, { ...c.settings, coins }, c.profile));
+    for (let i = 1; i < totals.length; i++) expect(totals[i]!.totals.coinsH).toBeGreaterThanOrEqual(totals[i - 1]!.totals.coinsH * 0.995);
+    for (const p of totals) {
+      expect(p.picks.every(o => o.coinsH >= Math.min(100_000, p.totals.coinsH * 0.01) - 1e-6)).toBe(true);
+      expect(p.totals.ordersUsed).toBeLessThanOrEqual(p.totals.orderSlots);
+      expect(typeof p.totals.limitedBy).toBe("string");
+    }
+  });
+
+  it("one trade at a time holds one side's order slots, not both; a forge wait is part of the round", () => {
+    const fill = { basis: "measured" as const, stats: null, flowH: 100, samples: Array.from({ length: 20 }, () => [600, 1000 / 6, 0] as [number, number, number]) };
+    const route = {
+      kind: "craft" as const, key: "t", title: "t", outputId: "OUT", requirements: [], flags: [], notes: [],
+      buys: [{ item: "A", name: "A", qty: 1, mode: "order" as const, price: 10, flowH: 100, share: 1, undercutsH: 0, fill }, { item: "B", name: "B", qty: 1, mode: "order" as const, price: 10, flowH: 100, share: 1, undercutsH: 0, fill }],
+      steps: [] as { type: "forge"; label: string; opsPerUnit: number; forgeSeconds: number; outputPerOp: number; requirements: never[] }[],
+      sell: { item: "OUT", name: "Out", mode: "offer" as const, grossPrice: 30, netPrice: 29.6, flowH: 100, share: 1, undercutsH: 0, fill },
+    };
+    const S = { ...DEFAULT_SETTINGS, coins: 1e9 };
+    const seq = evaluate(route, S, DEFAULT_PROFILE), both = evaluate(route, { ...S, overlapOrders: true }, DEFAULT_PROFILE);
+    expect(seq.oneAtATime).toBe(true);
+    expect(seq.ordersUsed).toBe(2);   // two buy orders, then one sell offer: never three at once
+    expect(both.ordersUsed).toBe(3);
+    // a 2 h forge between buying and selling: the round takes longer, so fewer units per hour
+    const forged = evaluate({ ...route, kind: "forge" as const, steps: [{ type: "forge" as const, label: "f", opsPerUnit: 1, forgeSeconds: 7200, outputPerOp: 1, requirements: [] }] }, S, { ...DEFAULT_PROFILE, hotmTier: 7 });
+    expect(forged.unitsH).toBeLessThan(seq.unitsH);
+    expect(forged.explain.join(" ")).toMatch(/wait for the forge/);
+  });
+
+  it("play hours: fill speed follows how busy the bazaar is in your hours (UTC, wraps past midnight)", () => {
+    const flat = Array(24).fill(1), busy = flat.map((_, h) => (h >= 18 ? 2 : 0.5));
+    expect(playFactor(null, 18, 4)).toEqual({ bid: 1, ask: 1 });
+    expect(playFactor({ buy: busy, sell: flat, days: 3 }, -1, 4)).toEqual({ bid: 1, ask: 1 });
+    expect(playFactor({ buy: busy, sell: flat, days: 3 }, 22, 4).ask).toBeCloseTo((2 + 2 + 0.5 + 0.5) / 4, 9); // 22, 23 busy; 0, 1 quiet
+    expect(playFactor({ buy: busy, sell: flat, days: 3 }, 22, 4).bid).toBe(1);
+    expect(playFactor({ buy: busy, sell: flat, days: 3 }, 18, 1.5).ask).toBeCloseTo(2, 9); // a part hour counts in part
+  });
+
   it("every order in a route uses the same batch: you sell exactly what you bought", () => {
     const c = ctx();
     const all = [...bazaarFlips(c), ...craftFlips(c), ...bookFlips(c), ...forgeFlips(c)];
@@ -259,8 +299,8 @@ describe("calculators on real market data", () => {
   });
 
   it("blends old and new flow: a quiet stretch does not zero a rare item", () => {
-    expect(blendFlow(0.36, 0, 6)).toBeCloseTo((0.36 * 12) / 18, 9);  // 6 quiet hours keep 2/3 of the weekly rate
-    expect(blendFlow(100, 75, 24)).toBeCloseTo((75 * 24 + 100 * 12) / 36, 9);
+    expect(blendFlow(0.36, 0, 6)).toBeCloseTo((0.36 * 6) / 12, 9);   // 6 quiet hours keep half the weekly rate
+    expect(blendFlow(100, 75, 24)).toBeCloseTo((75 * 24 + 100 * 6) / 30, 9);
     expect(blendFlow(100, 500, 24)).toBe(100);                         // never above the 7-day rate
     expect(blendFlow(100, null, 0)).toBe(100);
   });

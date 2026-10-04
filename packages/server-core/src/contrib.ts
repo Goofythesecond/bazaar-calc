@@ -105,10 +105,10 @@ export async function importDataFiles(db: Db, files: { label: string; file: Data
       if (p < 0 && f.polls.length && f.polls[0]! - (e.start[i]! + e.dur[i]! * 100) <= 150_000) p = 0;
       if (p < 0 || !ok.has(Math.floor(f.polls[p]! / H))) continue;
       const d = e.dur[i]! / 10;
-      eps.push([f.items[e.item[i]!], e.side[i] === 0 ? "b" : "a", iso(e.start[i]!), iso(Math.max(e.start[i]!, f.polls[p]!)), 0, d, d, d, e.polls[i], e.flow[i], 0, 0, 0, END[e.end[i]!]]);
+      eps.push([f.items[e.item[i]!], e.side[i] === 0 ? "b" : "a", iso(e.start[i]!), iso(Math.max(e.start[i]!, f.polls[p]!)), 0, d, d, d, e.polls[i], e.flow[i], 0, 0, 0, END[e.end[i]!], e.active?.[i] ?? null]);
     }
     await insertMany(db, "bazaar_top_episodes",
-      ["item_id", "side", "start_ts", "end_ts", "price_cents", "dur_s", "lo_s", "hi_s", "polls", "flow", "removed", "start_amount", "start_orders", "end_reason"], eps);
+      ["item_id", "side", "start_ts", "end_ts", "price_cents", "dur_s", "lo_s", "hi_s", "polls", "flow", "removed", "start_amount", "start_orders", "end_reason", "active"], eps);
     // auctions: every file contributes; the same sale seen by two people has the same item, time and price
     const s = f.ah.sales, sales: unknown[][] = [];
     for (let i = 0; i < s.ts.length; i++) {
@@ -187,12 +187,15 @@ export async function exportDataFiles(db: Db, name: string, version: string, opt
         fl.bidOutbid.push(Number(r.bid_outbid)); fl.askUndercut.push(Number(r.ask_undercut)); fl.bidRemoved.push(Number(r.bid_removed)); fl.askRemoved.push(Number(r.ask_removed));
         fl.tradeIntervals!.push(Number(r.trade_intervals)); fl.tradeSeconds!.push(Math.round(Number(r.trade_seconds) * 10) / 10); fl.bidTrades!.push(Number(r.bid_trades)); fl.askTrades!.push(Number(r.ask_trades));
       }
-      for (const r of (await db.query(`SELECT item_id, side, extract(epoch from start_ts) * 1000 AS s, dur_s, polls, flow, end_reason FROM bazaar_top_episodes
+      for (const r of (await db.query(`SELECT item_id, side, extract(epoch from start_ts) * 1000 AS s, dur_s, polls, flow, end_reason, active FROM bazaar_top_episodes
           WHERE end_ts BETWEEN $1 AND $2 ORDER BY item_id, side, start_ts`, range)).rows) {
         const e = f.episodes;
         e.item.push(item(r.item_id)); e.side.push(r.side === "b" ? 0 : 1); e.start.push(Math.round(Number(r.s))); e.dur.push(Math.round(Number(r.dur_s) * 10));
         e.polls.push(Number(r.polls)); e.flow.push(Math.round(Number(r.flow))); e.end.push(END.indexOf(r.end_reason));
+        e.active!.push(r.active == null ? -1 : Number(r.active));
       }
+      // the column is all or nothing: episodes recorded before it existed have none, so then the file has none
+      if (f.episodes.active!.some(x => x < 0)) delete f.episodes.active;
       const ks = new Map<string, number>(), key = (k: string) => { let i = ks.get(k); if (i == null) { i = f.ah.keys.push(k) - 1; ks.set(k, i); } return i; };
       for (const r of (await db.query(`SELECT item_key, extract(epoch from ts) * 1000 AS t, price, bin FROM ah_sales WHERE origin = 1 AND ts BETWEEN $1 AND $2 ORDER BY ts, item_key, price`, range)).rows) {
         f.ah.sales.ts.push(Math.round(Number(r.t))); f.ah.sales.key.push(key(r.item_key)); f.ah.sales.price.push(Number(r.price)); f.ah.sales.bin.push(r.bin ? 1 : 0);
