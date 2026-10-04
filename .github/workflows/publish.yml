@@ -41,6 +41,9 @@ jobs:
           fi
       - name: Build the site data
         run: node scripts/data/build-site.mjs --out site-data
+        env:
+          # GitHub's API allows few anonymous calls per runner IP; the recipe sync (NotEnoughUpdates-REPO) uses this token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - id: pages
         uses: actions/configure-pages@v6
       - name: Build the static site

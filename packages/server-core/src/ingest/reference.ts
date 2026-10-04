@@ -47,13 +47,21 @@ const NEU_PARSER = 3; // 3: pets ("BEE;0") no longer read as enchanted books
 
 /** Download the NEU repo tarball, parse every item, and replace the recipes table. Returns the commit used. */
 export async function syncNeuRecipes(db: Db): Promise<{ commit: string; recipes: number }> {
-  const head = await getJson<{ sha: string }>(`https://api.github.com/repos/${NEU_REPO}/commits/master`, { headers: { accept: "application/vnd.github+json" } });
+  // GitHub's API allows few anonymous calls per IP (shared by every GitHub Actions runner on it): send a token when
+  // there is one (the publish workflow passes its own), and if the lookup still fails, take the newest files directly
+  // from the download server (not the rate-limited API) without knowing the commit
+  const token = process.env.GITHUB_TOKEN;
+  let sha = "master";
+  try {
+    sha = (await getJson<{ sha: string }>(`https://api.github.com/repos/${NEU_REPO}/commits/master`,
+      { headers: { accept: "application/vnd.github+json", ...(token ? { authorization: `Bearer ${token}` } : {}) } })).sha;
+  } catch (e) { console.warn(`NEU commit lookup failed (${(e as Error).message}); downloading the newest files instead`); }
   const prev = await db.query("SELECT source_version FROM recipes WHERE source = 'neu' LIMIT 1");
-  const version = `${head.sha}#p${NEU_PARSER}`;
-  if (prev.rows[0]?.source_version === version) return { commit: head.sha, recipes: 0 };
+  const version = `${sha}#p${NEU_PARSER}`;
+  if (sha !== "master" && prev.rows[0]?.source_version === version) return { commit: sha, recipes: 0 };
   const dir = await mkdtemp(join(tmpdir(), "neu-"));
   try {
-    const res = await fetch(`https://codeload.github.com/${NEU_REPO}/tar.gz/${head.sha}`);
+    const res = await fetch(`https://codeload.github.com/${NEU_REPO}/tar.gz/${sha}`);
     if (!res.ok || !res.body) throw new Error(`NEU download failed: HTTP ${res.status}`);
     await pipeline(Readable.fromWeb(res.body as never), tar.x({ cwd: dir, strip: 1, filter: p => p.includes("/items/") }));
     const itemsDir = join(dir, "items");
@@ -78,7 +86,7 @@ export async function syncNeuRecipes(db: Db): Promise<{ commit: string; recipes:
         .map(r => [r.outputId, r.kind, JSON.stringify(r.inputs), r.outputCount, r.durationS ?? null, JSON.stringify(r.requirements), r.kind === "npc" ? r.source ?? null : texts.get(r.outputId) ?? null, "neu", version, key(r)]);
       await insertMany(client, "recipes", ["output_id", "kind", "inputs", "output_count", "duration_s", "requirements", "requirement_text", "source", "source_version", "inputs_key"], rows);
       await client.query("COMMIT");
-      return { commit: head.sha, recipes: rows.length };
+      return { commit: sha, recipes: rows.length };
     } catch (e) {
       await client.query("ROLLBACK");
       throw e;
