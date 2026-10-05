@@ -15,6 +15,8 @@ export interface PlanOptions {
   extraSlots?: number;
   /** plan in one pass with these budget weights (the what-if plans reuse the main plan's) */
   weights?: PlanWeights;
+  /** internal: this plan is the "fewer coins" re-plan (see plan) */
+  noRecap?: boolean;
   /** evaluations already made (same route, mode, coins and budgets left give the same result): shared by the passes
    *  and by the what-if plans of one request */
   cache?: Map<string, Opportunity>;
@@ -125,7 +127,9 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
         // NPC shops pay at most 500M coins a day across all your NPC sales
         npcSellCoinsDay: BAZAAR.npcDailySellCoins - others.reduce((a, x) => a + x.o.npcSellCoinsH, 0) * s.hoursPerDay,
       };
-      const sizes = have ? [Math.min(step, free)] : [...new Set([1, 2, 4, 10].map(k => Math.min(k * step, free)).concat(free))];
+      // a new route starts at 1-20 steps (at most 1B); it grows a step at a time from there. Starting it with all coins
+      // left sized huge orders that burned the daily limit, so 10B planned less than 1B (2026-10-05 market)
+      const sizes = have ? [Math.min(step, free)] : [...new Set([1, 2, 4, 10, 20].map(k => Math.min(k * step, free)))];
       let bestMove: { o: Opportunity; idx: number; gain: number; score: number } | null = null;
       // each budget scaled to "coins" by the share of it a move takes
       const share = (used: number, total: number) => (total > 0 ? (used / total) * s.coins : Infinity);
@@ -167,6 +171,33 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
       }
     };
     rounds(true);
+    // swaps: a pick blocks the routes that share an item with it (or another Kat pet). Adding routes one at a time can
+    // lock in the weaker of two such rivals (10B coins picked a 13.5M/h Kat route over a 17.3M/h one), so each pick is
+    // compared with the routes it alone blocks, with the coins and budgets it holds (and coins nobody uses), and the better
+    // one stays
+    const conflicts = (a: Opportunity, b: Opportunity) => items(a).some(i => items(b).includes(i)) || (a.steps.some(x => x.type === "kat") && b.steps.some(x => x.type === "kat"));
+    let swapped = false;
+    for (let i = 0; i < picks.length; i++) {
+      const x = picks[i]!, others = picks.filter((_, j) => j !== i);
+      const rivals = pool.filter(c => c.key !== x.c.key && !picks.some(y => y.c.key === c.key) && conflicts(c, x.c) && !others.some(y => conflicts(c, y.c)));
+      if (!rivals.length) continue;
+      const limits = {
+        activeSecondsH: 3600 * s.attention - others.reduce((a, y) => a + y.o.activeSecondsH, 0),
+        limitCoinsDay: s.dailyLimit - others.reduce((a, y) => a + y.o.limitCoinsH, 0) * s.hoursPerDay,
+        forgeSlots: fSlots - others.reduce((a, y) => a + y.o.forgeSlotsUsed, 0),
+        npcSellCoinsDay: BAZAAR.npcDailySellCoins - others.reduce((a, y) => a + y.o.npcSellCoinsH, 0) * s.hoursPerDay,
+      };
+      const slotsLeft = slots - others.reduce((a, y) => a + y.o.ordersUsed, 0);
+      // the coins the pick holds, plus any nobody uses
+      const coinsFor = s.coins - others.reduce((a, y) => a + y.o.capitalUsed, 0);
+      let best = x;
+      for (const c of rivals) for (const ms of modes(c)) {
+        const o = evalCached(c, ms, coinsFor, { ...limits, forgeSlots: c.steps.some(st => st.type === "forge") ? limits.forgeSlots : undefined });
+        if (o.ordersUsed <= slotsLeft && o.coinsH * conf(c) > best.o.coinsH * conf(best.c) * 1.001) best = { c, o };
+      }
+      if (best !== x) { picks[i] = best; swapped = true; }
+    }
+    if (swapped) rounds(false);
     // picks earning next to nothing cost a slot and clicks for little: drop them and give what they held to the others
     const total = picks.reduce((a, x) => a + x.o.coinsH, 0), floor = Math.max(MIN_PICK_COINS_H, MIN_PICK_SHARE * total);
     const tiny = picks.filter(x => x.o.coinsH < floor);
@@ -186,7 +217,21 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
     if ((Object.keys(w) as (keyof PlanWeights)[]).every(k => next[k] === w[k])) break;
     w = next;
   }
-  const { picks, dropped } = best!;
+  // more coins can always do what fewer coins did: a plan that leaves over half its coins unused is also made with twice
+  // the coins it used, and the better one stays (2026-10-05: 10B planned 131.3M/h and 1B 135.6M/h, because with plenty
+  // of coins the daily limit went to other routes before a 17M/h Kat route)
+  let { picks, dropped } = best!, weights = best!.w;
+  if (!opts.weights && !opts.noRecap) {
+    const used = picks.reduce((a, x) => a + x.o.capitalUsed, 0);
+    if (used < s.coins / 2) {
+      const alt = plan(candidates, { ...s, coins: Math.max(2 * used, step) }, p, { ...opts, noRecap: true });
+      if (alt.totals.coinsH > best!.coinsH * 1.001) {
+        picks = alt.picks.map(o => ({ c: pool.find(c => c.key === o.key) ?? o, o }));
+        dropped = alt.skipped.filter(x => x.reason.startsWith("would earn only"));
+        weights = alt.weights;
+      }
+    }
+  }
   const skipped: Plan["skipped"] = [...dropped];
   const chosen = new Set(picks.map(x => x.c.key));
   const taken = new Set(picks.flatMap(x => items(x.c)));
@@ -202,7 +247,7 @@ export function plan(candidates: Opportunity[], s: Settings, p: Profile, opts: P
   const full = (Object.entries(usage) as [keyof typeof usage, number][]).filter(([, v]) => v >= 0.95).sort((a, b) => b[1] - a[1]).map(([k]) => names[k]);
   const limitedBy = !full.length ? "no more profitable flips" : full.length === 1 ? full[0]! : `${full.slice(0, -1).join(", ")} and ${full.at(-1)}`;
   return {
-    picks: out, skipped, weights: best!.w,
+    picks: out, skipped, weights,
     totals: {
       coinsH, capitalUsed: sum(o => o.capitalUsed), ordersUsed: sum(o => o.ordersUsed), orderSlots: slots,
       forgeSlotsUsed: sum(o => o.forgeSlotsUsed), forgeSlots: fSlots, limitCoinsDay: sum(o => o.limitCoinsH) * s.hoursPerDay,

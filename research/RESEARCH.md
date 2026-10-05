@@ -211,6 +211,10 @@ Measured on one saved bazaar snapshot with the published statistics (`plan()`; 1
 - Moves are weighted by the route's confidence score; picks under 100k/h (or 1% of the plan) are dropped and their
   coins handed to the others; the plan names the budget that stops it and what one more order slot or 100M more coins
   would add (the same plan re-run with the winning weights).
+- 2026-10-05 market: 10B still planned 131.3M/h against 1B's 135.6M/h (a 13.5M/h Kat route locked in before a 17.3M/h
+  one, and the daily limit went to other routes first). Fixed with a swap step (each pick is compared with the routes
+  only it blocks: same item, or a second Kat pet) and a re-plan with twice the coins used when a plan uses under half its
+  coins (more coins can always copy what fewer did); a new route's first move is at most 20 steps. Now 135.6M/h for both.
 - One trade at a time now includes the forge / Kat wait inside a round (runs one after another, slots in parallel,
   each costing at most one play session).
 - Paper trading sells no higher than the price the calculator assumed (the typical-price cap): it used to follow a
